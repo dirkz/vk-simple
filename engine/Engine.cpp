@@ -51,7 +51,11 @@ void Engine::CreateInstance()
     std::transform(instanceExtensions.begin(), instanceExtensions.end(), extensionNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
 
-    vk::InstanceCreateInfo createInfo{{}, &appInfo, {}, extensionNames};
+    std::vector<const char *> layerNames(ValidationLayers.size());
+    std::transform(ValidationLayers.begin(), ValidationLayers.end(), layerNames.begin(),
+                   [](const std::string &s) { return s.c_str(); });
+
+    vk::InstanceCreateInfo createInfo{{}, &appInfo, layerNames, extensionNames};
 
     m_instance = m_context.createInstance(createInfo);
 }
