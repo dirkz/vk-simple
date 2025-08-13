@@ -10,6 +10,7 @@ struct Engine
 {
     Engine(IVulkanWindow &window);
 
+    bool CheckValidationLayerSupport();
     void CreateInstance();
 
   private:

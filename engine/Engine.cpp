@@ -3,13 +3,46 @@
 namespace vksimple
 {
 
+std::vector<std::string> ValidationLayers{"VK_LAYER_KHRONOS_validation"};
+
+#if NDEBUG
+constexpr bool EnableValidation = false;
+#else
+constexpr bool EnableValidation = true;
+#endif
+
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
     CreateInstance();
 }
 
+bool Engine::CheckValidationLayerSupport()
+{
+    std::set<std::string> layersPresent{};
+    std::vector<vk::LayerProperties> instanceLayers = m_context.enumerateInstanceLayerProperties();
+    for (vk::LayerProperties &prop : instanceLayers)
+    {
+        layersPresent.insert(prop.layerName);
+    }
+
+    for (std::string &layerName : ValidationLayers)
+    {
+        if (!layersPresent.contains(layerName))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void Engine::CreateInstance()
 {
+    if (EnableValidation && !CheckValidationLayerSupport())
+    {
+        throw std::runtime_error{"Validation requested but not supported"};
+    }
+
     vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
                                 VK_API_VERSION_1_4};
 
