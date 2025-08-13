@@ -10,9 +10,13 @@ struct Engine
 {
     Engine(IVulkanWindow &window);
 
+    void CreateInstance();
+
   private:
     IVulkanWindow &m_window;
+
     vk::raii::Context m_context;
+    vk::raii::Instance m_instance = nullptr;
 };
 
 } // namespace vksimple
