@@ -1,9 +1,9 @@
-﻿#include <iostream>
+﻿#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 
-using namespace std;
-
-int main()
+int SDL_main(int argc, char* argv[])
 {
-	cout << "Hello World.\n";
-	return 0;
+    SDL_Log("Hello, world!");
+
+    return 0;
 }
