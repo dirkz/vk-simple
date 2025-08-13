@@ -14,6 +14,7 @@ int SDL_main(int argc, char *argv[])
 
     SDLVulkanWindow vulkanWindow = SDLVulkanWindow{sdlWindow};
     std::vector<std::string> instanceExtensions = vulkanWindow.GetInstanceExtensions();
+    PFN_vkGetInstanceProcAddr instanceProcAddr = vulkanWindow.GetInstanceProcAddr();
 
     bool done = false;
     while (!done)

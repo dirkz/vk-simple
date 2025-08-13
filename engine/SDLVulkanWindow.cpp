@@ -18,4 +18,9 @@ std::vector<std::string> SDLVulkanWindow::GetInstanceExtensions()
     return result;
 }
 
+PFN_vkGetInstanceProcAddr SDLVulkanWindow::GetInstanceProcAddr()
+{
+    return reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr());
+}
+
 } // namespace vksimple
