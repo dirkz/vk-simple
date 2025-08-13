@@ -11,6 +11,7 @@ struct Engine
     Engine(IVulkanWindow &window);
 
     bool CheckValidationLayerSupport();
+    std::vector<std::string> GetRequiredExtensionNames();
     void CreateInstance();
 
   private:

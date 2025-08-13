@@ -36,6 +36,16 @@ bool Engine::CheckValidationLayerSupport()
     return true;
 }
 
+std::vector<std::string> Engine::GetRequiredExtensionNames()
+{
+    std::vector<std::string> instanceExtensions = m_window.GetInstanceExtensions();
+    if (EnableValidation)
+    {
+        instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    }
+    return instanceExtensions;
+}
+
 void Engine::CreateInstance()
 {
     if (EnableValidation && !CheckValidationLayerSupport())
@@ -46,7 +56,7 @@ void Engine::CreateInstance()
     vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
                                 VK_API_VERSION_1_4};
 
-    std::vector<std::string> instanceExtensions = m_window.GetInstanceExtensions();
+    std::vector<std::string> instanceExtensions = GetRequiredExtensionNames();
     std::vector<const char *> extensionNames(instanceExtensions.size());
     std::transform(instanceExtensions.begin(), instanceExtensions.end(), extensionNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
