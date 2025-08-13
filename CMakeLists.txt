@@ -30,5 +30,8 @@ option(SDL_STATIC "Build SDL as a static library" ON)
 
 add_subdirectory(glm)
 add_subdirectory(SDL-Hpp)
+add_subdirectory(engine)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC Vulkan::Vulkan glm::glm SDL-Hpp)
+target_precompile_headers(${PROJECT_NAME} REUSE_FROM engine)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC engine Vulkan::Vulkan glm::glm SDL-Hpp)
