@@ -101,4 +101,17 @@ void Engine::CreateInstance()
     m_instance = m_context.createInstance(createInfo);
 }
 
+void Engine::SetupDebugMessenger()
+{
+    vk::DebugUtilsMessengerCreateInfoEXT createInfo{
+        {},
+        vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
+            vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning,
+        vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
+            vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
+            vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
+            vk::DebugUtilsMessageTypeFlagBitsEXT::eDeviceAddressBinding,
+        DebugCallback};
+}
+
 } // namespace vksimple
