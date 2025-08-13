@@ -9,7 +9,7 @@ std::vector<std::string> SDLVulkanWindow::GetInstanceExtensions()
     const char *const *instanceExtensions = SDL_Vulkan_GetInstanceExtensions(&numExtensions);
 
     std::vector<std::string> result{};
-    for (auto i = 0; i < numExtensions; ++i)
+    for (Uint32 i = 0; i < numExtensions; ++i)
     {
         std::string extension{instanceExtensions[i]};
         result.push_back(extension);
