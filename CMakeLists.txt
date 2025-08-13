@@ -19,3 +19,7 @@ if (CMAKE_VERSION VERSION_GREATER 3.12)
 endif()
 
 # TODO: Add tests and install targets if needed.
+
+find_package(Vulkan REQUIRED)
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC Vulkan::Vulkan)
