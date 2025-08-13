@@ -11,26 +11,28 @@ int SDL_main(int argc, char *argv[])
 
     SDL_Window *sdlWindow = sdl::CreateWindow("vk-simple", 800, 600, SDL_WINDOW_VULKAN);
 
-    SDLVulkanWindow vulkanWindow = SDLVulkanWindow{sdlWindow};
-    std::vector<std::string> instanceExtensions = vulkanWindow.GetInstanceExtensions();
-    PFN_vkGetInstanceProcAddr instanceProcAddr = vulkanWindow.GetInstanceProcAddr();
-
-    Engine engine{vulkanWindow};
-
-    bool done = false;
-    while (!done)
     {
-        SDL_Event event;
+        SDLVulkanWindow vulkanWindow = SDLVulkanWindow{sdlWindow};
+        std::vector<std::string> instanceExtensions = vulkanWindow.GetInstanceExtensions();
+        PFN_vkGetInstanceProcAddr instanceProcAddr = vulkanWindow.GetInstanceProcAddr();
 
-        while (SDL_PollEvent(&event))
+        Engine engine{vulkanWindow};
+
+        bool done = false;
+        while (!done)
         {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                done = true;
-            }
-        }
+            SDL_Event event;
 
-        // Do game logic, present a frame, etc.
+            while (SDL_PollEvent(&event))
+            {
+                if (event.type == SDL_EVENT_QUIT)
+                {
+                    done = true;
+                }
+            }
+
+            // Do game logic, present a frame, etc.
+        }
     }
 
     // Close and destroy the window
