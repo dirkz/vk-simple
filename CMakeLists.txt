@@ -12,7 +12,11 @@ endif()
 project ("vk-simple")
 
 # Add source to this project's executable.
-add_executable (vk-simple "main.cpp" )
+if (WIN32)
+	add_executable (${PROJECT_NAME} WIN32 "main.cpp" )
+else()
+	add_executable (${PROJECT_NAME} "main.cpp" )
+endif()
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET vk-simple PROPERTY CXX_STANDARD 20)
@@ -21,5 +25,10 @@ endif()
 # TODO: Add tests and install targets if needed.
 
 find_package(Vulkan REQUIRED)
+
+option(SDL_STATIC "Build SDL as a static library" ON)
+
+add_subdirectory(glm)
+add_subdirectory(SDL-Hpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC Vulkan::Vulkan)
