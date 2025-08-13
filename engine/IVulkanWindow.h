@@ -5,7 +5,7 @@
 namespace vksimple
 {
 
-class IVulkanWindow
+struct IVulkanWindow
 {
     virtual std::vector<std::string> GetInstanceExtensions() = 0;
 };
