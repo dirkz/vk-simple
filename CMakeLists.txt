@@ -12,7 +12,7 @@ endif()
 project ("vk-simple")
 
 # Add source to this project's executable.
-add_executable (vk-simple "vk-simple.cpp" "vk-simple.h")
+add_executable (vk-simple "main.cpp" )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET vk-simple PROPERTY CXX_STANDARD 20)
