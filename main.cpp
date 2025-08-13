@@ -2,13 +2,18 @@
 
 #include "SDLVulkanWindow.h"
 
+using namespace vksimple;
+
 int SDL_main(int argc, char *argv[])
 {
     SDL_Log("Hello, world!");
 
     sdl::Init(SDL_INIT_VIDEO);
 
-    SDL_Window *window = sdl::CreateWindow("vk-simple", 800, 600, SDL_WINDOW_VULKAN);
+    SDL_Window *sdlWindow = sdl::CreateWindow("vk-simple", 800, 600, SDL_WINDOW_VULKAN);
+
+    SDLVulkanWindow vulkanWindow = SDLVulkanWindow{sdlWindow};
+    std::vector<std::string> instanceExtensions = vulkanWindow.GetInstanceExtensions();
 
     bool done = false;
     while (!done)
@@ -27,7 +32,7 @@ int SDL_main(int argc, char *argv[])
     }
 
     // Close and destroy the window
-    SDL_DestroyWindow(window);
+    SDL_DestroyWindow(sdlWindow);
 
     sdl::Quit();
 
