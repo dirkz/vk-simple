@@ -33,4 +33,12 @@ vk::raii::SurfaceKHR SDLVulkanWindow::CreateSurface(vk::raii::Instance &instance
     return vk::raii::SurfaceKHR{instance, surface};
 }
 
+vk::Extent2D SDLVulkanWindow::ExtentInPixels()
+{
+    int width, height;
+    sdl::GetWindowSizeInPixels(m_window, &width, &height);
+
+    return vk::Extent2D{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
+}
+
 } // namespace vksimple
