@@ -4,6 +4,7 @@
 
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
+#include "SwapchainSupportDetails.h"
 
 namespace vksimple
 {
