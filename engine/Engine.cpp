@@ -179,6 +179,18 @@ void Engine::CreateLogicalDevice()
     vk::DeviceQueueCreateInfo queueCreateInfo{{}, m_queueFamilyIndices.GraphicsQueue(), priorities};
 
     vk::PhysicalDeviceFeatures deviceFeatures{};
+
+    std::vector<const char *> layerNames{};
+    if (EnableValidation)
+    {
+        layerNames.resize(ValidationLayers.size());
+        std::transform(ValidationLayers.begin(), ValidationLayers.end(), layerNames.begin(),
+                       [](const std::string &s) { return s.c_str(); });
+    }
+
+    vk::DeviceCreateInfo createInfo{{}, queueCreateInfo, layerNames};
+
+    m_device = m_physicalDevice.createDevice(createInfo);
 }
 
 } // namespace vksimple
