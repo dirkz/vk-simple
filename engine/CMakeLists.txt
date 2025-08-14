@@ -2,7 +2,8 @@ add_library(engine OBJECT
 	Engine.h
 	Engine.cpp
 	IVulkanWindow.h
-	SDLVulkanWindow.h "SDLVulkanWindow.cpp")
+	SDLVulkanWindow.h
+	SDLVulkanWindow.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
