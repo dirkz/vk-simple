@@ -15,6 +15,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 {
     CreateInstance();
     SetupDebugMessenger();
+    CreateSurface();
     PickPhysicalDevice();
     CreateLogicalDevice();
 }
@@ -146,6 +147,11 @@ void Engine::SetupDebugMessenger()
     vk::DebugUtilsMessengerCreateInfoEXT createInfo = CreateDebugUtilsMessengerCreateInfo();
 
     m_debugMessenger = vk::raii::DebugUtilsMessengerEXT{m_instance, createInfo};
+}
+
+void Engine::CreateSurface()
+{
+    m_surface = m_window.CreateSurface(m_instance);
 }
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
