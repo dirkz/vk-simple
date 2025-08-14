@@ -42,5 +42,17 @@ vk::PresentModeKHR SwapchainSupportDetails::ChoosePresentMode()
 
     return vk::PresentModeKHR::eFifo;
 }
+vk::Extent2D SwapchainSupportDetails::ChooseExtent()
+{
+    if (m_capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
+    {
+        return m_capabilities.currentExtent;
+    }
+    else
+    {
+    }
+
+    return vk::Extent2D();
+}
 
 } // namespace vksimple

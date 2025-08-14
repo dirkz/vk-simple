@@ -6,6 +6,8 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdint>
+#include <limits>
 #include <optional>
 #include <set>
 #include <stdexcept>
