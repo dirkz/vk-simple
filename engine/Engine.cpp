@@ -161,7 +161,7 @@ void Engine::PickPhysicalDevice()
         if (IsDeviceSuitable(device))
         {
             m_physicalDevice = device;
-            m_queueFamilyIndices.SetDevice(device);
+            m_queueFamilyIndices = QueueFamilyIndices{device};
             break;
         }
     }

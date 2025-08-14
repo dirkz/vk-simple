@@ -9,11 +9,6 @@ QueueFamilyIndices::QueueFamilyIndices()
 
 QueueFamilyIndices::QueueFamilyIndices(vk::raii::PhysicalDevice &device)
 {
-    SetDevice(device);
-}
-
-void QueueFamilyIndices::SetDevice(vk::raii::PhysicalDevice &device)
-{
     std::vector<vk::QueueFamilyProperties> queueFamilies = device.getQueueFamilyProperties();
     uint32_t i = 0;
     for (const auto &queueFamily : queueFamilies)
