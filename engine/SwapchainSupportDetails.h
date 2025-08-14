@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+#include "IVulkanWindow.h"
+
 namespace vksimple
 {
 
@@ -12,7 +14,7 @@ struct SwapchainSupportDetails
     bool IsAdequate();
     vk::SurfaceFormatKHR ChooseSurfaceFormat();
     vk::PresentModeKHR ChoosePresentMode();
-    vk::Extent2D ChooseExtent();
+    vk::Extent2D ChooseExtent(IVulkanWindow &window) const;
 
   private:
     vk::SurfaceCapabilitiesKHR m_capabilities;

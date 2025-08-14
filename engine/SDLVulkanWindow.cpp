@@ -33,7 +33,7 @@ vk::raii::SurfaceKHR SDLVulkanWindow::CreateSurface(vk::raii::Instance &instance
     return vk::raii::SurfaceKHR{instance, surface};
 }
 
-vk::Extent2D SDLVulkanWindow::ExtentInPixels()
+vk::Extent2D SDLVulkanWindow::GetExtentInPixels()
 {
     int width, height;
     sdl::GetWindowSizeInPixels(m_window, &width, &height);

@@ -37,7 +37,7 @@ struct SDLVulkanWindow : IVulkanWindow
     std::vector<std::string> GetInstanceExtensions() override;
     PFN_vkGetInstanceProcAddr GetInstanceProcAddr() override;
     vk::raii::SurfaceKHR CreateSurface(vk::raii::Instance &instance) override;
-    vk::Extent2D ExtentInPixels() override;
+    vk::Extent2D GetExtentInPixels() override;
 
   private:
     SDL_Window *m_window;

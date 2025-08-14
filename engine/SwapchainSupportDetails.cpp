@@ -42,7 +42,8 @@ vk::PresentModeKHR SwapchainSupportDetails::ChoosePresentMode()
 
     return vk::PresentModeKHR::eFifo;
 }
-vk::Extent2D SwapchainSupportDetails::ChooseExtent()
+
+vk::Extent2D SwapchainSupportDetails::ChooseExtent(IVulkanWindow &window) const
 {
     if (m_capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
     {
@@ -50,9 +51,15 @@ vk::PresentModeKHR SwapchainSupportDetails::ChoosePresentMode()
     }
     else
     {
-    }
+        vk::Extent2D actualExtent = window.GetExtentInPixels();
 
-    return vk::Extent2D();
+        actualExtent.width = std::clamp(actualExtent.width, m_capabilities.minImageExtent.width,
+                                        m_capabilities.maxImageExtent.width);
+        actualExtent.height = std::clamp(actualExtent.height, m_capabilities.minImageExtent.height,
+                                         m_capabilities.maxImageExtent.height);
+
+        return actualExtent;
+    }
 }
 
 } // namespace vksimple
