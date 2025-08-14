@@ -47,30 +47,6 @@ std::vector<std::string> Engine::GetRequiredExtensionNames()
     return instanceExtensions;
 }
 
-void Engine::CreateInstance()
-{
-    if (EnableValidation && !CheckValidationLayerSupport())
-    {
-        throw std::runtime_error{"Validation requested but not supported"};
-    }
-
-    vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
-                                VK_API_VERSION_1_4};
-
-    std::vector<std::string> instanceExtensions = GetRequiredExtensionNames();
-    std::vector<const char *> extensionNames(instanceExtensions.size());
-    std::transform(instanceExtensions.begin(), instanceExtensions.end(), extensionNames.begin(),
-                   [](const std::string &s) { return s.c_str(); });
-
-    std::vector<const char *> layerNames(ValidationLayers.size());
-    std::transform(ValidationLayers.begin(), ValidationLayers.end(), layerNames.begin(),
-                   [](const std::string &s) { return s.c_str(); });
-
-    vk::InstanceCreateInfo createInfo{{}, &appInfo, layerNames, extensionNames};
-
-    m_instance = m_context.createInstance(createInfo);
-}
-
 static VKAPI_ATTR vk::Bool32 VKAPI_CALL
 DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
               vk::DebugUtilsMessageTypeFlagsEXT messageType,
@@ -102,13 +78,8 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     return vk::False;
 }
 
-void Engine::SetupDebugMessenger()
+vk::DebugUtilsMessengerCreateInfoEXT Engine::CreateDebugUtilsMessengerCreateInfo()
 {
-    if (!EnableValidation)
-    {
-        return;
-    }
-
     const vk::DebugUtilsMessageSeverityFlagsEXT messageSeverity =
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
@@ -121,6 +92,42 @@ void Engine::SetupDebugMessenger()
 
     vk::DebugUtilsMessengerCreateInfoEXT createInfo{
         {}, messageSeverity, messageType, DebugCallback};
+
+    return createInfo;
+}
+
+void Engine::CreateInstance()
+{
+    if (EnableValidation && !CheckValidationLayerSupport())
+    {
+        throw std::runtime_error{"Validation requested but not supported"};
+    }
+
+    vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
+                                VK_API_VERSION_1_4};
+
+    std::vector<std::string> instanceExtensions = GetRequiredExtensionNames();
+    std::vector<const char *> extensionNames(instanceExtensions.size());
+    std::transform(instanceExtensions.begin(), instanceExtensions.end(), extensionNames.begin(),
+                   [](const std::string &s) { return s.c_str(); });
+
+    std::vector<const char *> layerNames(ValidationLayers.size());
+    std::transform(ValidationLayers.begin(), ValidationLayers.end(), layerNames.begin(),
+                   [](const std::string &s) { return s.c_str(); });
+
+    vk::InstanceCreateInfo createInfo{{}, &appInfo, layerNames, extensionNames};
+
+    m_instance = m_context.createInstance(createInfo);
+}
+
+void Engine::SetupDebugMessenger()
+{
+    if (!EnableValidation)
+    {
+        return;
+    }
+
+    vk::DebugUtilsMessengerCreateInfoEXT createInfo = CreateDebugUtilsMessengerCreateInfo();
 
     m_debugMessenger = vk::raii::DebugUtilsMessengerEXT{m_instance, createInfo};
 }

@@ -12,6 +12,7 @@ struct Engine
 
     bool CheckValidationLayerSupport();
     std::vector<std::string> GetRequiredExtensionNames();
+    vk::DebugUtilsMessengerCreateInfoEXT CreateDebugUtilsMessengerCreateInfo();
     void CreateInstance();
     void SetupDebugMessenger();
 
