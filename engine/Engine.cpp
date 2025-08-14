@@ -70,7 +70,7 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
             kind = "ERROR";
             break;
         }
-        SDL_Log("%s: %s", kind, pCallbackData->pMessage);
+        SDL_Log("Validation (%s): %s", kind, pCallbackData->pMessage);
 
         return vk::True;
     }
@@ -87,8 +87,7 @@ vk::DebugUtilsMessengerCreateInfoEXT Engine::CreateDebugUtilsMessengerCreateInfo
     const vk::DebugUtilsMessageTypeFlagsEXT messageType =
         vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
         vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
-        vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
-        vk::DebugUtilsMessageTypeFlagBitsEXT::eDeviceAddressBinding;
+        vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance;
 
     vk::DebugUtilsMessengerCreateInfoEXT createInfo{
         {}, messageSeverity, messageType, DebugCallback};
@@ -115,9 +114,20 @@ void Engine::CreateInstance()
     std::transform(ValidationLayers.begin(), ValidationLayers.end(), layerNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
 
-    vk::InstanceCreateInfo createInfo{{}, &appInfo, layerNames, extensionNames};
+    vk::DebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo =
+        CreateDebugUtilsMessengerCreateInfo();
 
-    m_instance = m_context.createInstance(createInfo);
+    vk::InstanceCreateInfo instanceCreateInfo{{}, &appInfo, layerNames, extensionNames};
+
+    vk::StructureChain<vk::InstanceCreateInfo, vk::DebugUtilsMessengerCreateInfoEXT> createInfo{
+        instanceCreateInfo, debugMessengerCreateInfo};
+
+    if (!EnableValidation)
+    {
+        createInfo.unlink<vk::DebugUtilsMessengerCreateInfoEXT>();
+    }
+
+    m_instance = m_context.createInstance(createInfo.get<vk::InstanceCreateInfo>());
 }
 
 void Engine::SetupDebugMessenger()
