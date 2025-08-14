@@ -11,6 +11,7 @@ struct SwapchainSupportDetails
 
     bool IsAdequate();
     vk::SurfaceFormatKHR ChooseSurfaceFormat();
+    vk::PresentModeKHR ChoosePresentMode();
 
   private:
     vk::SurfaceCapabilitiesKHR m_capabilities;

@@ -18,7 +18,7 @@ bool SwapchainSupportDetails::IsAdequate()
 
 vk::SurfaceFormatKHR SwapchainSupportDetails::ChooseSurfaceFormat()
 {
-    for (const auto &format : m_formats)
+    for (const vk::SurfaceFormatKHR &format : m_formats)
     {
         if (format.format == vk::Format::eB8G8R8A8Srgb &&
             format.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear)
@@ -28,6 +28,19 @@ vk::SurfaceFormatKHR SwapchainSupportDetails::ChooseSurfaceFormat()
     }
 
     return m_formats[0];
+}
+
+vk::PresentModeKHR SwapchainSupportDetails::ChoosePresentMode()
+{
+    for (const vk::PresentModeKHR &presentMode : m_presentModes)
+    {
+        if (presentMode == vk::PresentModeKHR::eMailbox)
+        {
+            return presentMode;
+        }
+    }
+
+    return vk::PresentModeKHR::eFifo;
 }
 
 } // namespace vksimple
