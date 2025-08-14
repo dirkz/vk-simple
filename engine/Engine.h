@@ -18,6 +18,7 @@ struct Engine
     void CreateInstance();
     void SetupDebugMessenger();
     void CreateSurface();
+    bool CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device);
     bool IsDeviceSuitable(vk::raii::PhysicalDevice &device);
     void PickPhysicalDevice();
     void CreateLogicalDevice();

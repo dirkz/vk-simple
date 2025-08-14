@@ -11,6 +11,8 @@ constexpr bool EnableValidation = false;
 constexpr bool EnableValidation = true;
 #endif
 
+std::vector<std::string> DeviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
     CreateInstance();
@@ -154,10 +156,30 @@ void Engine::CreateSurface()
     m_surface = m_window.CreateSurface(m_instance);
 }
 
+bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
+{
+    const std::vector<vk::ExtensionProperties> properties =
+        device.enumerateDeviceExtensionProperties();
+
+    std::set<std::string> requiredExtensions{DeviceExtensions.begin(), DeviceExtensions.end()};
+
+    for (const vk::ExtensionProperties &props : properties)
+    {
+        requiredExtensions.erase(props.extensionName);
+        if (requiredExtensions.empty())
+        {
+            break;
+        }
+    }
+
+    return requiredExtensions.empty();
+}
+
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
     QueueFamilyIndices indices{device, m_surface};
-    return indices.IsComplete();
+    bool extensionsSupported = CheckDeviceExtensionSupport(device);
+    return indices.IsComplete() && extensionsSupported;
 }
 
 void Engine::PickPhysicalDevice()
@@ -202,7 +224,11 @@ void Engine::CreateLogicalDevice()
                        [](const std::string &s) { return s.c_str(); });
     }
 
-    vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames};
+    std::vector<const char *> extensionNames(DeviceExtensions.size());
+    std::transform(DeviceExtensions.begin(), DeviceExtensions.end(), extensionNames.begin(),
+                   [](const std::string &s) { return s.c_str(); });
+
+    vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames, extensionNames};
 
     m_device = m_physicalDevice.createDevice(createInfo);
 
