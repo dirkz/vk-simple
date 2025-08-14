@@ -45,6 +45,7 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
     CreateInstance();
+    SetupDebugMessenger();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -103,6 +104,11 @@ void Engine::CreateInstance()
 
 void Engine::SetupDebugMessenger()
 {
+    if (!EnableValidation)
+    {
+        return;
+    }
+
     const vk::DebugUtilsMessageSeverityFlagsEXT messageSeverity =
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
@@ -115,6 +121,8 @@ void Engine::SetupDebugMessenger()
 
     vk::DebugUtilsMessengerCreateInfoEXT createInfo{
         {}, messageSeverity, messageType, DebugCallback};
+
+    m_debugMessenger = vk::raii::DebugUtilsMessengerEXT{m_instance, createInfo};
 }
 
 } // namespace vksimple

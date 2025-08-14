@@ -19,8 +19,8 @@ struct Engine
     IVulkanWindow &m_window;
 
     vk::raii::Context m_context;
-    vk::raii::DebugUtilsMessengerEXT m_debugMessenger = nullptr;
     vk::raii::Instance m_instance = nullptr;
+    vk::raii::DebugUtilsMessengerEXT m_debugMessenger = nullptr;
 };
 
 } // namespace vksimple
