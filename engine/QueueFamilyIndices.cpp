@@ -32,4 +32,9 @@ bool QueueFamilyIndices::IsComplete()
     return m_graphicsFamily.has_value();
 }
 
+uint32_t QueueFamilyIndices::GraphicsQueue()
+{
+    return m_graphicsFamily.value();
+}
+
 } // namespace vksimple

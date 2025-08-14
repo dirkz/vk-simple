@@ -16,6 +16,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateInstance();
     SetupDebugMessenger();
     PickPhysicalDevice();
+    CreateLogicalDevice();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -170,6 +171,14 @@ void Engine::PickPhysicalDevice()
     {
         throw std::runtime_error{"no suitable physical device found"};
     }
+}
+
+void Engine::CreateLogicalDevice()
+{
+    const std::array priorities{1.0f};
+    vk::DeviceQueueCreateInfo queueCreateInfo{{}, m_queueFamilyIndices.GraphicsQueue(), priorities};
+
+    vk::PhysicalDeviceFeatures deviceFeatures{};
 }
 
 } // namespace vksimple

@@ -5,6 +5,7 @@
 #include <vulkan/vulkan_raii.hpp>
 
 #include <algorithm>
+#include <array>
 #include <optional>
 #include <set>
 #include <stdexcept>

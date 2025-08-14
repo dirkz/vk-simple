@@ -19,6 +19,7 @@ struct Engine
     void SetupDebugMessenger();
     bool IsDeviceSuitable(vk::raii::PhysicalDevice &device);
     void PickPhysicalDevice();
+    void CreateLogicalDevice();
 
     IVulkanWindow &m_window;
 
@@ -27,6 +28,7 @@ struct Engine
     vk::raii::DebugUtilsMessengerEXT m_debugMessenger = nullptr;
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
+    vk::raii::Device m_device = nullptr;
 };
 
 } // namespace vksimple
