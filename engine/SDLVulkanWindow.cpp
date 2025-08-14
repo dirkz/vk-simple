@@ -23,4 +23,14 @@ PFN_vkGetInstanceProcAddr SDLVulkanWindow::GetInstanceProcAddr()
     return reinterpret_cast<PFN_vkGetInstanceProcAddr>(SDL_Vulkan_GetVkGetInstanceProcAddr());
 }
 
+vk::raii::SurfaceKHR SDLVulkanWindow::CreateSurface(vk::raii::Instance &instance)
+{
+    VkSurfaceKHR surface;
+
+    bool success = SDL_Vulkan_CreateSurface(m_window, *instance, nullptr, &surface);
+    HandleSDLError(success == false, "SDL_Vulkan_CreateSurface");
+
+    return vk::raii::SurfaceKHR{instance, surface};
+}
+
 } // namespace vksimple
