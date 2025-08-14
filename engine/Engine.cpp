@@ -178,8 +178,17 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
     QueueFamilyIndices indices{device, m_surface};
+
     bool extensionsSupported = CheckDeviceExtensionSupport(device);
-    return indices.IsComplete() && extensionsSupported;
+
+    bool swapchainAdequate = false;
+    if (extensionsSupported)
+    {
+        SwapchainSupportDetails swapchainDetails{device, m_surface};
+        swapchainAdequate = swapchainDetails.IsAdequate();
+    }
+
+    return indices.IsComplete() && extensionsSupported && swapchainAdequate;
 }
 
 void Engine::PickPhysicalDevice()
