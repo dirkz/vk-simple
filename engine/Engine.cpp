@@ -1,5 +1,7 @@
 #include "Engine.h"
 
+#include "SwapchainSupportDetails.h"
+
 namespace vksimple
 {
 
@@ -20,6 +22,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateSurface();
     PickPhysicalDevice();
     CreateLogicalDevice();
+    CreateSwapchain();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -243,6 +246,14 @@ void Engine::CreateLogicalDevice()
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
+}
+
+void Engine::CreateSwapchain()
+{
+    SwapchainSupportDetails details{m_physicalDevice, m_surface};
+
+    uint32_t imageCount =
+        std::clamp(static_cast<uint32_t>(3), details.MinImageCount(), details.MaxImageCount());
 }
 
 } // namespace vksimple

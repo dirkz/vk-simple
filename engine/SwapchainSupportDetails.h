@@ -15,6 +15,8 @@ struct SwapchainSupportDetails
     vk::SurfaceFormatKHR ChooseSurfaceFormat();
     vk::PresentModeKHR ChoosePresentMode();
     vk::Extent2D ChooseExtent(IVulkanWindow &window) const;
+    uint32_t MinImageCount() const;
+    uint32_t MaxImageCount() const;
 
   private:
     vk::SurfaceCapabilitiesKHR m_capabilities;

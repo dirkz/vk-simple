@@ -4,7 +4,6 @@
 
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
-#include "SwapchainSupportDetails.h"
 
 namespace vksimple
 {
@@ -23,6 +22,7 @@ struct Engine
     bool IsDeviceSuitable(vk::raii::PhysicalDevice &device);
     void PickPhysicalDevice();
     void CreateLogicalDevice();
+    void CreateSwapchain();
 
     IVulkanWindow &m_window;
 
