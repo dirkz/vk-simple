@@ -11,37 +11,6 @@ constexpr bool EnableValidation = false;
 constexpr bool EnableValidation = true;
 #endif
 
-static VKAPI_ATTR vk::Bool32 VKAPI_CALL
-DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-              vk::DebugUtilsMessageTypeFlagsEXT messageType,
-              const vk::DebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
-{
-    if (messageSeverity >= vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning)
-    {
-        const char *kind = "UNKNOWN";
-        switch (messageSeverity)
-        {
-        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose:
-            kind = "VERBOSE";
-            break;
-        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo:
-            kind = "INFO";
-            break;
-        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning:
-            kind = "WARNING";
-            break;
-        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eError:
-            kind = "ERROR";
-            break;
-        }
-        SDL_Log("%s: %s", kind, pCallbackData->pMessage);
-
-        return vk::True;
-    }
-
-    return vk::False;
-}
-
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
     CreateInstance();
@@ -100,6 +69,37 @@ void Engine::CreateInstance()
     vk::InstanceCreateInfo createInfo{{}, &appInfo, layerNames, extensionNames};
 
     m_instance = m_context.createInstance(createInfo);
+}
+
+static VKAPI_ATTR vk::Bool32 VKAPI_CALL
+DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+              vk::DebugUtilsMessageTypeFlagsEXT messageType,
+              const vk::DebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
+{
+    if (messageSeverity >= vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning)
+    {
+        const char *kind = "UNKNOWN";
+        switch (messageSeverity)
+        {
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose:
+            kind = "VERBOSE";
+            break;
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo:
+            kind = "INFO";
+            break;
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning:
+            kind = "WARNING";
+            break;
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eError:
+            kind = "ERROR";
+            break;
+        }
+        SDL_Log("%s: %s", kind, pCallbackData->pMessage);
+
+        return vk::True;
+    }
+
+    return vk::False;
 }
 
 void Engine::SetupDebugMessenger()
