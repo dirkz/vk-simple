@@ -11,26 +11,26 @@ constexpr bool EnableValidation = false;
 constexpr bool EnableValidation = true;
 #endif
 
-static VKAPI_ATTR VkBool32 VKAPI_CALL
-DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-              VkDebugUtilsMessageTypeFlagsEXT messageType,
-              const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
+static VKAPI_ATTR vk::Bool32 VKAPI_CALL
+DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+              vk::DebugUtilsMessageTypeFlagsEXT messageType,
+              const vk::DebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData)
 {
-    if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+    if (messageSeverity >= vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning)
     {
         const char *kind = "UNKNOWN";
         switch (messageSeverity)
         {
-        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT:
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose:
             kind = "VERBOSE";
             break;
-        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT:
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo:
             kind = "INFO";
             break;
-        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT:
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning:
             kind = "WARNING";
             break;
-        case VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT:
+        case vk::DebugUtilsMessageSeverityFlagBitsEXT::eError:
             kind = "ERROR";
             break;
         }
@@ -103,15 +103,18 @@ void Engine::CreateInstance()
 
 void Engine::SetupDebugMessenger()
 {
-    vk::DebugUtilsMessengerCreateInfoEXT createInfo{
-        {},
+    const vk::DebugUtilsMessageSeverityFlagsEXT messageSeverity =
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
-            vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning,
+        vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
+
+    const vk::DebugUtilsMessageTypeFlagsEXT messageType =
         vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
-            vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
-            vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
-            vk::DebugUtilsMessageTypeFlagBitsEXT::eDeviceAddressBinding,
-        DebugCallback};
+        vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
+        vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
+        vk::DebugUtilsMessageTypeFlagBitsEXT::eDeviceAddressBinding;
+
+    vk::DebugUtilsMessengerCreateInfoEXT createInfo{
+        {}, messageSeverity, messageType, DebugCallback};
 }
 
 } // namespace vksimple
