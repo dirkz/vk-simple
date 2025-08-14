@@ -156,7 +156,7 @@ void Engine::CreateSurface()
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
-    QueueFamilyIndices indices{device};
+    QueueFamilyIndices indices{device, m_surface};
     return indices.IsComplete();
 }
 
@@ -168,7 +168,7 @@ void Engine::PickPhysicalDevice()
         if (IsDeviceSuitable(device))
         {
             m_physicalDevice = device;
-            m_queueFamilyIndices = QueueFamilyIndices{device};
+            m_queueFamilyIndices = QueueFamilyIndices{device, m_surface};
             break;
         }
     }
