@@ -10,13 +10,13 @@ struct Engine
 {
     Engine(IVulkanWindow &window);
 
+  private:
     bool CheckValidationLayerSupport();
     std::vector<std::string> GetRequiredExtensionNames();
     vk::DebugUtilsMessengerCreateInfoEXT CreateDebugUtilsMessengerCreateInfo();
     void CreateInstance();
     void SetupDebugMessenger();
 
-  private:
     IVulkanWindow &m_window;
 
     vk::raii::Context m_context;
