@@ -149,7 +149,8 @@ void Engine::SetupDebugMessenger()
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
-    return true;
+    QueueFamilyIndices indices{device};
+    return indices.IsComplete();
 }
 
 void Engine::PickPhysicalDevice()
@@ -160,6 +161,7 @@ void Engine::PickPhysicalDevice()
         if (IsDeviceSuitable(device))
         {
             m_physicalDevice = device;
+            m_queueFamilyIndices.SetDevice(device);
             break;
         }
     }
