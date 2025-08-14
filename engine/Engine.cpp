@@ -15,6 +15,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 {
     CreateInstance();
     SetupDebugMessenger();
+    PickPhysicalDevice();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -144,6 +145,29 @@ void Engine::SetupDebugMessenger()
     vk::DebugUtilsMessengerCreateInfoEXT createInfo = CreateDebugUtilsMessengerCreateInfo();
 
     m_debugMessenger = vk::raii::DebugUtilsMessengerEXT{m_instance, createInfo};
+}
+
+bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
+{
+    return true;
+}
+
+void Engine::PickPhysicalDevice()
+{
+    std::vector<vk::raii::PhysicalDevice> devices = m_instance.enumeratePhysicalDevices();
+    for (vk::raii::PhysicalDevice &device : devices)
+    {
+        if (IsDeviceSuitable(device))
+        {
+            m_physicalDevice = device;
+            break;
+        }
+    }
+
+    if (m_physicalDevice == nullptr)
+    {
+        throw std::runtime_error{"no suitable physical device found"};
+    }
 }
 
 } // namespace vksimple
