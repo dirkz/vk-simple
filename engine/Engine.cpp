@@ -181,8 +181,16 @@ void Engine::PickPhysicalDevice()
 
 void Engine::CreateLogicalDevice()
 {
+    std::set<uint32_t> queues{m_queueFamilyIndices.GraphicsQueue(),
+                              m_queueFamilyIndices.PresentQueue()};
+
     const std::array priorities{1.0f};
-    vk::DeviceQueueCreateInfo queueCreateInfo{{}, m_queueFamilyIndices.GraphicsQueue(), priorities};
+    std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos{};
+    for (uint32_t queue : queues)
+    {
+        vk::DeviceQueueCreateInfo queueCreateInfo{{}, queue, priorities};
+        queueCreateInfos.push_back(queueCreateInfo);
+    }
 
     vk::PhysicalDeviceFeatures deviceFeatures{};
 
@@ -194,11 +202,12 @@ void Engine::CreateLogicalDevice()
                        [](const std::string &s) { return s.c_str(); });
     }
 
-    vk::DeviceCreateInfo createInfo{{}, queueCreateInfo, layerNames};
+    vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames};
 
     m_device = m_physicalDevice.createDevice(createInfo);
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
+    m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
 }
 
 } // namespace vksimple
