@@ -191,6 +191,8 @@ void Engine::CreateLogicalDevice()
     vk::DeviceCreateInfo createInfo{{}, queueCreateInfo, layerNames};
 
     m_device = m_physicalDevice.createDevice(createInfo);
+
+    m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
 }
 
 } // namespace vksimple

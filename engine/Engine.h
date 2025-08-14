@@ -29,6 +29,8 @@ struct Engine
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
+
+    vk::raii::Queue m_graphicsQueue = nullptr;
 };
 
 } // namespace vksimple
