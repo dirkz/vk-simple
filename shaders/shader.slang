@@ -11,21 +11,21 @@ static float3 Colors[3] = float3[](
 );
 
 struct VertexOutput {
-    float3 color;
-    float4 sv_position : SV_Position;
+    float3 Color;
+    float4 Position : SV_Position;
 };
 
 [shader("vertex")]
 VertexOutput VertexMain(uint vid : SV_VertexID) {
     VertexOutput output;
-    output.sv_position = float4(Positions[vid], 0.0, 1.0);
-    output.color = Colors[vid];
+    output.Position = float4(Positions[vid], 0.0, 1.0);
+    output.Color = Colors[vid];
     return output;
 }
 
 [shader("fragment")]
 float4 FragmentMain(VertexOutput inVert) : SV_Target
 {
-    float3 color = inVert.color;
+    float3 color = inVert.Color;
     return float4(color, 1.0);
 }
