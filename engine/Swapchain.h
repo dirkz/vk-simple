@@ -34,7 +34,7 @@ struct Swapchain
         return *this;
     }
 
-    void CreateImageViews();
+    void CreateImageViews(vk::raii::Device &device);
 
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;

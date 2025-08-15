@@ -62,20 +62,28 @@ vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::rai
     m_imageFormat = surfaceFormat.format;
     m_extent = imageExtent;
 
-    CreateImageViews();
+    CreateImageViews(device);
 }
 
-void Swapchain::CreateImageViews()
+void Swapchain::CreateImageViews(vk::raii::Device &device)
 {
     vk::ComponentMapping componentMapping{
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity};
 
+    vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1};
+
     m_imageViews.resize(m_images.size());
     for (auto i = 0; i < m_images.size(); ++i)
     {
-        vk::ImageViewCreateInfo createInfo{
-            {}, m_images[0], vk::ImageViewType::e2D, m_imageFormat, componentMapping};
+        vk::ImageViewCreateInfo createInfo{{},
+                                           m_images[0],
+                                           vk::ImageViewType::e2D,
+                                           m_imageFormat,
+                                           componentMapping,
+                                           subresourceRange};
+
+        m_imageViews[i] = device.createImageView(createInfo);
     }
 }
 
