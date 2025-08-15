@@ -250,57 +250,12 @@ void Engine::CreateLogicalDevice()
 
 void Engine::CreateSwapchain()
 {
-    SwapchainSupportDetails details{m_physicalDevice, m_surface};
-
-    uint32_t imageCount = 3;
-
-    if (imageCount < details.MinImageCount())
-    {
-        imageCount = details.MinImageCount();
-    }
-
-    if (details.MaxImageCount() > 0 && imageCount > details.MaxImageCount())
-    {
-        imageCount = details.MaxImageCount();
-    }
-
-    const vk::SharingMode imageSharingMode =
-        m_queueFamilyIndices.GraphicsQueue() == m_queueFamilyIndices.PresentQueue()
-            ? vk::SharingMode::eExclusive
-            : vk::SharingMode::eConcurrent;
-    std::vector<uint32_t> queueFamilyIndices{};
-    if (imageSharingMode == vk::SharingMode::eConcurrent)
-    {
-        queueFamilyIndices.push_back(m_queueFamilyIndices.GraphicsQueue());
-        queueFamilyIndices.push_back(m_queueFamilyIndices.PresentQueue());
-    }
-
-    const vk::SurfaceFormatKHR surfaceFormat = details.ChooseSurfaceFormat();
-    const vk::Format imageFormat = surfaceFormat.format;
-    const vk::ColorSpaceKHR imageColorSpace = surfaceFormat.colorSpace;
-    const vk::Extent2D imageExtent = details.ChooseExtent(m_window);
-    const uint32_t imageArrayLayers = 1;
-    const vk::SurfaceTransformFlagBitsKHR preTransform = details.CurrentTransform();
-    const vk::PresentModeKHR presentMode = details.ChoosePresentMode();
-    const vk::Bool32 clipped = vk::True;
-    vk::SwapchainCreateInfoKHR createInfo{{},
-                                          m_surface,
-                                          imageCount,
-                                          imageFormat,
-                                          imageColorSpace,
-                                          imageExtent,
-                                          imageArrayLayers,
-                                          vk::ImageUsageFlagBits::eColorAttachment,
-                                          imageSharingMode,
-                                          queueFamilyIndices,
-                                          preTransform,
-                                          vk::CompositeAlphaFlagBitsKHR::eOpaque,
-                                          presentMode,
-                                          clipped};
-
-    m_swapchain = m_device.createSwapchainKHR(createInfo);
-
-    m_swapchainImages = m_swapchain.getImages();
+    m_swapchain = Swapchain{m_physicalDevice,
+                            m_device,
+                            m_surface,
+                            m_window,
+                            m_queueFamilyIndices.GraphicsQueue(),
+                            m_queueFamilyIndices.PresentQueue()};
 }
 
 } // namespace vksimple

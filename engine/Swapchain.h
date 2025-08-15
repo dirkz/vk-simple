@@ -9,6 +9,10 @@ namespace vksimple
 
 struct Swapchain
 {
+    Swapchain() = delete;
+    Swapchain(Swapchain &) = delete;
+    Swapchain &operator=(Swapchain const &) = delete;
+
     Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device,
               vk::raii::SurfaceKHR &surface, IVulkanWindow &window, uint32_t graphicsQueue,
               uint32_t presentQueue);
@@ -17,13 +21,14 @@ struct Swapchain
     {
     }
 
-    Swapchain() = delete;
-    Swapchain(Swapchain &) = delete;
-
-    Swapchain(Swapchain &&rhs)
-        : m_swapchain{std::move(rhs.m_swapchain)},
-          m_swapchainImages{std::move(rhs.m_swapchainImages)}
+    Swapchain &operator=(Swapchain &&rhs)
     {
+        if (this != &rhs)
+        {
+            std::swap(m_swapchain, rhs.m_swapchain);
+            std::swap(m_swapchainImages, rhs.m_swapchainImages);
+        }
+        return *this;
     }
 
   private:

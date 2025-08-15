@@ -4,6 +4,7 @@
 
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
+#include "Swapchain.h"
 
 namespace vksimple
 {
@@ -34,8 +35,7 @@ struct Engine
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
 
-    vk::raii::SwapchainKHR m_swapchain = nullptr;
-    std::vector<vk::Image> m_swapchainImages;
+    Swapchain m_swapchain = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;
