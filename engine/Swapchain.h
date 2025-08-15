@@ -21,19 +21,23 @@ struct Swapchain
     {
     }
 
-    Swapchain &operator=(Swapchain &&rhs)
+    Swapchain &operator=(Swapchain &&rhs) noexcept
     {
         if (this != &rhs)
         {
             std::swap(m_swapchain, rhs.m_swapchain);
-            std::swap(m_swapchainImages, rhs.m_swapchainImages);
+            std::swap(m_images, rhs.m_images);
+            std::swap(m_imageFormat, rhs.m_imageFormat);
+            std::swap(m_extent, rhs.m_extent);
         }
         return *this;
     }
 
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
-    std::vector<vk::Image> m_swapchainImages;
+    std::vector<vk::Image> m_images;
+    vk::Format m_imageFormat;
+    vk::Extent2D m_extent;
 };
 
 } // namespace vksimple

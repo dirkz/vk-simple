@@ -57,7 +57,10 @@ vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::rai
 
     m_swapchain = device.createSwapchainKHR(createInfo);
 
-    m_swapchainImages = m_swapchain.getImages();
+    m_images = m_swapchain.getImages();
+
+    m_imageFormat = surfaceFormat.format;
+    m_extent = imageExtent;
 }
 
 } // namespace vksimple
