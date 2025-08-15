@@ -281,6 +281,8 @@ void Engine::CreateSwapchain()
     const vk::Extent2D imageExtent = details.ChooseExtent(m_window);
     const uint32_t imageArrayLayers = 1;
     const vk::SurfaceTransformFlagBitsKHR preTransform = details.CurrentTransform();
+    const vk::PresentModeKHR presentMode = details.ChoosePresentMode();
+    const vk::Bool32 clipped = vk::True;
     vk::SwapchainCreateInfoKHR createInfo{{},
                                           m_surface,
                                           imageCount,
@@ -291,7 +293,10 @@ void Engine::CreateSwapchain()
                                           vk::ImageUsageFlagBits::eColorAttachment,
                                           imageSharingMode,
                                           queueFamilyIndices,
-                                          preTransform};
+                                          preTransform,
+                                          vk::CompositeAlphaFlagBitsKHR::eOpaque,
+                                          presentMode,
+                                          clipped};
 }
 
 } // namespace vksimple
