@@ -299,6 +299,8 @@ void Engine::CreateSwapchain()
                                           clipped};
 
     m_swapchain = m_device.createSwapchainKHR(createInfo);
+
+    m_swapchainImages = m_swapchain.getImages();
 }
 
 } // namespace vksimple
