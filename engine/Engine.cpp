@@ -263,6 +263,33 @@ void Engine::CreateSwapchain()
     {
         imageCount = details.MaxImageCount();
     }
+
+    const vk::SharingMode imageSharingMode =
+        m_queueFamilyIndices.GraphicsQueue() == m_queueFamilyIndices.PresentQueue()
+            ? vk::SharingMode::eExclusive
+            : vk::SharingMode::eConcurrent;
+    std::vector<uint32_t> queueFamilyIndices{};
+    if (imageSharingMode == vk::SharingMode::eConcurrent)
+    {
+        queueFamilyIndices.push_back(m_queueFamilyIndices.GraphicsQueue());
+        queueFamilyIndices.push_back(m_queueFamilyIndices.PresentQueue());
+    }
+
+    const vk::SurfaceFormatKHR surfaceFormat = details.ChooseSurfaceFormat();
+    const vk::Format imageFormat = surfaceFormat.format;
+    const vk::ColorSpaceKHR imageColorSpace = surfaceFormat.colorSpace;
+    const vk::Extent2D imageExtent = details.ChooseExtent(m_window);
+    const uint32_t imageArrayLayers = 1;
+    vk::SwapchainCreateInfoKHR createInfo{{},
+                                          m_surface,
+                                          imageCount,
+                                          imageFormat,
+                                          imageColorSpace,
+                                          imageExtent,
+                                          imageArrayLayers,
+                                          vk::ImageUsageFlagBits::eColorAttachment,
+                                          imageSharingMode,
+                                          queueFamilyIndices};
 }
 
 } // namespace vksimple
