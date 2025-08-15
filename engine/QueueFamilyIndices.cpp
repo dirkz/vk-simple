@@ -34,19 +34,4 @@ QueueFamilyIndices::QueueFamilyIndices(vk::raii::PhysicalDevice &device,
     }
 }
 
-bool QueueFamilyIndices::IsComplete()
-{
-    return m_graphicsFamily.has_value() && m_presentFamily.has_value();
-}
-
-uint32_t QueueFamilyIndices::GraphicsQueue()
-{
-    return m_graphicsFamily.value();
-}
-
-uint32_t QueueFamilyIndices::PresentQueue()
-{
-    return m_presentFamily.value();
-}
-
 } // namespace vksimple
