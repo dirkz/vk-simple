@@ -74,6 +74,7 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
     vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1};
 
     m_imageViews.resize(m_images.size());
+
     for (auto i = 0; i < m_images.size(); ++i)
     {
         vk::ImageViewCreateInfo createInfo{{},
