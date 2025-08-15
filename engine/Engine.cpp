@@ -252,8 +252,17 @@ void Engine::CreateSwapchain()
 {
     SwapchainSupportDetails details{m_physicalDevice, m_surface};
 
-    uint32_t imageCount =
-        std::clamp(static_cast<uint32_t>(3), details.MinImageCount(), details.MaxImageCount());
+    uint32_t imageCount = 3;
+
+    if (imageCount < details.MinImageCount())
+    {
+        imageCount = details.MinImageCount();
+    }
+
+    if (details.MaxImageCount() > 0 && imageCount > details.MaxImageCount())
+    {
+        imageCount = details.MaxImageCount();
+    }
 }
 
 } // namespace vksimple
