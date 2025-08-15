@@ -33,6 +33,7 @@ struct Engine
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
+    vk::raii::SwapchainKHR m_swapchain = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;

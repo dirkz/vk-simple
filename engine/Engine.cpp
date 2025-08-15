@@ -297,6 +297,8 @@ void Engine::CreateSwapchain()
                                           vk::CompositeAlphaFlagBitsKHR::eOpaque,
                                           presentMode,
                                           clipped};
+
+    m_swapchain = m_device.createSwapchainKHR(createInfo);
 }
 
 } // namespace vksimple
