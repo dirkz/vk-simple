@@ -29,15 +29,19 @@ struct Swapchain
             std::swap(m_images, rhs.m_images);
             std::swap(m_imageFormat, rhs.m_imageFormat);
             std::swap(m_extent, rhs.m_extent);
+            std::swap(m_imageViews, rhs.m_imageViews);
         }
         return *this;
     }
+
+    void CreateImageViews();
 
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
     vk::Format m_imageFormat;
     vk::Extent2D m_extent;
+    std::vector<vk::ImageView> m_imageViews;
 };
 
 } // namespace vksimple

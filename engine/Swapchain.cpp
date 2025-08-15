@@ -61,6 +61,22 @@ vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::rai
 
     m_imageFormat = surfaceFormat.format;
     m_extent = imageExtent;
+
+    CreateImageViews();
+}
+
+void Swapchain::CreateImageViews()
+{
+    vk::ComponentMapping componentMapping{
+        vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
+        vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity};
+
+    m_imageViews.resize(m_images.size());
+    for (auto i = 0; i < m_images.size(); ++i)
+    {
+        vk::ImageViewCreateInfo createInfo{
+            {}, m_images[0], vk::ImageViewType::e2D, m_imageFormat, componentMapping};
+    }
 }
 
 } // namespace vksimple
