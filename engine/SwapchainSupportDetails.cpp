@@ -62,14 +62,4 @@ vk::Extent2D SwapchainSupportDetails::ChooseExtent(IVulkanWindow &window) const
     }
 }
 
-uint32_t SwapchainSupportDetails::MinImageCount() const
-{
-    return m_capabilities.minImageCount;
-}
-
-uint32_t SwapchainSupportDetails::MaxImageCount() const
-{
-    return m_capabilities.maxImageCount;
-}
-
 } // namespace vksimple

@@ -280,6 +280,7 @@ void Engine::CreateSwapchain()
     const vk::ColorSpaceKHR imageColorSpace = surfaceFormat.colorSpace;
     const vk::Extent2D imageExtent = details.ChooseExtent(m_window);
     const uint32_t imageArrayLayers = 1;
+    const vk::SurfaceTransformFlagBitsKHR preTransform = details.CurrentTransform();
     vk::SwapchainCreateInfoKHR createInfo{{},
                                           m_surface,
                                           imageCount,
@@ -289,7 +290,8 @@ void Engine::CreateSwapchain()
                                           imageArrayLayers,
                                           vk::ImageUsageFlagBits::eColorAttachment,
                                           imageSharingMode,
-                                          queueFamilyIndices};
+                                          queueFamilyIndices,
+                                          preTransform};
 }
 
 } // namespace vksimple
