@@ -7,7 +7,9 @@ add_library(engine OBJECT
 	QueueFamilyIndices.h
 	QueueFamilyIndices.cpp
 	SwapchainSupportDetails.h
-	SwapchainSupportDetails.cpp)
+	SwapchainSupportDetails.cpp
+	Swapchain.h
+	Swapchain.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)

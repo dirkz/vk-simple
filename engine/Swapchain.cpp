@@ -1,0 +1,63 @@
+#include "Swapchain.h"
+
+#include "SwapchainSupportDetails.h"
+
+namespace vksimple
+{
+
+vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device,
+                               vk::raii::SurfaceKHR &surface, IVulkanWindow &window,
+                               uint32_t graphicsQueue, uint32_t presentQueue)
+{
+    SwapchainSupportDetails details{physicalDevice, surface};
+
+    uint32_t imageCount = 3;
+
+    if (imageCount < details.MinImageCount())
+    {
+        imageCount = details.MinImageCount();
+    }
+
+    if (details.MaxImageCount() > 0 && imageCount > details.MaxImageCount())
+    {
+        imageCount = details.MaxImageCount();
+    }
+
+    const vk::SharingMode imageSharingMode =
+        graphicsQueue == presentQueue ? vk::SharingMode::eExclusive : vk::SharingMode::eConcurrent;
+    std::vector<uint32_t> queueFamilyIndices{};
+    if (imageSharingMode == vk::SharingMode::eConcurrent)
+    {
+        queueFamilyIndices.push_back(graphicsQueue);
+        queueFamilyIndices.push_back(presentQueue);
+    }
+
+    const vk::SurfaceFormatKHR surfaceFormat = details.ChooseSurfaceFormat();
+    const vk::Format imageFormat = surfaceFormat.format;
+    const vk::ColorSpaceKHR imageColorSpace = surfaceFormat.colorSpace;
+    const vk::Extent2D imageExtent = details.ChooseExtent(window);
+    const uint32_t imageArrayLayers = 1;
+    const vk::SurfaceTransformFlagBitsKHR preTransform = details.CurrentTransform();
+    const vk::PresentModeKHR presentMode = details.ChoosePresentMode();
+    const vk::Bool32 clipped = vk::True;
+    vk::SwapchainCreateInfoKHR createInfo{{},
+                                          surface,
+                                          imageCount,
+                                          imageFormat,
+                                          imageColorSpace,
+                                          imageExtent,
+                                          imageArrayLayers,
+                                          vk::ImageUsageFlagBits::eColorAttachment,
+                                          imageSharingMode,
+                                          queueFamilyIndices,
+                                          preTransform,
+                                          vk::CompositeAlphaFlagBitsKHR::eOpaque,
+                                          presentMode,
+                                          clipped};
+
+    m_swapchain = device.createSwapchainKHR(createInfo);
+
+    m_swapchainImages = m_swapchain.getImages();
+}
+
+} // namespace vksimple
