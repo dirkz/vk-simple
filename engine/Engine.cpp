@@ -118,7 +118,7 @@ void Engine::CreateInstance()
     }
 
     vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
-                                VK_API_VERSION_1_4};
+                                VK_MAKE_VERSION(0, 0, 1), VK_API_VERSION_1_4};
 
     std::vector<std::string> instanceExtensions = GetRequiredExtensionNames();
     std::vector<const char *> extensionNames(instanceExtensions.size());
