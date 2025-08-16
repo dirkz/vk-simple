@@ -28,4 +28,11 @@ ShaderModule::ShaderModule(const std::string &filename)
     file.close();
 }
 
+vk::raii::ShaderModule ShaderModule::CreateShaderModule(vk::raii::Device &device)
+{
+    vk::ShaderModuleCreateInfo createInfo{
+        {}, m_buffer.size(), reinterpret_cast<uint32_t *>(m_buffer.data())};
+    return device.createShaderModule(createInfo);
+}
+
 } // namespace vksimple

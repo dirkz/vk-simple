@@ -263,6 +263,9 @@ void Engine::CreateSwapchain()
 void Engine::CreateGraphicsPipeline()
 {
     ShaderModule shaderModule{"shader.slang.spv"};
+
+    vk::raii::ShaderModule vertexShaderModule = shaderModule.CreateShaderModule(m_device);
+    vk::raii::ShaderModule fragmentShaderModule = shaderModule.CreateShaderModule(m_device);
 }
 
 } // namespace vksimple
