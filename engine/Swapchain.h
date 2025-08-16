@@ -36,6 +36,16 @@ struct Swapchain
 
     void CreateImageViews(vk::raii::Device &device);
 
+    uint32_t CurrentWidth() const
+    {
+        return m_extent.width;
+    }
+
+    uint32_t CurrentHeight() const
+    {
+        return m_extent.height;
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
