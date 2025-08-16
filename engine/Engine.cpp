@@ -281,6 +281,8 @@ void Engine::CreateGraphicsPipeline()
 
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
+
+    vk::PipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
 }
 
 } // namespace vksimple
