@@ -1,5 +1,6 @@
 #include "Engine.h"
 
+#include "ShaderModule.h"
 #include "SwapchainSupportDetails.h"
 
 namespace vksimple
@@ -261,6 +262,7 @@ void Engine::CreateSwapchain()
 
 void Engine::CreateGraphicsPipeline()
 {
+    ShaderModule shaderModule{"shader.slang.spv"};
 }
 
 } // namespace vksimple
