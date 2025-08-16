@@ -8,7 +8,7 @@ ShaderModule::ShaderModule(const std::string &filename)
     std::filesystem::path basePath{sdl::GetBasePath()};
     std::filesystem::path filepath = basePath / "shaders" / filename;
 
-    std::fstream file{filepath, std::ios::ate | std::ios::binary};
+    std::ifstream file{filepath, std::ios::ate | std::ios::binary};
     if (!file.is_open())
     {
         std::string filenameString = filepath.string();
