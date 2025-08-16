@@ -278,6 +278,9 @@ void Engine::CreateGraphicsPipeline()
         {}, vk::ShaderStageFlagBits::eFragment, shaderModule, "FragmentMain"};
 
     std::array shaderStageCreateInfos{vertextShaderStageCreateInfo, fragmentShaderStageCreateInfo};
+
+    std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
+    vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
 }
 
 } // namespace vksimple
