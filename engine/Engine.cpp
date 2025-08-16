@@ -283,6 +283,9 @@ void Engine::CreateGraphicsPipeline()
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
 
     vk::PipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
+
+    vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateCreateInfo{
+        {}, vk::PrimitiveTopology::eTriangleList, vk::False};
 }
 
 } // namespace vksimple
