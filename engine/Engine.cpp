@@ -14,7 +14,9 @@ constexpr bool EnableValidation = false;
 constexpr bool EnableValidation = true;
 #endif
 
-std::vector<std::string> DeviceExtensions{VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+std::vector<std::string> DeviceExtensions{vk::KHRSwapchainExtensionName,
+                                          vk::KHRSpirv14ExtensionName,
+                                          vk::KHRShaderFloatControlsExtensionName};
 
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
@@ -54,6 +56,9 @@ std::vector<std::string> Engine::GetRequiredExtensionNames()
     {
         instanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
+
+    instanceExtensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+
     return instanceExtensions;
 }
 
