@@ -9,6 +9,7 @@ ShaderModule::ShaderModule(const std::string &filename)
     std::filesystem::path filepath = basePath / "shaders" / filename;
 
     std::ifstream file{filepath, std::ios::ate | std::ios::binary};
+
     if (!file.is_open())
     {
         std::string filenameString = filepath.string();
@@ -17,6 +18,14 @@ ShaderModule::ShaderModule(const std::string &filename)
         std::string message{string};
         throw std::runtime_error{message};
     }
+
+    size_t fileSize = file.tellg();
+    m_buffer.resize(fileSize);
+
+    file.seekg(0);
+    file.read(m_buffer.data(), fileSize);
+
+    file.close();
 }
 
 } // namespace vksimple
