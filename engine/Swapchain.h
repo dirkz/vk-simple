@@ -17,7 +17,7 @@ struct Swapchain
               vk::raii::SurfaceKHR &surface, IVulkanWindow &window, uint32_t graphicsQueue,
               uint32_t presentQueue);
 
-    Swapchain(std::nullptr_t)
+    Swapchain(std::nullptr_t) : m_imageFormat{vk::Format::eR8G8B8A8Srgb}
     {
     }
 
