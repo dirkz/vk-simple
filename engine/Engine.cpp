@@ -1,6 +1,6 @@
 #include "Engine.h"
 
-#include "ShaderModule.h"
+#include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
 
 namespace vksimple
@@ -267,10 +267,17 @@ void Engine::CreateSwapchain()
 
 void Engine::CreateGraphicsPipeline()
 {
-    ShaderModule shaderModule{"shader.slang.spv"};
+    ShaderModuleLoader shaderModuleLoader{"shader.slang.spv"};
 
-    vk::raii::ShaderModule vertexShaderModule = shaderModule.CreateShaderModule(m_device);
-    vk::raii::ShaderModule fragmentShaderModule = shaderModule.CreateShaderModule(m_device);
+    vk::raii::ShaderModule shaderModule = shaderModuleLoader.CreateShaderModule(m_device);
+
+    vk::PipelineShaderStageCreateInfo vertextShaderStageCreateInfo{
+        {}, vk::ShaderStageFlagBits::eVertex, shaderModule, "VertexMain"};
+
+    vk::PipelineShaderStageCreateInfo fragmentShaderStageCreateInfo{
+        {}, vk::ShaderStageFlagBits::eFragment, shaderModule, "FragmentMain"};
+
+    std::array shaderStageCreateInfos{vertextShaderStageCreateInfo, fragmentShaderStageCreateInfo};
 }
 
 } // namespace vksimple

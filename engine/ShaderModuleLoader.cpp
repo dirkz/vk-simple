@@ -1,9 +1,9 @@
-#include "ShaderModule.h"
+#include "ShaderModuleLoader.h"
 
 namespace vksimple
 {
 
-ShaderModule::ShaderModule(const std::string &filename)
+ShaderModuleLoader::ShaderModuleLoader(const std::string &filename)
 {
     std::filesystem::path basePath{sdl::GetBasePath()};
     std::filesystem::path filepath = basePath / "shaders" / filename;
@@ -28,7 +28,7 @@ ShaderModule::ShaderModule(const std::string &filename)
     file.close();
 }
 
-vk::raii::ShaderModule ShaderModule::CreateShaderModule(vk::raii::Device &device)
+vk::raii::ShaderModule ShaderModuleLoader::CreateShaderModule(vk::raii::Device &device)
 {
     vk::ShaderModuleCreateInfo createInfo{
         {}, m_buffer.size(), reinterpret_cast<uint32_t *>(m_buffer.data())};

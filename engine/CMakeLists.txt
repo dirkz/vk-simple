@@ -10,8 +10,8 @@ add_library(engine OBJECT
 	SwapchainSupportDetails.cpp
 	Swapchain.h
 	Swapchain.cpp
-	ShaderModule.h
-	ShaderModule.cpp)
+	ShaderModuleLoader.h
+	ShaderModuleLoader.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)

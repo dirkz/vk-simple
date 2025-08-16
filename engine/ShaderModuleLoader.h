@@ -5,9 +5,9 @@
 namespace vksimple
 {
 
-struct ShaderModule
+struct ShaderModuleLoader
 {
-    ShaderModule(const std::string &filename);
+    ShaderModuleLoader(const std::string &filename);
 
     vk::raii::ShaderModule CreateShaderModule(vk::raii::Device &device);
 
