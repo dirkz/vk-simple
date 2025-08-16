@@ -24,6 +24,7 @@ struct Engine
     void PickPhysicalDevice();
     void CreateLogicalDevice();
     void CreateSwapchain();
+    void CreateGraphicsPipeline();
 
     IVulkanWindow &m_window;
 

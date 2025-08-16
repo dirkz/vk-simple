@@ -23,6 +23,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     PickPhysicalDevice();
     CreateLogicalDevice();
     CreateSwapchain();
+    CreateGraphicsPipeline();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -256,6 +257,10 @@ void Engine::CreateSwapchain()
                             m_window,
                             m_queueFamilyIndices.GraphicsQueue(),
                             m_queueFamilyIndices.PresentQueue()};
+}
+
+void Engine::CreateGraphicsPipeline()
+{
 }
 
 } // namespace vksimple
