@@ -339,6 +339,11 @@ void Engine::CreateGraphicsPipeline()
         logicOpEnable,
         vk::LogicOp::eXor, // should not matter, since disabled
         colorBlendAttachmentState};
+
+    // No uniform buffers, no push constants yet.
+    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+
+    m_pipelineLayout = m_device.createPipelineLayout(pipelineLayoutCreateInfo);
 }
 
 } // namespace vksimple

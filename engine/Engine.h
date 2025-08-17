@@ -38,6 +38,8 @@ struct Engine
 
     Swapchain m_swapchain = nullptr;
 
+    vk::raii::PipelineLayout m_pipelineLayout = nullptr;
+
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;
 };
