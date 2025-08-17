@@ -319,6 +319,9 @@ void Engine::CreateGraphicsPipeline()
                                                                        depthBiasConstantFactor,
                                                                        depthBiasClamp,
                                                                        lineWidth};
+
+    vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
+    multisampleStateCreateInfo.minSampleShading = 1.f;
 }
 
 } // namespace vksimple
