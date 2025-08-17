@@ -279,9 +279,6 @@ void Engine::CreateGraphicsPipeline()
 
     std::array shaderStageCreateInfos{vertextShaderStageCreateInfo, fragmentShaderStageCreateInfo};
 
-    std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
-    vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
-
     vk::PipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
 
     vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateCreateInfo{
@@ -298,6 +295,12 @@ void Engine::CreateGraphicsPipeline()
 
     vk::Offset2D offset{0, 0};
     vk::Rect2D scissorRect{offset, m_swapchain.Extent()};
+
+    std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
+    vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
+
+    // TODO: Is this necessary for a dynamic state configuration?
+    vk::PipelineViewportStateCreateInfo viewportStateCreateInfo{{}, viewport, scissorRect};
 }
 
 } // namespace vksimple
