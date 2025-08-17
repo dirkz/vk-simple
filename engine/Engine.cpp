@@ -286,6 +286,18 @@ void Engine::CreateGraphicsPipeline()
 
     vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateCreateInfo{
         {}, vk::PrimitiveTopology::eTriangleList, vk::False};
+
+    const float minDepth = 0.f;
+    const float maxDepth = 1.f;
+    vk::Viewport viewport{0.f,
+                          0.f,
+                          static_cast<float>(m_swapchain.CurrentWidth()),
+                          static_cast<float>(m_swapchain.CurrentWidth()),
+                          minDepth,
+                          maxDepth};
+
+    vk::Offset2D offset{0, 0};
+    vk::Rect2D scissorRect{offset, m_swapchain.Extent()};
 }
 
 } // namespace vksimple

@@ -46,6 +46,11 @@ struct Swapchain
         return m_extent.height;
     }
 
+    vk::Extent2D Extent() const
+    {
+        return m_extent;
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
