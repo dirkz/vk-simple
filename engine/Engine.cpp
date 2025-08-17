@@ -301,6 +301,24 @@ void Engine::CreateGraphicsPipeline()
 
     // TODO: Is this necessary for a dynamic state configuration?
     vk::PipelineViewportStateCreateInfo viewportStateCreateInfo{{}, viewport, scissorRect};
+
+    const vk::Bool32 depthClampEnable = vk::False;
+    const vk::Bool32 rasterizerDiscardEnable = vk::False;
+    const vk::Bool32 depthBiasEnable = vk::False;
+    const float depthBiasConstantFactor = 0.f;
+    const float depthBiasClamp = 0.f;
+    const float depthBiasSlopeFactor = 0.f;
+    const float lineWidth = 1.f;
+    vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{{},
+                                                                       depthClampEnable,
+                                                                       rasterizerDiscardEnable,
+                                                                       vk::PolygonMode::eFill,
+                                                                       vk::CullModeFlagBits::eBack,
+                                                                       vk::FrontFace::eClockwise,
+                                                                       depthBiasEnable,
+                                                                       depthBiasConstantFactor,
+                                                                       depthBiasClamp,
+                                                                       lineWidth};
 }
 
 } // namespace vksimple
