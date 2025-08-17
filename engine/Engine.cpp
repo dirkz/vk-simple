@@ -322,6 +322,8 @@ void Engine::CreateGraphicsPipeline()
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
     multisampleStateCreateInfo.minSampleShading = 1.f;
+
+    vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{};
 }
 
 } // namespace vksimple
