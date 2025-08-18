@@ -279,6 +279,13 @@ void Engine::CreateRenderPass()
         vk::ImageLayout::eUndefined,
         vk::ImageLayout::ePresentSrcKHR,
     };
+
+    vk::AttachmentReference colorAttachmentRef{0, vk::ImageLayout::eColorAttachmentOptimal};
+
+    vk::SubpassDescription subpass{{},
+                                   vk::PipelineBindPoint::eGraphics,
+                                   {}, // inputAttachments
+                                   colorAttachmentRef};
 }
 
 void Engine::CreateGraphicsPipeline()
