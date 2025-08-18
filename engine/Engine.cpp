@@ -286,6 +286,10 @@ void Engine::CreateRenderPass()
                                    vk::PipelineBindPoint::eGraphics,
                                    {}, // inputAttachments
                                    colorAttachmentRef};
+
+    vk::RenderPassCreateInfo renderPassCreateInfo{{}, colorAttachment, subpass};
+
+    m_renderPass = m_device.createRenderPass(renderPassCreateInfo);
 }
 
 void Engine::CreateGraphicsPipeline()
