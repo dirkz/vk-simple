@@ -51,6 +51,11 @@ struct Swapchain
         return m_extent;
     }
 
+    vk::Format Format() const
+    {
+        return m_imageFormat;
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;

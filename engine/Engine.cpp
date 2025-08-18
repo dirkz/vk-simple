@@ -268,6 +268,17 @@ void Engine::CreateSwapchain()
 
 void Engine::CreateRenderPass()
 {
+    vk::AttachmentDescription colorAttachment{
+        {},
+        m_swapchain.Format(),
+        vk::SampleCountFlagBits::e1,
+        vk::AttachmentLoadOp::eClear,     // loadOp
+        vk::AttachmentStoreOp::eStore,    // storeOp
+        vk::AttachmentLoadOp::eDontCare,  // stencilLoadOp
+        vk::AttachmentStoreOp::eDontCare, // stencilStoreOp
+        vk::ImageLayout::eUndefined,
+        vk::ImageLayout::ePresentSrcKHR,
+    };
 }
 
 void Engine::CreateGraphicsPipeline()
