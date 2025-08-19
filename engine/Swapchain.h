@@ -62,7 +62,7 @@ struct Swapchain
     std::vector<vk::Image> m_images;
     vk::Format m_imageFormat;
     vk::Extent2D m_extent;
-    std::vector<vk::ImageView> m_imageViews;
+    std::vector<vk::raii::ImageView> m_imageViews;
     std::vector<vk::raii::Framebuffer> m_frameBuffers;
 };
 
