@@ -28,6 +28,7 @@ struct Engine
     void CreateRenderPass();
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
+    void CreateCommandPool();
 
     IVulkanWindow &m_window;
 
@@ -38,14 +39,11 @@ struct Engine
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
-
     Swapchain m_swapchain = nullptr;
-
     vk::raii::RenderPass m_renderPass = nullptr;
-
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
-
     vk::raii::Pipeline m_pipeline = nullptr;
+    vk::raii::CommandPool m_commandPool = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;

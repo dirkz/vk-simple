@@ -30,6 +30,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateRenderPass();
     CreateGraphicsPipeline();
     CreateFrameBuffers();
+    CreateCommandPool();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -404,6 +405,14 @@ void Engine::CreateGraphicsPipeline()
 void Engine::CreateFrameBuffers()
 {
     m_swapchain.CreateFrameBuffers(m_device, m_renderPass);
+}
+
+void Engine::CreateCommandPool()
+{
+    vk::CommandPoolCreateInfo commandPoolCreateInfo{
+        vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
+
+    m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
 } // namespace vksimple
