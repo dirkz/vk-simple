@@ -375,6 +375,7 @@ void Engine::CreateGraphicsPipeline()
 
     m_pipelineLayout = m_device.createPipelineLayout(pipelineLayoutCreateInfo);
 
+    const uint32_t subpass = 0;
     vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo{{},
                                                               shaderStageCreateInfos,
                                                               &vertexInputStateCreateInfo,
@@ -388,9 +389,7 @@ void Engine::CreateGraphicsPipeline()
                                                               &dynamicStateCreateInfo,
                                                               m_pipelineLayout,
                                                               m_renderPass,
-                                                              0 /* subpass */,
-                                                              {} /* basePipelineHandle */,
-                                                              -1 /* basePipelineIndex */};
+                                                              subpass};
 
     m_pipeline = m_device.createGraphicsPipeline(nullptr, graphicsPipelineCreateInfo);
 }
