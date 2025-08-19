@@ -57,6 +57,11 @@ struct Swapchain
         return m_imageFormat;
     }
 
+    vk::raii::Framebuffer &FrameBufferAt(uint32_t index)
+    {
+        return m_frameBuffers[index];
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;

@@ -30,6 +30,7 @@ struct Engine
     void CreateFrameBuffers();
     void CreateCommandPool();
     void CreateCommandBuffer();
+    void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
 
     IVulkanWindow &m_window;
 

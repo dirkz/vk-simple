@@ -426,4 +426,15 @@ void Engine::CreateCommandBuffer()
     m_commandBuffer = std::move(commandBuffers[0]);
 }
 
+void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)
+{
+    vk::CommandBufferBeginInfo commandBufferBeginInfo{};
+    commandBuffer.begin(commandBufferBeginInfo);
+
+    const vk::Rect2D renderArea{{0, 0}, m_swapchain.Extent()};
+    const vk::ClearValue clearValue{{0.f, 0.f, 0.f, 1.f}};
+    vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
+                                                renderArea, clearValue};
+}
+
 } // namespace vksimple
