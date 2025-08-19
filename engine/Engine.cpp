@@ -427,10 +427,17 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     const vk::ClearValue clearValue{{0.f, 0.f, 0.f, 1.f}};
     vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
                                                 renderArea, clearValue};
-
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
+
+    commandBuffer.setViewport(0, m_swapchain.Viewport());
+    commandBuffer.setScissor(0, m_swapchain.ScissorRect());
+
+    commandBuffer.draw(3, 1, 0, 0);
+
+    commandBuffer.endRenderPass();
+    commandBuffer.end();
 }
 
 } // namespace vksimple
