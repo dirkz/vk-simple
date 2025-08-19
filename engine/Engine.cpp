@@ -322,17 +322,9 @@ void Engine::CreateGraphicsPipeline()
 
     vk::PipelineTessellationStateCreateInfo tesselationStateCreateInfo{};
 
-    const float minDepth = 0.f;
-    const float maxDepth = 1.f;
-    vk::Viewport viewport{0.f,
-                          0.f,
-                          static_cast<float>(m_swapchain.Width()),
-                          static_cast<float>(m_swapchain.Width()),
-                          minDepth,
-                          maxDepth};
+    vk::Viewport viewport = m_swapchain.Viewport();
 
-    vk::Offset2D offset{0, 0};
-    vk::Rect2D scissorRect{offset, m_swapchain.Extent()};
+    vk::Rect2D scissorRect{{0, 0}, m_swapchain.Extent()};
 
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};

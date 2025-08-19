@@ -62,6 +62,14 @@ struct Swapchain
         return m_frameBuffers[index];
     }
 
+    vk::Viewport Viewport() const
+    {
+        const float minDepth = 0.f;
+        const float maxDepth = 1.f;
+        return vk::Viewport{
+            0.f, 0.f, static_cast<float>(Width()), static_cast<float>(Width()), minDepth, maxDepth};
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
