@@ -71,7 +71,7 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
 
     vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1};
 
-    // m_imageViews.resize(m_images.size());
+    m_imageViews.clear();
 
     for (auto i = 0; i < m_images.size(); ++i)
     {
@@ -82,20 +82,22 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
                                            componentMapping,
                                            subresourceRange};
 
-        auto imageView = device.createImageView(createInfo);
+        vk::raii::ImageView imageView = device.createImageView(createInfo);
+        m_imageViews.push_back(std::move(imageView));
     }
 }
 
 void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass)
 {
-    // m_frameBuffers.resize(m_imageViews.size());
+    m_frameBuffers.clear();
 
-    const uint32_t layers = 0;
+    const uint32_t layers = 1;
     for (auto i = 0; i < m_imageViews.size(); ++i)
     {
         vk::FramebufferCreateInfo frameBufferCreateInfo{
             {}, renderPass, *m_imageViews[i], CurrentWidth(), CurrentHeight(), layers};
-        auto frameBuffer = device.createFramebuffer(frameBufferCreateInfo);
+        vk::raii::Framebuffer frameBuffer = device.createFramebuffer(frameBufferCreateInfo);
+        m_frameBuffers.push_back(std::move(frameBuffer));
     }
 }
 
