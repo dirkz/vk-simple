@@ -70,6 +70,11 @@ struct Swapchain
             0.f, 0.f, static_cast<float>(Width()), static_cast<float>(Width()), minDepth, maxDepth};
     }
 
+    vk::Rect2D ScissorRect() const
+    {
+        return vk::Rect2D{{0, 0}, Extent()};
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;

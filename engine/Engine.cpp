@@ -324,7 +324,7 @@ void Engine::CreateGraphicsPipeline()
 
     vk::Viewport viewport = m_swapchain.Viewport();
 
-    vk::Rect2D scissorRect{{0, 0}, m_swapchain.Extent()};
+    vk::Rect2D scissorRect = m_swapchain.ScissorRect();
 
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
