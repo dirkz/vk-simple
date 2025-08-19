@@ -29,6 +29,7 @@ struct Engine
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
+    void CreateCommandBuffer();
 
     IVulkanWindow &m_window;
 
@@ -44,6 +45,7 @@ struct Engine
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
+    vk::raii::CommandBuffer m_commandBuffer = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;

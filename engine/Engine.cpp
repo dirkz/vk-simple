@@ -31,6 +31,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
+    CreateCommandBuffer();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -413,6 +414,16 @@ void Engine::CreateCommandPool()
         vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
 
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
+}
+
+void Engine::CreateCommandBuffer()
+{
+    const uint32_t commandBufferCount = 1;
+    vk::CommandBufferAllocateInfo commandBufferAllocateInfo{
+        m_commandPool, vk::CommandBufferLevel::ePrimary, commandBufferCount};
+
+    auto commandBuffers = m_device.allocateCommandBuffers(commandBufferAllocateInfo);
+    m_commandBuffer = std::move(commandBuffers[0]);
 }
 
 } // namespace vksimple
