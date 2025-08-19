@@ -61,8 +61,6 @@ vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::rai
 
     m_imageFormat = surfaceFormat.format;
     m_extent = imageExtent;
-
-    CreateImageViews(device);
 }
 
 void Swapchain::CreateImageViews(vk::raii::Device &device)

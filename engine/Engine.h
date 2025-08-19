@@ -24,6 +24,7 @@ struct Engine
     void PickPhysicalDevice();
     void CreateLogicalDevice();
     void CreateSwapchain();
+    void CreateImageViews();
     void CreateRenderPass();
     void CreateGraphicsPipeline();
 

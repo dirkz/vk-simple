@@ -26,6 +26,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     PickPhysicalDevice();
     CreateLogicalDevice();
     CreateSwapchain();
+    CreateImageViews();
     CreateRenderPass();
     CreateGraphicsPipeline();
 }
@@ -264,6 +265,10 @@ void Engine::CreateSwapchain()
                             m_window,
                             m_queueFamilyIndices.GraphicsQueue(),
                             m_queueFamilyIndices.PresentQueue()};
+}
+void Engine::CreateImageViews()
+{
+    m_swapchain.CreateImageViews(m_device);
 }
 
 void Engine::CreateRenderPass()
