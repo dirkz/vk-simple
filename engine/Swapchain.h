@@ -37,12 +37,12 @@ struct Swapchain
     void CreateImageViews(vk::raii::Device &device);
     void CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass);
 
-    uint32_t CurrentWidth() const
+    uint32_t Width() const
     {
         return m_extent.width;
     }
 
-    uint32_t CurrentHeight() const
+    uint32_t Height() const
     {
         return m_extent.height;
     }

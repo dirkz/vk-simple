@@ -326,8 +326,8 @@ void Engine::CreateGraphicsPipeline()
     const float maxDepth = 1.f;
     vk::Viewport viewport{0.f,
                           0.f,
-                          static_cast<float>(m_swapchain.CurrentWidth()),
-                          static_cast<float>(m_swapchain.CurrentWidth()),
+                          static_cast<float>(m_swapchain.Width()),
+                          static_cast<float>(m_swapchain.Width()),
                           minDepth,
                           maxDepth};
 

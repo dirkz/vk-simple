@@ -94,8 +94,8 @@ void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPas
     const uint32_t layers = 1;
     for (auto i = 0; i < m_imageViews.size(); ++i)
     {
-        vk::FramebufferCreateInfo frameBufferCreateInfo{
-            {}, renderPass, *m_imageViews[i], CurrentWidth(), CurrentHeight(), layers};
+        vk::FramebufferCreateInfo frameBufferCreateInfo{{},      renderPass, *m_imageViews[i],
+                                                        Width(), Height(),   layers};
         vk::raii::Framebuffer frameBuffer = device.createFramebuffer(frameBufferCreateInfo);
         m_frameBuffers.push_back(std::move(frameBuffer));
     }
