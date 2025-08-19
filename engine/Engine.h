@@ -27,6 +27,7 @@ struct Engine
     void CreateImageViews();
     void CreateRenderPass();
     void CreateGraphicsPipeline();
+    void CreateFrameBuffers();
 
     IVulkanWindow &m_window;
 

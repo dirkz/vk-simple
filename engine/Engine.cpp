@@ -29,6 +29,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateImageViews();
     CreateRenderPass();
     CreateGraphicsPipeline();
+    CreateFrameBuffers();
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -266,7 +267,8 @@ void Engine::CreateSwapchain()
                             m_queueFamilyIndices.GraphicsQueue(),
                             m_queueFamilyIndices.PresentQueue()};
 }
-void Engine::CreateImageViews()
+
+void Engine::CreateImageViews()
 {
     m_swapchain.CreateImageViews(m_device);
 }
@@ -397,6 +399,11 @@ void Engine::CreateGraphicsPipeline()
                                                               subpass};
 
     m_pipeline = m_device.createGraphicsPipeline(nullptr, graphicsPipelineCreateInfo);
+}
+
+void Engine::CreateFrameBuffers()
+{
+    m_swapchain.CreateFrameBuffers(m_device, m_renderPass);
 }
 
 } // namespace vksimple

@@ -35,6 +35,7 @@ struct Swapchain
     }
 
     void CreateImageViews(vk::raii::Device &device);
+    void CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass);
 
     uint32_t CurrentWidth() const
     {
@@ -62,6 +63,7 @@ struct Swapchain
     vk::Format m_imageFormat;
     vk::Extent2D m_extent;
     std::vector<vk::ImageView> m_imageViews;
+    std::vector<vk::raii::Framebuffer> m_frameBuffers;
 };
 
 } // namespace vksimple

@@ -86,4 +86,17 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
     }
 }
 
+void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass)
+{
+    //m_frameBuffers.resize(m_imageViews.size());
+
+    const uint32_t layers = 0;
+    for (auto i = 0; i < m_imageViews.size(); ++i)
+    {
+        vk::FramebufferCreateInfo frameBufferCreateInfo{
+            {}, renderPass, m_imageViews[i], CurrentWidth(), CurrentHeight(), layers};
+        auto frameBuffer = device.createFramebuffer(frameBufferCreateInfo);
+    }
+}
+
 } // namespace vksimple
