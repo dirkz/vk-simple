@@ -43,6 +43,8 @@ struct Engine
 
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
 
+    vk::raii::Pipeline m_pipeline = nullptr;
+
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;
 };

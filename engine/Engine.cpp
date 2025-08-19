@@ -311,6 +311,8 @@ void Engine::CreateGraphicsPipeline()
     vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateCreateInfo{
         {}, vk::PrimitiveTopology::eTriangleList, vk::False};
 
+    vk::PipelineTessellationStateCreateInfo tesselationStateCreateInfo{};
+
     const float minDepth = 0.f;
     const float maxDepth = 1.f;
     vk::Viewport viewport{0.f,
@@ -345,6 +347,7 @@ void Engine::CreateGraphicsPipeline()
                                                                        depthBiasEnable,
                                                                        depthBiasConstantFactor,
                                                                        depthBiasClamp,
+                                                                       depthBiasSlopeFactor,
                                                                        lineWidth};
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
@@ -371,6 +374,25 @@ void Engine::CreateGraphicsPipeline()
     vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
 
     m_pipelineLayout = m_device.createPipelineLayout(pipelineLayoutCreateInfo);
+
+    vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo{{},
+                                                              shaderStageCreateInfos,
+                                                              &vertexInputStateCreateInfo,
+                                                              &inputAssemblyStateCreateInfo,
+                                                              &tesselationStateCreateInfo,
+                                                              &viewportStateCreateInfo,
+                                                              &rasterizerStateCreateInfo,
+                                                              &multisampleStateCreateInfo,
+                                                              &depthStencilCreateInfo,
+                                                              &colorBlendStateCreateInfo,
+                                                              &dynamicStateCreateInfo,
+                                                              m_pipelineLayout,
+                                                              m_renderPass,
+                                                              0 /* subpass */,
+                                                              {} /* basePipelineHandle */,
+                                                              -1 /* basePipelineIndex */};
+
+    m_pipeline = m_device.createGraphicsPipeline(nullptr, graphicsPipelineCreateInfo);
 }
 
 } // namespace vksimple
