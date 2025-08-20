@@ -15,6 +15,7 @@ ShaderModuleLoader::ShaderModuleLoader(const std::string &filename)
         std::string filenameString = filepath.string();
         char *string;
         SDL_asprintf(&string, "cannot open file: '%s'", filenameString.c_str());
+        SDL_Log("%s", string);
         std::string message{string};
         SDL_free(string);
         throw std::runtime_error{message};
