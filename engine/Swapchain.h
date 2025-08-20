@@ -78,9 +78,9 @@ struct Swapchain
 
     uint32_t AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphore);
 
-    vk::SwapchainKHR SwapchainKHR()
+    vk::raii::SwapchainKHR &SwapchainKHR()
     {
-        return *m_swapchain;
+        return m_swapchain;
     }
 
     vk::raii::Semaphore &RenderFinishedSemaphoreAt(uint32_t imageIndex)

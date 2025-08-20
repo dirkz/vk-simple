@@ -56,8 +56,8 @@ void Engine::DrawFrame()
                               *renderFinishedSemaphore};
     m_graphicsQueue.submit(submitInfo, m_inflightFence);
 
-    const vk::SwapchainKHR swapchain = m_swapchain.SwapchainKHR();
-    vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, swapchain, imageIndex};
+    const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
+    vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 }
 
