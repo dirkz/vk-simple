@@ -318,7 +318,14 @@ void Engine::CreateRenderPass()
                                    {}, // inputAttachments
                                    colorAttachmentRef};
 
-    vk::RenderPassCreateInfo renderPassCreateInfo{{}, colorAttachment, subpass};
+    vk::SubpassDependency subpassDependency{VK_SUBPASS_EXTERNAL,
+                                            0,
+                                            vk::PipelineStageFlagBits::eColorAttachmentOutput,
+                                            vk::PipelineStageFlagBits::eColorAttachmentOutput,
+                                            vk::AccessFlagBits::eNone,
+                                            vk::AccessFlagBits::eColorAttachmentWrite};
+
+    vk::RenderPassCreateInfo renderPassCreateInfo{{}, colorAttachment, subpass, subpassDependency};
 
     m_renderPass = m_device.createRenderPass(renderPassCreateInfo);
 }
