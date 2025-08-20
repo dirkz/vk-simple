@@ -45,14 +45,12 @@ void Engine::DrawFrame()
     uint32_t imageIndex = m_swapchain.AcquireNextImage(m_imageAvailableSemaphore);
 
     m_commandBuffer.reset();
-
     RecordCommandBuffer(m_commandBuffer, imageIndex);
 
     const vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
     vk::SubmitInfo submitInfo{*m_imageAvailableSemaphore, waitDstStageMask, *m_commandBuffer,
                               *m_renderFinishedSemaphore};
-
     m_graphicsQueue.submit(submitInfo, m_inflightFence);
 
     const vk::SwapchainKHR swapchain = m_swapchain.SwapchainKHR();
