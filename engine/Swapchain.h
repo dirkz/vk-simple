@@ -77,6 +77,11 @@ struct Swapchain
 
     uint32_t AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphore);
 
+    vk::SwapchainKHR SwapchainKHR()
+    {
+        return *m_swapchain;
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
