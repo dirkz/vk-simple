@@ -33,6 +33,9 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateCommandPool();
     CreateCommandBuffer();
 }
+void Engine::DrawFrame()
+{
+}
 
 bool Engine::CheckValidationLayerSupport()
 {
