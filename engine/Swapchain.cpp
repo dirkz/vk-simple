@@ -104,8 +104,8 @@ void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPas
 uint32_t Swapchain::AcquireNextImage(vk::raii::Device &device,
                                      vk::raii::Semaphore &imageAvailableSemaphore)
 {
-    vk::AcquireNextImageInfoKHR info{m_swapchain, std::numeric_limits<uint32_t>::max(),
-                                     imageAvailableSemaphore};
+    vk::AcquireNextImageInfoKHR info{
+        m_swapchain, std::numeric_limits<uint32_t>::max(), imageAvailableSemaphore, {}, 1};
     auto [result, imageIndex] = device.acquireNextImage2KHR(info);
 
     if (result != vk::Result::eSuccess)
