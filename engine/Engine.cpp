@@ -32,8 +32,10 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateFrameBuffers();
     CreateCommandPool();
     CreateCommandBuffer();
+    CreateSyncObjects();
 }
-void Engine::DrawFrame()
+
+void Engine::DrawFrame()
 {
 }
 
@@ -419,6 +421,16 @@ void Engine::CreateCommandBuffer()
 
     auto commandBuffers = m_device.allocateCommandBuffers(commandBufferAllocateInfo);
     m_commandBuffer = std::move(commandBuffers[0]);
+}
+
+void Engine::CreateSyncObjects()
+{
+    vk::SemaphoreCreateInfo semaphoreCreateInfo{};
+    m_imageAvailableSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
+    m_renderFinishedSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
+
+    vk::FenceCreateInfo fenceCreateInfo{};
+    m_inflightFence = m_device.createFence(fenceCreateInfo);
 }
 
 void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)

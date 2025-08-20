@@ -32,6 +32,8 @@ struct Engine
     void CreateFrameBuffers();
     void CreateCommandPool();
     void CreateCommandBuffer();
+    void CreateSyncObjects();
+
     void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
 
     IVulkanWindow &m_window;
@@ -49,6 +51,10 @@ struct Engine
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
+
+    vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
+    vk::raii::Semaphore m_renderFinishedSemaphore = nullptr;
+    vk::raii::Fence m_inflightFence = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;
