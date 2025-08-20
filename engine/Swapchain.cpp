@@ -101,4 +101,21 @@ void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPas
     }
 }
 
+uint32_t Swapchain::AcquireNextImage(vk::raii::Device &device,
+                                     vk::raii::Semaphore &imageAvailableSemaphore)
+{
+    vk::AcquireNextImageInfoKHR info{m_swapchain, std::numeric_limits<uint32_t>::max(),
+                                     imageAvailableSemaphore};
+    auto [result, imageIndex] = device.acquireNextImage2KHR(info);
+
+    if (result != vk::Result::eSuccess)
+    {
+        std::string msg{"acquireNextImage2KHR failed with result: "};
+        msg += string_VkResult(static_cast<VkResult>(result));
+        throw std::runtime_error{msg};
+    }
+
+    return imageIndex;
+}
+
 } // namespace vksimple

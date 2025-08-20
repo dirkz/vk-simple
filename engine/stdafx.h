@@ -3,6 +3,7 @@
 
 #define VULKAN_HPP_ENABLE_DYNAMIC_LOADER_TOOL 0
 #include <vulkan/vulkan_raii.hpp>
+#include <vulkan/vk_enum_string_helper.h>
 
 #include <algorithm>
 #include <array>
