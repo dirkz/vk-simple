@@ -37,9 +37,23 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 
 void Engine::DrawFrame()
 {
-    //vk::Result resultOfWaiting =
-        //m_device.waitForFences(*m_inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
-    //m_device.resetFences(*m_inflightFence);
+    vk::Result resultOfWaiting =
+        m_device.waitForFences(*m_inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
+
+    m_device.resetFences(*m_inflightFence);
+
+    uint32_t imageIndex = m_swapchain.AcquireNextImage(m_device, m_imageAvailableSemaphore);
+
+    m_commandBuffer.reset();
+
+    RecordCommandBuffer(m_commandBuffer, imageIndex);
+
+    const vk::PipelineStageFlags waitDstStageMask =
+        vk::PipelineStageFlagBits::eColorAttachmentOutput;
+    vk::SubmitInfo submitInfo{*m_imageAvailableSemaphore, waitDstStageMask, *m_commandBuffer,
+                              *m_renderFinishedSemaphore};
+
+    m_graphicsQueue.submit(submitInfo, m_inflightFence);
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -100,7 +114,7 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         }
         SDL_Log("Validation (%s): %s", kind, pCallbackData->pMessage);
 
-        return vk::True;
+        return vk::False;
     }
 
     return vk::False;
