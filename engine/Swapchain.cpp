@@ -110,8 +110,11 @@ uint32_t Swapchain::AcquireNextImage(vk::raii::Device &device,
 
     if (result != vk::Result::eSuccess)
     {
-        std::string msg{"acquireNextImage2KHR failed with result: "};
-        msg += string_VkResult(static_cast<VkResult>(result));
+        char *string;
+        SDL_asprintf(&string, "acquireNextImage2KHR failed with result: %s",
+                     string_VkResult(static_cast<VkResult>(result)));
+        std::string msg{string};
+        SDL_free(string);
         throw std::runtime_error{msg};
     }
 
