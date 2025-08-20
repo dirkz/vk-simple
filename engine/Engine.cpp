@@ -47,7 +47,7 @@ void Engine::DrawFrame()
     m_commandBuffer.reset();
     RecordCommandBuffer(m_commandBuffer, imageIndex);
 
-    const vk::PipelineStageFlags waitDstStageMask =
+    constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
     vk::SubmitInfo submitInfo{*m_imageAvailableSemaphore, waitDstStageMask, *m_commandBuffer,
                               *m_renderFinishedSemaphore};
@@ -124,11 +124,11 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 
 vk::DebugUtilsMessengerCreateInfoEXT Engine::CreateDebugUtilsMessengerCreateInfo()
 {
-    const vk::DebugUtilsMessageSeverityFlagsEXT messageSeverity =
+    constexpr vk::DebugUtilsMessageSeverityFlagsEXT messageSeverity =
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eError |
         vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning;
 
-    const vk::DebugUtilsMessageTypeFlagsEXT messageType =
+    constexpr vk::DebugUtilsMessageTypeFlagsEXT messageType =
         vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
         vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
         vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance;
@@ -254,7 +254,7 @@ void Engine::CreateLogicalDevice()
     std::set<uint32_t> queues{m_queueFamilyIndices.GraphicsQueue(),
                               m_queueFamilyIndices.PresentQueue()};
 
-    const std::array priorities{1.0f};
+    constexpr std::array priorities{1.0f};
     std::vector<vk::DeviceQueueCreateInfo> queueCreateInfos{};
     for (uint32_t queue : queues)
     {
@@ -363,13 +363,13 @@ void Engine::CreateGraphicsPipeline()
     // TODO: Is this necessary for a dynamic state configuration?
     vk::PipelineViewportStateCreateInfo viewportStateCreateInfo{{}, viewport, scissorRect};
 
-    const vk::Bool32 depthClampEnable = vk::False;
-    const vk::Bool32 rasterizerDiscardEnable = vk::False;
-    const vk::Bool32 depthBiasEnable = vk::False;
-    const float depthBiasConstantFactor = 0.f;
-    const float depthBiasClamp = 0.f;
-    const float depthBiasSlopeFactor = 0.f;
-    const float lineWidth = 1.f;
+    constexpr vk::Bool32 depthClampEnable = vk::False;
+    constexpr vk::Bool32 rasterizerDiscardEnable = vk::False;
+    constexpr vk::Bool32 depthBiasEnable = vk::False;
+    constexpr float depthBiasConstantFactor = 0.f;
+    constexpr float depthBiasClamp = 0.f;
+    constexpr float depthBiasSlopeFactor = 0.f;
+    constexpr float lineWidth = 1.f;
     vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{{},
                                                                        depthClampEnable,
                                                                        rasterizerDiscardEnable,
@@ -395,7 +395,7 @@ void Engine::CreateGraphicsPipeline()
         vk::ColorComponentFlagBits::eA | vk::ColorComponentFlagBits::eR |
         vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB;
 
-    const vk::Bool32 logicOpEnable = vk::False;
+    constexpr vk::Bool32 logicOpEnable = vk::False;
     vk::PipelineColorBlendStateCreateInfo colorBlendStateCreateInfo{
         {},
         logicOpEnable,
@@ -407,7 +407,7 @@ void Engine::CreateGraphicsPipeline()
 
     m_pipelineLayout = m_device.createPipelineLayout(pipelineLayoutCreateInfo);
 
-    const uint32_t subpass = 0;
+    constexpr uint32_t subpass = 0;
     vk::GraphicsPipelineCreateInfo graphicsPipelineCreateInfo{{},
                                                               shaderStageCreateInfos,
                                                               &vertexInputStateCreateInfo,
@@ -441,7 +441,7 @@ void Engine::CreateCommandPool()
 
 void Engine::CreateCommandBuffer()
 {
-    const uint32_t commandBufferCount = 1;
+    constexpr uint32_t commandBufferCount = 1;
     vk::CommandBufferAllocateInfo commandBufferAllocateInfo{
         m_commandPool, vk::CommandBufferLevel::ePrimary, commandBufferCount};
 
@@ -465,7 +465,7 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.begin(commandBufferBeginInfo);
 
     const vk::Rect2D renderArea{{0, 0}, m_swapchain.Extent()};
-    const vk::ClearValue clearValue{{0.f, 0.f, 0.f, 1.f}};
+    constexpr vk::ClearValue clearValue{{0.f, 0.f, 0.f, 1.f}};
     vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
                                                 renderArea, clearValue};
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
