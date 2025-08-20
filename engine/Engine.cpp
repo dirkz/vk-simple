@@ -42,7 +42,7 @@ void Engine::DrawFrame()
 
     m_device.resetFences(*m_inflightFence);
 
-    uint32_t imageIndex = m_swapchain.AcquireNextImage(m_device, m_imageAvailableSemaphore);
+    uint32_t imageIndex = m_swapchain.AcquireNextImage(m_imageAvailableSemaphore);
 
     m_commandBuffer.reset();
 
