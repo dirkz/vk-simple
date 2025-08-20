@@ -429,7 +429,7 @@ void Engine::CreateSyncObjects()
     m_imageAvailableSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
     m_renderFinishedSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
 
-    vk::FenceCreateInfo fenceCreateInfo{};
+    vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
     m_inflightFence = m_device.createFence(fenceCreateInfo);
 }
 
