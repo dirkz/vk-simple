@@ -37,6 +37,9 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 
 void Engine::DrawFrame()
 {
+    //vk::Result resultOfWaiting =
+        //m_device.waitForFences(*m_inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
+    //m_device.resetFences(*m_inflightFence);
 }
 
 bool Engine::CheckValidationLayerSupport()
