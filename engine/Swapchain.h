@@ -30,6 +30,7 @@ struct Swapchain
             std::swap(m_imageFormat, rhs.m_imageFormat);
             std::swap(m_extent, rhs.m_extent);
             std::swap(m_imageViews, rhs.m_imageViews);
+            std::swap(m_renderFinishedSemaphores, rhs.m_renderFinishedSemaphores);
         }
         return *this;
     }
@@ -82,6 +83,11 @@ struct Swapchain
         return *m_swapchain;
     }
 
+    vk::raii::Semaphore &RenderFinishedSemaphoreAt(uint32_t imageIndex)
+    {
+        return m_renderFinishedSemaphores[imageIndex];
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
@@ -89,6 +95,7 @@ struct Swapchain
     vk::Extent2D m_extent;
     std::vector<vk::raii::ImageView> m_imageViews;
     std::vector<vk::raii::Framebuffer> m_frameBuffers;
+    std::vector<vk::raii::Semaphore> m_renderFinishedSemaphores;
 };
 
 } // namespace vksimple
