@@ -26,11 +26,11 @@ int SDL_main(int argc, char *argv[])
                 {
                     done = true;
                 }
-
-                engine.DrawFrame();
             }
 
             // Do game logic, present a frame, etc.
+
+            engine.DrawFrame();
         }
     }
 
