@@ -119,7 +119,7 @@ DebugCallback(vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         }
         SDL_Log("Validation (%s): %s", kind, pCallbackData->pMessage);
 
-        return vk::True;
+        return vk::False;
     }
 
     return vk::False;
