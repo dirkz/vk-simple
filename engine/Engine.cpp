@@ -57,7 +57,7 @@ void Engine::DrawFrame()
 
     const vk::SwapchainKHR swapchain = m_swapchain.SwapchainKHR();
     vk::PresentInfoKHR presentInfo{*m_renderFinishedSemaphore, swapchain, imageIndex};
-    vk::Result result = m_presentQueue.presentKHR(presentInfo);
+    vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 }
 
 bool Engine::CheckValidationLayerSupport()
