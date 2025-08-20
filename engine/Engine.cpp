@@ -283,7 +283,7 @@ void Engine::CreateLogicalDevice()
     m_device = m_physicalDevice.createDevice(createInfo);
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
-    m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
+    m_presentQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
 }
 
 void Engine::CreateSwapchain()
