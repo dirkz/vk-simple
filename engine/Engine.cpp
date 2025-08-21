@@ -44,9 +44,15 @@ void Engine::DrawFrame()
     vk::Result resultOfWaiting =
         m_device.waitForFences(*inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
 
-    m_device.resetFences(*inflightFence);
-
     auto [result, imageIndex] = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
+
+    if (result == vk::Result::eErrorOutOfDateKHR)
+    {
+        RecreateSwapchain();
+        return;
+    }
+
+    m_device.resetFences(*inflightFence);
 
     commandBuffer.reset();
     RecordCommandBuffer(commandBuffer, imageIndex);
