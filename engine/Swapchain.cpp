@@ -108,13 +108,20 @@ void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPas
     }
 }
 
-uint32_t Swapchain::AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphore)
+std::pair<vk::Result, uint32_t> Swapchain::AcquireNextImage(
+    vk::raii::Semaphore &imageAvailableSemaphore)
 {
     auto [result, imageIndex] = m_swapchain.acquireNextImage(std::numeric_limits<uint32_t>::max(),
                                                              *imageAvailableSemaphore);
 
-    if (result != vk::Result::eSuccess && result != vk::Result::eSuboptimalKHR)
+    switch (result)
     {
+    case vk::Result::eSuccess:
+    case vk::Result::eSuboptimalKHR:
+    case vk::Result::eErrorOutOfDateKHR:
+        // it's either ok, or has to be handled by the caller
+        break;
+    default:
         char *string;
         SDL_asprintf(&string, "acquireNextImage2KHR failed with result: %s",
                      string_VkResult(static_cast<VkResult>(result)));
@@ -124,7 +131,7 @@ uint32_t Swapchain::AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphor
         throw std::runtime_error{msg};
     }
 
-    return imageIndex;
+    return std::make_pair(result, imageIndex);
 }
 
 } // namespace vksimple

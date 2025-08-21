@@ -46,7 +46,7 @@ void Engine::DrawFrame()
 
     m_device.resetFences(*inflightFence);
 
-    uint32_t imageIndex = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
+    auto [result, imageIndex] = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
 
     commandBuffer.reset();
     RecordCommandBuffer(commandBuffer, imageIndex);
@@ -454,7 +454,8 @@ void Engine::CreateFrameData()
         m_frameData[i] = FrameData(m_device, m_commandPool);
     }
 }
-void Engine::RecreateSwapchain()
+
+void Engine::RecreateSwapchain()
 {
     WaitIdle();
 

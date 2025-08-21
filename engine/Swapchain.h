@@ -77,7 +77,7 @@ struct Swapchain
         return vk::Rect2D{{0, 0}, Extent()};
     }
 
-    uint32_t AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphore);
+    std::pair<vk::Result, uint32_t> AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphore);
 
     vk::raii::SwapchainKHR &SwapchainKHR()
     {
