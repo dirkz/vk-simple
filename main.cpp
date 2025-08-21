@@ -32,6 +32,9 @@ int SDL_main(int argc, char *argv[])
 
             engine.DrawFrame();
         }
+
+        // Just in case the GPU was still working on something.
+        engine.WaitIdle();
     }
 
     // Close and destroy the window

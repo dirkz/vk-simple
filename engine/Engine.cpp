@@ -67,6 +67,11 @@ void Engine::DrawFrame()
     m_currentFrame = (m_currentFrame + 1) % MaxFramesInFlight;
 }
 
+void Engine::WaitIdle()
+{
+    m_device.waitIdle();
+}
+
 bool Engine::CheckValidationLayerSupport()
 {
     std::set<std::string> layersPresent{};

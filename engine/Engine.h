@@ -17,6 +17,7 @@ struct Engine
     Engine(IVulkanWindow &window);
 
     void DrawFrame();
+    void WaitIdle();
 
   private:
     bool CheckValidationLayerSupport();
