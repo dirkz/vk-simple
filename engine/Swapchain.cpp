@@ -83,7 +83,7 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
     for (auto i = 0; i < m_images.size(); ++i)
     {
         vk::ImageViewCreateInfo createInfo{{},
-                                           m_images[0],
+                                           m_images[i],
                                            vk::ImageViewType::e2D,
                                            m_imageFormat,
                                            componentMapping,
