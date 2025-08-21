@@ -361,7 +361,6 @@ void Engine::CreateGraphicsPipeline()
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
 
-    // TODO: Is this necessary for a dynamic state configuration?
     vk::PipelineViewportStateCreateInfo viewportStateCreateInfo{{}, viewport, scissorRect};
 
     constexpr vk::Bool32 depthClampEnable = vk::False;
