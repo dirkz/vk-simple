@@ -2,12 +2,16 @@
 
 #include "stdafx.h"
 
+#include "FrameData.h"
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
 #include "Swapchain.h"
 
 namespace vksimple
 {
+
+constexpr int MaxFramesInFlight = 2;
+
 struct Engine
 {
     Engine(IVulkanWindow &window);
@@ -50,8 +54,10 @@ struct Engine
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
-    vk::raii::CommandBuffer m_commandBuffer = nullptr;
 
+    std::array<FrameData, 2> m_frameData{nullptr, nullptr};
+
+    vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
 
