@@ -14,6 +14,7 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
 
     vk::SemaphoreCreateInfo semaphoreCreateInfo{};
     m_imageAvailableSemaphore = device.createSemaphore(semaphoreCreateInfo);
+    m_renderFinishedSemaphore = device.createSemaphore(semaphoreCreateInfo);
 
     vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
     m_inflightFence = device.createFence(fenceCreateInfo);
