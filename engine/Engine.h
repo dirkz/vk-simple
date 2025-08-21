@@ -18,6 +18,7 @@ struct Engine
 
     void DrawFrame();
     void WaitIdle();
+    void WindowResized();
 
   private:
     bool CheckValidationLayerSupport();
@@ -66,6 +67,8 @@ struct Engine
 
     vk::raii::Queue m_graphicsQueue = nullptr;
     vk::raii::Queue m_presentQueue = nullptr;
+
+    bool m_windowResized = false;
 };
 
 } // namespace vksimple

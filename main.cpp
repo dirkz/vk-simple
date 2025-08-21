@@ -23,9 +23,14 @@ int SDL_main(int argc, char *argv[])
 
             while (SDL_PollEvent(&event))
             {
-                if (event.type == SDL_EVENT_QUIT)
+                switch (event.type)
                 {
+                case SDL_EVENT_QUIT:
                     done = true;
+                    break;
+                case SDL_EVENT_WINDOW_RESIZED:
+                    engine.WindowResized();
+                    break;
                 }
             }
 

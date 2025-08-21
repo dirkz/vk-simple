@@ -46,8 +46,9 @@ void Engine::DrawFrame()
 
     auto [result, imageIndex] = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
 
-    if (result == vk::Result::eErrorOutOfDateKHR)
+    if (result == vk::Result::eErrorOutOfDateKHR || m_windowResized)
     {
+        m_windowResized = false;
         RecreateSwapchain();
         return;
     }
@@ -76,6 +77,11 @@ void Engine::DrawFrame()
 void Engine::WaitIdle()
 {
     m_device.waitIdle();
+}
+
+void Engine::WindowResized()
+{
+    m_windowResized = true;
 }
 
 bool Engine::CheckValidationLayerSupport()
