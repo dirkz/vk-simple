@@ -53,6 +53,7 @@ struct Engine
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
 
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
+    vk::raii::Semaphore m_renderFinishedSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
 
     vk::raii::Queue m_graphicsQueue = nullptr;

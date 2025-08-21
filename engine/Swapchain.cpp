@@ -61,13 +61,6 @@ vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::rai
 
     m_imageFormat = surfaceFormat.format;
     m_extent = imageExtent;
-
-    vk::SemaphoreCreateInfo semaphoreCreateInfo{};
-    for (uint32_t i = 0; i < imageCount; ++i)
-    {
-        vk::raii::Semaphore renderFinishedSemaphore = device.createSemaphore(semaphoreCreateInfo);
-        m_renderFinishedSemaphores.push_back(std::move(renderFinishedSemaphore));
-    }
 }
 
 void Swapchain::CreateImageViews(vk::raii::Device &device)

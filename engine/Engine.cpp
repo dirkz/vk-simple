@@ -47,17 +47,14 @@ void Engine::DrawFrame()
     m_commandBuffer.reset();
     RecordCommandBuffer(m_commandBuffer, imageIndex);
 
-    vk::raii::Semaphore &renderFinishedSemaphore =
-        m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
-
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
     vk::SubmitInfo submitInfo{*m_imageAvailableSemaphore, waitDstStageMask, *m_commandBuffer,
-                              *renderFinishedSemaphore};
+                              *m_renderFinishedSemaphore};
     m_graphicsQueue.submit(submitInfo, m_inflightFence);
 
     const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
-    vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
+    vk::PresentInfoKHR presentInfo{*m_renderFinishedSemaphore, *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 }
 
@@ -450,6 +447,7 @@ void Engine::CreateSyncObjects()
 {
     vk::SemaphoreCreateInfo semaphoreCreateInfo{};
     m_imageAvailableSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
+    m_renderFinishedSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
 
     vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
     m_inflightFence = m_device.createFence(fenceCreateInfo);
