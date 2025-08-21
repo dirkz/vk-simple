@@ -9,10 +9,6 @@ namespace vksimple
 
 struct Swapchain
 {
-    Swapchain() = delete;
-    Swapchain(Swapchain &) = delete;
-    Swapchain &operator=(Swapchain const &) = delete;
-
     Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device,
               vk::raii::SurfaceKHR &surface, IVulkanWindow &window, uint32_t graphicsQueue,
               uint32_t presentQueue);
@@ -20,6 +16,10 @@ struct Swapchain
     Swapchain(std::nullptr_t) : m_imageFormat{vk::Format::eR8G8B8A8Srgb}
     {
     }
+
+    Swapchain() = delete;
+    Swapchain(Swapchain &) = delete;
+    Swapchain &operator=(Swapchain const &) = delete;
 
     Swapchain &operator=(Swapchain &&rhs) noexcept
     {
