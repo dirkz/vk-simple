@@ -37,25 +37,28 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 void Engine::DrawFrame()
 {
     FrameData &frameData = CurrentFrameData();
+    vk::raii::Fence &inflightFence = frameData.InflightFence();
+    vk::raii::Semaphore &imageAvailableSemaphore = frameData.ImageAvailableSemaphore();
+    vk::raii::CommandBuffer &commandBuffer = frameData.CommandBuffer();
 
-    vk::Result resultOfWaiting = m_device.waitForFences(*frameData.InflightFence(), vk::True,
-                                                        std::numeric_limits<uint32_t>::max());
+    vk::Result resultOfWaiting =
+        m_device.waitForFences(*inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
 
-    m_device.resetFences(*frameData.InflightFence());
+    m_device.resetFences(*inflightFence);
 
-    uint32_t imageIndex = m_swapchain.AcquireNextImage(frameData.ImageAvailableSemaphore());
+    uint32_t imageIndex = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
 
-    frameData.CommandBuffer().reset();
-    RecordCommandBuffer(frameData.CommandBuffer(), imageIndex);
+    commandBuffer.reset();
+    RecordCommandBuffer(commandBuffer, imageIndex);
 
     vk::raii::Semaphore &renderFinishedSemaphore =
         m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
 
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    vk::SubmitInfo submitInfo{*frameData.ImageAvailableSemaphore(), waitDstStageMask,
-                              *frameData.CommandBuffer(), *renderFinishedSemaphore};
-    m_graphicsQueue.submit(submitInfo, frameData.InflightFence());
+    vk::SubmitInfo submitInfo{*imageAvailableSemaphore, waitDstStageMask, *commandBuffer,
+                              *renderFinishedSemaphore};
+    m_graphicsQueue.submit(submitInfo, inflightFence);
 
     const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
     vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
