@@ -383,12 +383,9 @@ void Engine::CreateGraphicsPipeline()
                                                                        lineWidth};
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
-    multisampleStateCreateInfo.minSampleShading = 1.f; // TODO: Is that needed at all?
-
-    // Disabled by default?
     vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{};
 
-    // Disabled by default? But make sure the all color parts are written out.
+    // Even without any blending, have to make sure all colors are written out.
     // https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Fixed_functions#page_Color-blending
     vk::PipelineColorBlendAttachmentState colorBlendAttachmentState{};
     colorBlendAttachmentState.colorWriteMask =
@@ -399,7 +396,7 @@ void Engine::CreateGraphicsPipeline()
     vk::PipelineColorBlendStateCreateInfo colorBlendStateCreateInfo{
         {},
         logicOpEnable,
-        vk::LogicOp::eXor, // should not matter, since disabled
+        vk::LogicOp::eClear, // should not matter, since disabled
         colorBlendAttachmentState};
 
     // No uniform buffers, no push constants yet.
