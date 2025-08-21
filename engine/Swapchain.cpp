@@ -113,7 +113,7 @@ uint32_t Swapchain::AcquireNextImage(vk::raii::Semaphore &imageAvailableSemaphor
     auto [result, imageIndex] = m_swapchain.acquireNextImage(std::numeric_limits<uint32_t>::max(),
                                                              *imageAvailableSemaphore);
 
-    if (result != vk::Result::eSuccess)
+    if (result != vk::Result::eSuccess && result != vk::Result::eSuboptimalKHR)
     {
         char *string;
         SDL_asprintf(&string, "acquireNextImage2KHR failed with result: %s",
