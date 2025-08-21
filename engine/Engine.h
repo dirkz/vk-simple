@@ -37,6 +37,7 @@ struct Engine
     void CreateFrameBuffers();
     void CreateCommandPool();
     void CreateFrameData();
+    void RecreateSwapchain();
 
     void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
 

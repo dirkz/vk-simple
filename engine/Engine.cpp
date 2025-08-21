@@ -454,6 +454,14 @@ void Engine::CreateFrameData()
         m_frameData[i] = FrameData(m_device, m_commandPool);
     }
 }
+void Engine::RecreateSwapchain()
+{
+    WaitIdle();
+
+    CreateSwapchain();
+    CreateImageViews();
+    CreateFrameBuffers();
+}
 
 void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)
 {
