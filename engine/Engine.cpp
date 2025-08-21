@@ -48,14 +48,17 @@ void Engine::DrawFrame()
     frameData.CommandBuffer().reset();
     RecordCommandBuffer(frameData.CommandBuffer(), imageIndex);
 
+    vk::raii::Semaphore &renderFinishedSemaphore =
+        m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
+
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
     vk::SubmitInfo submitInfo{*frameData.ImageAvailableSemaphore(), waitDstStageMask,
-                              *frameData.CommandBuffer(), *frameData.RenderFinishedSemaphore()};
+                              *frameData.CommandBuffer(), *renderFinishedSemaphore};
     m_graphicsQueue.submit(submitInfo, frameData.InflightFence());
 
     const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
-    vk::PresentInfoKHR presentInfo{*frameData.RenderFinishedSemaphore(), *swapchain, imageIndex};
+    vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 
     m_currentFrame = (m_currentFrame + 1) % MaxFramesInFlight;

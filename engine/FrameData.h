@@ -19,7 +19,6 @@ struct FrameData
         {
             std::swap(m_commandBuffer, rhs.m_commandBuffer);
             std::swap(m_imageAvailableSemaphore, rhs.m_imageAvailableSemaphore);
-            std::swap(m_renderFinishedSemaphore, rhs.m_renderFinishedSemaphore);
             std::swap(m_inflightFence, rhs.m_inflightFence);
         }
         return *this;
@@ -39,12 +38,6 @@ struct FrameData
         return m_imageAvailableSemaphore;
     }
 
-    // TODO
-    vk::raii::Semaphore &RenderFinishedSemaphore()
-    {
-        return m_renderFinishedSemaphore;
-    }
-
     vk::raii::Fence &InflightFence()
     {
         return m_inflightFence;
@@ -53,10 +46,6 @@ struct FrameData
   private:
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
-
-    // TODO
-    vk::raii::Semaphore m_renderFinishedSemaphore = nullptr;
-
     vk::raii::Fence m_inflightFence = nullptr;
 };
 
