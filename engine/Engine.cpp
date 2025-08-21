@@ -31,34 +31,34 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
-    CreateCommandBuffer();
-    CreateSyncObjects();
+    CreateFrameData();
 }
 
 void Engine::DrawFrame()
 {
-    vk::Result resultOfWaiting =
-        m_device.waitForFences(*m_inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
+    FrameData &frameData = CurrentFrameData();
 
-    m_device.resetFences(*m_inflightFence);
+    vk::Result resultOfWaiting = m_device.waitForFences(*frameData.InflightFence(), vk::True,
+                                                        std::numeric_limits<uint32_t>::max());
 
-    uint32_t imageIndex = m_swapchain.AcquireNextImage(m_imageAvailableSemaphore);
+    m_device.resetFences(*frameData.InflightFence());
 
-    m_commandBuffer.reset();
-    RecordCommandBuffer(m_commandBuffer, imageIndex);
+    uint32_t imageIndex = m_swapchain.AcquireNextImage(frameData.ImageAvailableSemaphore());
 
-    vk::raii::Semaphore &renderFinishedSemaphore =
-        m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
+    frameData.CommandBuffer().reset();
+    RecordCommandBuffer(frameData.CommandBuffer(), imageIndex);
 
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
-    vk::SubmitInfo submitInfo{*m_imageAvailableSemaphore, waitDstStageMask, *m_commandBuffer,
-                              *renderFinishedSemaphore};
-    m_graphicsQueue.submit(submitInfo, m_inflightFence);
+    vk::SubmitInfo submitInfo{*frameData.ImageAvailableSemaphore(), waitDstStageMask,
+                              *frameData.CommandBuffer(), *frameData.RenderFinishedSemaphore()};
+    m_graphicsQueue.submit(submitInfo, frameData.InflightFence());
 
     const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
-    vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
+    vk::PresentInfoKHR presentInfo{*frameData.RenderFinishedSemaphore(), *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
+
+    m_currentFrame = (m_currentFrame + 1) % MaxFramesInFlight;
 }
 
 bool Engine::CheckValidationLayerSupport()
@@ -436,23 +436,12 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-void Engine::CreateCommandBuffer()
+void Engine::CreateFrameData()
 {
-    constexpr uint32_t commandBufferCount = 1;
-    vk::CommandBufferAllocateInfo commandBufferAllocateInfo{
-        m_commandPool, vk::CommandBufferLevel::ePrimary, commandBufferCount};
-
-    auto commandBuffers = m_device.allocateCommandBuffers(commandBufferAllocateInfo);
-    m_commandBuffer = std::move(commandBuffers[0]);
-}
-
-void Engine::CreateSyncObjects()
-{
-    vk::SemaphoreCreateInfo semaphoreCreateInfo{};
-    m_imageAvailableSemaphore = m_device.createSemaphore(semaphoreCreateInfo);
-
-    vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
-    m_inflightFence = m_device.createFence(fenceCreateInfo);
+    for (auto i = 0; i < m_frameData.size(); ++i)
+    {
+        m_frameData[i] = FrameData(m_device, m_commandPool);
+    }
 }
 
 void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)
