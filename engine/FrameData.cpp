@@ -19,4 +19,10 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
     m_inflightFence = device.createFence(fenceCreateInfo);
 }
 
+void FrameData::RecreateSemaphore(vk::raii::Device &device, vk::raii::Semaphore &semaphore)
+{
+    vk::SemaphoreCreateInfo semaphoreCreateInfo{};
+    semaphore = device.createSemaphore(semaphoreCreateInfo);
+}
+
 } // namespace vksimple

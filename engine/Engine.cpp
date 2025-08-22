@@ -50,6 +50,10 @@ void Engine::DrawFrame()
     {
         m_windowResized = false;
         RecreateSwapchain();
+
+        // This semaphore is now burnt, renew it.
+        frameData.RecreateSemaphore(m_device, imageAvailableSemaphore);
+
         return;
     }
 
