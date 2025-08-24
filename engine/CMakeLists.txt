@@ -14,7 +14,9 @@ add_library(engine OBJECT
 	ShaderModuleLoader.cpp
 	FrameData.h
 	FrameData.cpp
-	Vertex.h)
+	Vertex.h
+	Buffer.h
+	Buffer.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
