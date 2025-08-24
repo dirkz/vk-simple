@@ -2,6 +2,7 @@
 
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
+#include "Vertex.h"
 
 namespace vksimple
 {
@@ -17,6 +18,10 @@ constexpr bool EnableValidation = true;
 std::vector<std::string> DeviceExtensions{vk::KHRSwapchainExtensionName,
                                           vk::KHRSpirv14ExtensionName,
                                           vk::KHRShaderFloatControlsExtensionName};
+
+const std::vector<Vertex> Vertices{{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+                                   {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+                                   {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
 
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
