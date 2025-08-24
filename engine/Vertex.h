@@ -7,6 +7,13 @@ namespace vksimple
 
 struct Vertex
 {
+    static vk::VertexInputBindingDescription BindingDescription()
+    {
+        vk::VertexInputBindingDescription description{0, sizeof(Vertex),
+                                                      vk::VertexInputRate::eVertex};
+        return description;
+    }
+
     Vertex(glm::vec2 position, glm::vec3 color) : m_position{position}, m_color{color}
     {
     }
