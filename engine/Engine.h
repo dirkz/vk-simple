@@ -37,7 +37,13 @@ struct Engine
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
+    void CreateVertexBuffer();
+
+    /// <summary>
+    ///  Combines CreateCommandBuffers, CreateSyncObjects.
+    /// </summary>
     void CreateFrameData();
+
     void RecreateSwapchain();
 
     void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
@@ -61,6 +67,8 @@ struct Engine
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
+    
+    vk::raii::Buffer m_vertexBuffer = nullptr;
 
     std::array<FrameData, 2> m_frameData{nullptr, nullptr};
     uint32_t m_currentFrame = 0;

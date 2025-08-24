@@ -36,6 +36,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
+    CreateVertexBuffer();
     CreateFrameData();
 }
 
@@ -469,6 +470,16 @@ void Engine::CreateCommandPool()
         vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
 
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
+}
+
+void Engine::CreateVertexBuffer()
+{
+    vk::BufferCreateInfo bufferCreateInfo{{},
+                                          sizeof(Vertex) * Vertices.size(),
+                                          vk::BufferUsageFlagBits::eVertexBuffer,
+                                          vk::SharingMode::eExclusive};
+
+    m_vertexBuffer = m_device.createBuffer(bufferCreateInfo);
 }
 
 void Engine::CreateFrameData()
