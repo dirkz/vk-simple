@@ -379,7 +379,10 @@ void Engine::CreateGraphicsPipeline()
 
     std::array shaderStageCreateInfos{vertextShaderStageCreateInfo, fragmentShaderStageCreateInfo};
 
-    vk::PipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
+    vk::VertexInputBindingDescription bindingDescrption = Vertex::BindingDescription();
+    std::array attributeDescriptions = Vertex::AttributeDescriptions();
+    vk::PipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{
+        {}, bindingDescrption, attributeDescriptions};
 
     vk::PipelineInputAssemblyStateCreateInfo inputAssemblyStateCreateInfo{
         {}, vk::PrimitiveTopology::eTriangleList, vk::False};
