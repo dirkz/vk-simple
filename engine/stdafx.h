@@ -5,6 +5,8 @@
 #include <vulkan/vk_enum_string_helper.h>
 #include <vulkan/vulkan_raii.hpp>
 
+#include <glm/glm.hpp>
+
 #include <algorithm>
 #include <array>
 #include <cstdint>
