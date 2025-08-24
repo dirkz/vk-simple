@@ -1,5 +1,6 @@
 #include "Engine.h"
 
+#include "Buffer.h"
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
 #include "Vertex.h"
@@ -480,6 +481,14 @@ void Engine::CreateVertexBuffer()
                                           vk::SharingMode::eExclusive};
 
     m_vertexBuffer = m_device.createBuffer(bufferCreateInfo);
+
+    vk::MemoryRequirements memoryRequirements = m_vertexBuffer.getMemoryRequirements();
+
+    const uint32_t memoryTypeIndex = Buffer::FindMemoryType(
+        m_physicalDevice, memoryRequirements.memoryTypeBits,
+        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
+
+    vk::MemoryAllocateInfo allocateInfo{};
 }
 
 void Engine::CreateFrameData()

@@ -3,7 +3,7 @@
 namespace vksimple
 {
 
-uint32_t Buffer::FindMemoryType(vk::PhysicalDevice &physicalDevice, uint32_t memoryTypeBits,
+uint32_t Buffer::FindMemoryType(vk::raii::PhysicalDevice &physicalDevice, uint32_t memoryTypeBits,
                                 vk::MemoryPropertyFlags memoryPropertyFlags)
 {
     vk::PhysicalDeviceMemoryProperties memoryProperties = physicalDevice.getMemoryProperties();
