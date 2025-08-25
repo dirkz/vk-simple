@@ -489,6 +489,11 @@ void Engine::CreateVertexBuffer()
         vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
 
     vk::MemoryAllocateInfo allocateInfo{memoryRequirements.size, memoryTypeIndex};
+
+    m_vertexBufferMemory = m_device.allocateMemory(allocateInfo);
+
+    vk::BindBufferMemoryInfo bindBufferMemoryInfo{m_vertexBuffer, m_vertexBufferMemory, 0};
+    m_device.bindBufferMemory2(bindBufferMemoryInfo);
 }
 
 void Engine::CreateFrameData()
