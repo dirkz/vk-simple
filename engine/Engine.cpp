@@ -494,6 +494,13 @@ void Engine::CreateVertexBuffer()
 
     vk::BindBufferMemoryInfo bindBufferMemoryInfo{m_vertexBuffer, m_vertexBufferMemory, 0};
     m_device.bindBufferMemory2(bindBufferMemoryInfo);
+
+    vk::MemoryMapInfo memoryMapInfo{{}, m_vertexBufferMemory, 0, bufferCreateInfo.size};
+    void *vertexData = m_device.mapMemory2(memoryMapInfo);
+    memcpy(vertexData, Vertices.data(), bufferCreateInfo.size);
+
+    vk::MemoryUnmapInfo memoryUnmapInfo{{}, m_vertexBufferMemory};
+    m_device.unmapMemory2(memoryUnmapInfo);
 }
 
 void Engine::CreateFrameData()
