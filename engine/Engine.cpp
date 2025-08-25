@@ -532,7 +532,7 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
-
+    commandBuffer.bindVertexBuffers(0, *m_vertexBuffer, static_cast<vk::DeviceSize>(0));
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
 
