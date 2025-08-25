@@ -542,4 +542,9 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.end();
 }
 
+FrameData &Engine::CurrentFrameData()
+{
+    return m_frameData[m_currentFrame];
+}
+
 } // namespace vksimple

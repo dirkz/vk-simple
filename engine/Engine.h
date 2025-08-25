@@ -48,10 +48,7 @@ struct Engine
 
     void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
 
-    FrameData &CurrentFrameData()
-    {
-        return m_frameData[m_currentFrame];
-    }
+    FrameData &CurrentFrameData();
 
     IVulkanWindow &m_window;
 
