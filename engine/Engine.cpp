@@ -4,7 +4,6 @@
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
 #include "Vertex.h"
-#include "Vma.h"
 
 namespace vkdeck
 {
@@ -32,6 +31,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateSurface();
     PickPhysicalDevice();
     CreateLogicalDevice();
+    CreateVma();
     CreateSwapchain();
     CreateImageViews();
     CreateRenderPass();
@@ -332,6 +332,10 @@ void Engine::CreateLogicalDevice()
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
     m_presentQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
+}
+
+void Engine::CreateVma()
+{
 }
 
 void Engine::CreateSwapchain()

@@ -6,6 +6,7 @@
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
 #include "Swapchain.h"
+#include "Vma.h"
 
 namespace vkdeck
 {
@@ -31,6 +32,7 @@ struct Engine
     bool IsDeviceSuitable(vk::raii::PhysicalDevice &device);
     void PickPhysicalDevice();
     void CreateLogicalDevice();
+    void CreateVma();
     void CreateSwapchain();
     void CreateImageViews();
     void CreateRenderPass();
@@ -59,6 +61,7 @@ struct Engine
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
+    Vma m_vma = nullptr;
     Swapchain m_swapchain = nullptr;
     vk::raii::RenderPass m_renderPass = nullptr;
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
