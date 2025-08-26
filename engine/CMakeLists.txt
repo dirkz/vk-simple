@@ -16,7 +16,7 @@ add_library(engine OBJECT
 	FrameData.cpp
 	Vertex.h
 	Buffer.h
-	Buffer.cpp)
+	Buffer.cpp "Vma.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
