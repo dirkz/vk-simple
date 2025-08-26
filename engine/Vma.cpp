@@ -6,15 +6,22 @@
 namespace vkdeck
 {
 
-const std::set<std::string> DesiredExtensions{VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
-                                              VK_KHR_BIND_MEMORY_2_EXTENSION_NAME,
-                                              VK_KHR_MAINTENANCE_4_EXTENSION_NAME,
-                                              VK_KHR_MAINTENANCE_5_EXTENSION_NAME,
-                                              VK_EXT_MEMORY_BUDGET_EXTENSION_NAME,
-                                              VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
-                                              VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME,
-                                              VK_AMD_DEVICE_COHERENT_MEMORY_EXTENSION_NAME,
-                                              "VK_KHR_external_memory_win32"};
+const std::unordered_map<std::string, VmaAllocatorCreateFlagBits> DesiredExtensionFlags{
+    std::make_pair(VK_KHR_DEDICATED_ALLOCATION_EXTENSION_NAME,
+                   VMA_ALLOCATOR_CREATE_KHR_DEDICATED_ALLOCATION_BIT),
+    std::make_pair(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME, VMA_ALLOCATOR_CREATE_KHR_BIND_MEMORY2_BIT),
+
+    std::make_pair(VK_KHR_MAINTENANCE_4_EXTENSION_NAME, VMA_ALLOCATOR_CREATE_KHR_MAINTENANCE4_BIT),
+    std::make_pair(VK_KHR_MAINTENANCE_5_EXTENSION_NAME, VMA_ALLOCATOR_CREATE_KHR_MAINTENANCE5_BIT),
+    std::make_pair(VK_EXT_MEMORY_BUDGET_EXTENSION_NAME, VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT),
+    std::make_pair(VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME,
+                   VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT),
+    std::make_pair(VK_EXT_MEMORY_PRIORITY_EXTENSION_NAME,
+                   VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT),
+    std::make_pair(VK_AMD_DEVICE_COHERENT_MEMORY_EXTENSION_NAME,
+                   VMA_ALLOCATOR_CREATE_AMD_DEVICE_COHERENT_MEMORY_BIT),
+    std::make_pair("VK_KHR_external_memory_win32",
+                   VMA_ALLOCATOR_CREATE_KHR_EXTERNAL_MEMORY_WIN32_BIT)};
 
 std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(vk::raii::PhysicalDevice &physicalDevice)
 {
@@ -26,7 +33,7 @@ std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(vk::raii::PhysicalDev
     for (const auto &extensionProperties : actualExtensionProperties)
     {
         std::string extensionName{static_cast<const char *>(extensionProperties.extensionName)};
-        if (DesiredExtensions.contains(extensionName))
+        if (DesiredExtensionFlags.count(extensionName) > 0)
         {
             extensions.insert(extensionName);
         }
