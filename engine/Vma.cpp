@@ -42,4 +42,27 @@ std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(vk::raii::PhysicalDev
     return extensions;
 }
 
+VmaAllocatorCreateFlagBits Vma::CreateFlagBits(vk::raii::PhysicalDevice &physicalDevice)
+{
+    VmaAllocatorCreateFlagBits flags{};
+
+    std::vector<vk::ExtensionProperties> actualExtensionProperties =
+        physicalDevice.enumerateDeviceExtensionProperties();
+
+    for (const auto &extensionProperties : actualExtensionProperties)
+    {
+        std::string extensionName{static_cast<const char *>(extensionProperties.extensionName)};
+        const auto &it = DesiredExtensionFlags.find(extensionName);
+        if (it != DesiredExtensionFlags.end())
+        {
+            const auto &pair = *it;
+            VmaAllocatorCreateFlagBits flagsToAdd = pair.second;
+            auto newFlags = flags | flagsToAdd;
+            flags = static_cast<VmaAllocatorCreateFlagBits>(newFlags);
+        }
+    }
+
+    return flags;
+}
+
 } // namespace vkdeck
