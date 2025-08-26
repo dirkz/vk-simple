@@ -1,6 +1,6 @@
 #include "SwapchainSupportDetails.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 SwapchainSupportDetails::SwapchainSupportDetails(vk::raii::PhysicalDevice &device,
@@ -62,4 +62,4 @@ vk::Extent2D SwapchainSupportDetails::ChooseExtent(IVulkanWindow &window) const
     }
 }
 
-} // namespace vksimple
+} // namespace vkdeck

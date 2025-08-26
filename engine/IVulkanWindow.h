@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct IVulkanWindow
@@ -13,4 +13,4 @@ struct IVulkanWindow
     virtual vk::Extent2D GetExtentInPixels() = 0;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

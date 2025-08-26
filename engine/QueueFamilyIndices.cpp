@@ -1,6 +1,6 @@
 #include "QueueFamilyIndices.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 QueueFamilyIndices::QueueFamilyIndices()
@@ -34,4 +34,4 @@ QueueFamilyIndices::QueueFamilyIndices(vk::raii::PhysicalDevice &device,
     }
 }
 
-} // namespace vksimple
+} // namespace vkdeck

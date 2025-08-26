@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct Buffer
@@ -12,4 +12,4 @@ struct Buffer
                                    vk::MemoryPropertyFlags memoryPropertyFlags);
 };
 
-} // namespace vksimple
+} // namespace vkdeck

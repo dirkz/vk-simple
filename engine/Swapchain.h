@@ -4,7 +4,7 @@
 
 #include "IVulkanWindow.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct Swapchain
@@ -99,4 +99,4 @@ struct Swapchain
     std::vector<vk::raii::Semaphore> m_renderFinishedSemaphores;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

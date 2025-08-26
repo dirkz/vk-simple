@@ -1,6 +1,6 @@
 #include "SDLVulkanWindow.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 std::vector<std::string> SDLVulkanWindow::GetInstanceExtensions()
@@ -41,4 +41,4 @@ vk::Extent2D SDLVulkanWindow::GetExtentInPixels()
     return vk::Extent2D{static_cast<uint32_t>(width), static_cast<uint32_t>(height)};
 }
 
-} // namespace vksimple
+} // namespace vkdeck

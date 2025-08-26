@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct QueueFamilyIndices
@@ -30,4 +30,4 @@ struct QueueFamilyIndices
     std::optional<uint32_t> m_presentFamily;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

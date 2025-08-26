@@ -4,7 +4,7 @@
 
 #include "IVulkanWindow.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 inline void HandleSDLError(bool errorCheck, const char *functionName)
@@ -43,4 +43,4 @@ struct SDLVulkanWindow : IVulkanWindow
     SDL_Window *m_window;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

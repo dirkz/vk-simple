@@ -4,7 +4,7 @@
 
 #include "IVulkanWindow.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct SwapchainSupportDetails
@@ -37,4 +37,4 @@ struct SwapchainSupportDetails
     std::vector<vk::PresentModeKHR> m_presentModes;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

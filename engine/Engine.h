@@ -7,7 +7,7 @@
 #include "QueueFamilyIndices.h"
 #include "Swapchain.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 constexpr int MaxFramesInFlight = 2;
@@ -77,4 +77,4 @@ struct Engine
     bool m_windowResized = false;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

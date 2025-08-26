@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "SDLVulkanWindow.h"
 
-using namespace vksimple;
+using namespace vkdeck;
 
 int SDL_main(int argc, char *argv[])
 {

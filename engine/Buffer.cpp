@@ -1,6 +1,6 @@
 #include "Buffer.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 uint32_t Buffer::FindMemoryType(vk::raii::PhysicalDevice &physicalDevice, uint32_t memoryTypeBits,
@@ -26,4 +26,4 @@ uint32_t Buffer::FindMemoryType(vk::raii::PhysicalDevice &physicalDevice, uint32
     throw std::runtime_error{"no suitable memory found"};
 }
 
-} // namespace vksimple
+} // namespace vkdeck

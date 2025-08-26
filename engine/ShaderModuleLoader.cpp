@@ -1,6 +1,6 @@
 #include "ShaderModuleLoader.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 ShaderModuleLoader::ShaderModuleLoader(const std::string &filename)
@@ -37,4 +37,4 @@ vk::raii::ShaderModule ShaderModuleLoader::CreateShaderModule(vk::raii::Device &
     return device.createShaderModule(createInfo);
 }
 
-} // namespace vksimple
+} // namespace vkdeck

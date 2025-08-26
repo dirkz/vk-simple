@@ -2,12 +2,12 @@
 
 #include "SwapchainSupportDetails.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
-vksimple::Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device,
-                               vk::raii::SurfaceKHR &surface, IVulkanWindow &window,
-                               uint32_t graphicsQueue, uint32_t presentQueue)
+Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device,
+                     vk::raii::SurfaceKHR &surface, IVulkanWindow &window, uint32_t graphicsQueue,
+                     uint32_t presentQueue)
 {
     SwapchainSupportDetails details{physicalDevice, surface};
 
@@ -134,4 +134,4 @@ std::pair<vk::Result, uint32_t> Swapchain::AcquireNextImage(
     return std::make_pair(result, imageIndex);
 }
 
-} // namespace vksimple
+} // namespace vkdeck

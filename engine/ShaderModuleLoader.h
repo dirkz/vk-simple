@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct ShaderModuleLoader
@@ -15,4 +15,4 @@ struct ShaderModuleLoader
     std::vector<char> m_buffer;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

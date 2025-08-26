@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct Vertex
@@ -45,4 +45,4 @@ struct Vertex
     glm::vec3 m_color;
 };
 
-} // namespace vksimple
+} // namespace vkdeck

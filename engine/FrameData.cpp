@@ -1,6 +1,6 @@
 #include "FrameData.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool)
@@ -25,4 +25,4 @@ void FrameData::RecreateSemaphore(vk::raii::Device &device, vk::raii::Semaphore 
     semaphore = device.createSemaphore(semaphoreCreateInfo);
 }
 
-} // namespace vksimple
+} // namespace vkdeck

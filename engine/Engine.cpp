@@ -5,7 +5,7 @@
 #include "SwapchainSupportDetails.h"
 #include "Vertex.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 std::vector<std::string> ValidationLayers{"VK_LAYER_KHRONOS_validation"};
@@ -547,4 +547,4 @@ FrameData &Engine::CurrentFrameData()
     return m_frameData[m_currentFrame];
 }
 
-} // namespace vksimple
+} // namespace vkdeck

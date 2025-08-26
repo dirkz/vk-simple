@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-namespace vksimple
+namespace vkdeck
 {
 
 struct FrameData
@@ -51,4 +51,4 @@ struct FrameData
     vk::raii::Fence m_inflightFence = nullptr;
 };
 
-} // namespace vksimple
+} // namespace vkdeck
