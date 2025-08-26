@@ -28,6 +28,8 @@ struct Vma
     Vma() = delete;
     Vma(const Vma &) = delete;
 
+    ~Vma();
+
     Vma &operator=(const Vma &) = delete;
 
     Vma &operator=(Vma &&rhs)
@@ -38,6 +40,9 @@ struct Vma
 
         return *this;
     }
+
+  private:
+    VmaAllocator m_allocator = nullptr;
 };
 
 } // namespace vkdeck

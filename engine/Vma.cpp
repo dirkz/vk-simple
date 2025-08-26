@@ -1,3 +1,4 @@
+#include "Vma.h"
 #define VMA_IMPLEMENTATION
 #include <vk_mem_alloc.h>
 
@@ -63,6 +64,14 @@ VmaAllocatorCreateFlagBits Vma::CreateFlagBits(vk::raii::PhysicalDevice &physica
     }
 
     return flags;
+}
+
+Vma::~Vma()
+{
+    if (m_allocator)
+    {
+        vmaDestroyAllocator(m_allocator);
+    }
 }
 
 } // namespace vkdeck
