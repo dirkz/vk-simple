@@ -13,7 +13,7 @@ struct Vma
     /// <param name="physicalDevice">The physical device to check extension support for</param>
     /// <returns></returns>
     static std::set<std::string> DesiredPhysicalDeviceExtensions(
-        vk::raii::PhysicalDevice &physicalDevice);
+        const vk::raii::PhysicalDevice &physicalDevice);
 
     /// <summary>
     /// The `VmaAllocatorCreateFlagBits` the given physical device supports
@@ -21,7 +21,8 @@ struct Vma
     /// </summary>
     /// <param name="physicalDevice">The physical device to check</param>
     /// <returns></returns>
-    static VmaAllocatorCreateFlagBits CreateFlagBits(vk::raii::PhysicalDevice &physicalDevice);
+    static VmaAllocatorCreateFlagBits CreateFlagBits(
+        const vk::raii::PhysicalDevice &physicalDevice);
 
     Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
         vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device);

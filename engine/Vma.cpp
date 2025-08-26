@@ -24,7 +24,8 @@ const std::unordered_map<std::string, VmaAllocatorCreateFlagBits> DesiredExtensi
     std::make_pair("VK_KHR_external_memory_win32",
                    VMA_ALLOCATOR_CREATE_KHR_EXTERNAL_MEMORY_WIN32_BIT)};
 
-std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(vk::raii::PhysicalDevice &physicalDevice)
+std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(
+    const vk::raii::PhysicalDevice &physicalDevice)
 {
     std::set<std::string> extensions{};
 
@@ -43,7 +44,7 @@ std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(vk::raii::PhysicalDev
     return extensions;
 }
 
-VmaAllocatorCreateFlagBits Vma::CreateFlagBits(vk::raii::PhysicalDevice &physicalDevice)
+VmaAllocatorCreateFlagBits Vma::CreateFlagBits(const vk::raii::PhysicalDevice &physicalDevice)
 {
     VmaAllocatorCreateFlagBits flags{};
 
@@ -75,6 +76,17 @@ Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &in
     VmaVulkanFunctions vulkanFunctions{};
     vulkanFunctions.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
     vulkanFunctions.vkGetDeviceProcAddr = vkGetDeviceProcAddr;
+
+    VmaAllocatorCreateFlagBits flags = CreateFlagBits(physicalDevice);
+    VmaAllocatorCreateInfo allocatorCreateInfo{};
+    allocatorCreateInfo.flags = flags;
+    allocatorCreateInfo.vulkanApiVersion = vk::ApiVersion14;
+    allocatorCreateInfo.instance = *instance;
+    allocatorCreateInfo.physicalDevice = *physicalDevice;
+    allocatorCreateInfo.device = *device;
+    allocatorCreateInfo.pVulkanFunctions = &vulkanFunctions;
+
+    vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
 }
 
 Vma::~Vma()
