@@ -22,6 +22,22 @@ struct Vma
     /// <param name="physicalDevice">The physical device to check</param>
     /// <returns></returns>
     static VmaAllocatorCreateFlagBits CreateFlagBits(vk::raii::PhysicalDevice &physicalDevice);
+
+    Vma(std::nullptr_t) {};
+
+    Vma() = delete;
+    Vma(const Vma &) = delete;
+
+    Vma &operator=(const Vma &) = delete;
+
+    Vma &operator=(Vma &&rhs)
+    {
+        if (this != &rhs)
+        {
+        }
+
+        return *this;
+    }
 };
 
 } // namespace vkdeck
