@@ -65,9 +65,16 @@ VmaAllocatorCreateFlagBits Vma::CreateFlagBits(vk::raii::PhysicalDevice &physica
 
     return flags;
 }
-Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
+
+Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
          vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device)
 {
+    PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(
+        *vkGetInstanceProcAddr(*instance, "vkGetDeviceProcAddr"));
+
+    VmaVulkanFunctions vulkanFunctions{};
+    vulkanFunctions.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
+    vulkanFunctions.vkGetDeviceProcAddr = vkGetDeviceProcAddr;
 }
 
 Vma::~Vma()
