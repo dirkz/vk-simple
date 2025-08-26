@@ -4,6 +4,7 @@
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
 #include "Vertex.h"
+#include "Vma.h"
 
 namespace vkdeck
 {
@@ -124,6 +125,8 @@ std::vector<std::string> Engine::GetRequiredExtensionNames()
     }
 
     instanceExtensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+
+    std::set<std::string> vmaExtensions = Vma::Extensions(m_context);
 
     return instanceExtensions;
 }
