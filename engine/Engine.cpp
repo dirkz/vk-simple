@@ -17,9 +17,9 @@ constexpr bool EnableValidation = false;
 constexpr bool EnableValidation = true;
 #endif
 
-std::vector<std::string> DeviceExtensions{vk::KHRSwapchainExtensionName,
-                                          vk::KHRSpirv14ExtensionName,
-                                          vk::KHRShaderFloatControlsExtensionName};
+std::vector<std::string> PhysicalDeviceExtensions{vk::KHRSwapchainExtensionName,
+                                                  vk::KHRSpirv14ExtensionName,
+                                                  vk::KHRShaderFloatControlsExtensionName};
 
 const std::vector<Vertex> Vertices{{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
                                    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -125,8 +125,6 @@ std::vector<std::string> Engine::GetRequiredExtensionNames()
     }
 
     instanceExtensions.push_back(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
-
-    std::set<std::string> vmaExtensions = Vma::Extensions(m_context);
 
     return instanceExtensions;
 }
@@ -240,7 +238,8 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
     const std::vector<vk::ExtensionProperties> properties =
         device.enumerateDeviceExtensionProperties();
 
-    std::set<std::string> requiredExtensions{DeviceExtensions.begin(), DeviceExtensions.end()};
+    std::set<std::string> requiredExtensions{PhysicalDeviceExtensions.begin(),
+                                             PhysicalDeviceExtensions.end()};
 
     for (const vk::ExtensionProperties &props : properties)
     {
@@ -312,8 +311,19 @@ void Engine::CreateLogicalDevice()
                        [](const std::string &s) { return s.c_str(); });
     }
 
-    std::vector<const char *> extensionNames(DeviceExtensions.size());
-    std::transform(DeviceExtensions.begin(), DeviceExtensions.end(), extensionNames.begin(),
+    // Those have already been checked to be supported.
+    std::vector<std::string> deviceExtensions = PhysicalDeviceExtensions;
+
+    // Get desired VMA extensions that are supported by the physical device
+    // and add them to our list.
+    std::set<std::string> vmaExtensions = Vma::DesiredPhysicalDeviceExtensions(m_physicalDevice);
+    for (const std::string &vmaExtension : vmaExtensions)
+    {
+        deviceExtensions.push_back(vmaExtension);
+    }
+
+    std::vector<const char *> extensionNames(deviceExtensions.size());
+    std::transform(deviceExtensions.begin(), deviceExtensions.end(), extensionNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
 
     vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames, extensionNames};

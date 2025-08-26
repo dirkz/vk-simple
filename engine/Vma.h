@@ -7,7 +7,8 @@ namespace vkdeck
 
 struct Vma
 {
-    static std::set<std::string> Extensions(vk::raii::Context &context);
+    static std::set<std::string> DesiredPhysicalDeviceExtensions(
+        vk::raii::PhysicalDevice &physicalDevice);
 };
 
 } // namespace vkdeck
