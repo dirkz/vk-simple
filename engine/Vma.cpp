@@ -65,6 +65,10 @@ VmaAllocatorCreateFlagBits Vma::CreateFlagBits(vk::raii::PhysicalDevice &physica
 
     return flags;
 }
+Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
+         vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device)
+{
+}
 
 Vma::~Vma()
 {

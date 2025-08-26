@@ -23,6 +23,9 @@ struct Vma
     /// <returns></returns>
     static VmaAllocatorCreateFlagBits CreateFlagBits(vk::raii::PhysicalDevice &physicalDevice);
 
+    Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
+        vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device);
+
     Vma(std::nullptr_t) {};
 
     Vma() = delete;

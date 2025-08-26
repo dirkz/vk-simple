@@ -336,6 +336,7 @@ void Engine::CreateLogicalDevice()
 
 void Engine::CreateVma()
 {
+    m_vma = Vma{m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device};
 }
 
 void Engine::CreateSwapchain()
