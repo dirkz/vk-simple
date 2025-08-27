@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+#include "VmaBuffer.h"
+
 namespace vkdeck
 {
 
@@ -36,7 +38,7 @@ struct Vma
 
     Vma &operator=(const Vma &) = delete;
 
-    Vma &operator=(Vma &&rhs)
+    Vma &operator=(Vma &&rhs) noexcept
     {
         if (this != &rhs)
         {
@@ -45,6 +47,9 @@ struct Vma
 
         return *this;
     }
+
+    VmaBuffer CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+                           VmaMemoryUsage memoryUsage = VMA_MEMORY_USAGE_AUTO);
 
   private:
     VmaAllocator m_allocator = nullptr;

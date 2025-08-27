@@ -100,4 +100,21 @@ Vma::~Vma()
     }
 }
 
+VmaBuffer Vma::CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+                            VmaMemoryUsage memoryUsage)
+{
+    vk::BufferCreateInfo bufferCreateInfo1{{}, size, bufferUsage, vk::SharingMode::eExclusive};
+    VkBufferCreateInfo bufferCreateInfo = bufferCreateInfo1;
+
+    VmaAllocationCreateInfo allocationCreateInfo{};
+    allocationCreateInfo.usage = memoryUsage;
+
+    VkBuffer buffer;
+    VmaAllocation allocation;
+    vmaCreateBuffer(m_allocator, &bufferCreateInfo, &allocationCreateInfo, &buffer, &allocation,
+                    nullptr);
+
+    return VmaBuffer{m_allocator, buffer, allocation};
+}
+
 } // namespace vkdeck
