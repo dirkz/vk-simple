@@ -3,6 +3,13 @@
 #include "Engine.h"
 #include "SDLVulkanWindow.h"
 
+// windows.h gets included because of VK_USE_PLATFORM_WIN32_KHR,
+// which we nened for VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME
+// (VMA will complain about it missing during runtime even if the value
+// is used directly).
+// And this clashes with our use of `sdl::CreateWindow`.
+#undef CreateWindow
+
 using namespace vkdeck;
 
 int SDL_main(int argc, char *argv[])

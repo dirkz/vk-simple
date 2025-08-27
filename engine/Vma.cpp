@@ -21,7 +21,7 @@ const std::unordered_map<std::string, VmaAllocatorCreateFlagBits> DesiredExtensi
                    VMA_ALLOCATOR_CREATE_EXT_MEMORY_PRIORITY_BIT),
     std::make_pair(VK_AMD_DEVICE_COHERENT_MEMORY_EXTENSION_NAME,
                    VMA_ALLOCATOR_CREATE_AMD_DEVICE_COHERENT_MEMORY_BIT),
-    std::make_pair("VK_KHR_external_memory_win32",
+    std::make_pair(VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME,
                    VMA_ALLOCATOR_CREATE_KHR_EXTERNAL_MEMORY_WIN32_BIT)};
 
 std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(

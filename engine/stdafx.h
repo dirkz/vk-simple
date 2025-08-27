@@ -1,3 +1,7 @@
+#if WIN32
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif
+
 #include <SDL.hpp>
 #include <SDL3/SDL_vulkan.h>
 
