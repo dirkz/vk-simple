@@ -493,6 +493,10 @@ void Engine::CreateCommandPool()
 
 void Engine::CreateVertexBuffer()
 {
+    VmaBuffer buffer =
+        m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer,
+                           VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+
     vk::BufferCreateInfo bufferCreateInfo{{},
                                           sizeof(Vertex) * Vertices.size(),
                                           vk::BufferUsageFlagBits::eVertexBuffer,

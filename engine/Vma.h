@@ -49,6 +49,7 @@ struct Vma
     }
 
     VmaBuffer CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+                           VmaAllocationCreateFlagBits createFlagBits,
                            VmaMemoryUsage memoryUsage = VMA_MEMORY_USAGE_AUTO);
 
   private:
