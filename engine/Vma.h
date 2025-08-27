@@ -3,6 +3,7 @@
 #include "stdafx.h"
 
 #include "VmaBuffer.h"
+#include "VmaHelpers.h"
 
 namespace vkdeck
 {

@@ -2,8 +2,6 @@
 #define VMA_IMPLEMENTATION
 #include <vk_mem_alloc.h>
 
-#include "Vma.h"
-
 namespace vkdeck
 {
 
@@ -89,7 +87,8 @@ Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &in
     allocatorCreateInfo.device = *device;
     allocatorCreateInfo.pVulkanFunctions = &vulkanFunctions;
 
-    vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
+    VkResult result = vmaCreateAllocator(&allocatorCreateInfo, &m_allocator);
+    CheckResult(result);
 }
 
 Vma::~Vma()
@@ -112,8 +111,9 @@ VmaBuffer Vma::CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsag
 
     VkBuffer buffer;
     VmaAllocation allocation;
-    vmaCreateBuffer(m_allocator, &bufferCreateInfo, &allocationCreateInfo, &buffer, &allocation,
-                    nullptr);
+    VkResult result = vmaCreateBuffer(m_allocator, &bufferCreateInfo, &allocationCreateInfo,
+                                      &buffer, &allocation, nullptr);
+    CheckResult(result);
 
     return VmaBuffer{m_allocator, buffer, allocation, size};
 }
