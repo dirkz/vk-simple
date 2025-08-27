@@ -18,7 +18,9 @@ add_library(engine OBJECT
 	Buffer.h
 	Buffer.cpp
 	Vma.cpp
-	Vma.h)
+	Vma.h
+	VmaBuffer.h
+	VmaBuffer.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
