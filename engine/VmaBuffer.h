@@ -7,8 +7,9 @@ namespace vkdeck
 
 struct VmaBuffer
 {
-    VmaBuffer(VmaAllocator allocator, VkBuffer buffer, VmaAllocation allocation)
-        : m_allocator{allocator}, m_buffer{buffer}, m_allocation{allocation} {};
+    VmaBuffer(VmaAllocator allocator, VkBuffer buffer, VmaAllocation allocation,
+              vk::DeviceSize size)
+        : m_allocator{allocator}, m_buffer{buffer}, m_allocation{allocation}, m_size{size} {};
 
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
@@ -25,10 +26,13 @@ struct VmaBuffer
         return m_buffer;
     }
 
+    void CopyMemoryToAllocation(const void *src) const;
+
   private:
     VmaAllocator m_allocator;
     VkBuffer m_buffer;
     VmaAllocation m_allocation;
+    vk::DeviceSize m_size;
 };
 
 } // namespace vkdeck

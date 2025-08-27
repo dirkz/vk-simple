@@ -115,7 +115,7 @@ VmaBuffer Vma::CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsag
     vmaCreateBuffer(m_allocator, &bufferCreateInfo, &allocationCreateInfo, &buffer, &allocation,
                     nullptr);
 
-    return VmaBuffer{m_allocator, buffer, allocation};
+    return VmaBuffer{m_allocator, buffer, allocation, size};
 }
 
 } // namespace vkdeck
