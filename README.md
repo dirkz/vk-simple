@@ -5,6 +5,7 @@ including its use of
 [render passes](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Render_passes),
 but fully embracing [vk::raii](https://github.com/KhronosGroup/Vulkan-Hpp/blob/main/vk_raii_ProgrammingGuide.md),
 using [VMA](https://gpuopen.com/vulkan-memory-allocator/) for memory management,
+[slang](https://github.com/shader-slang/slang) for compiling shaders,
 [SDL3](https://wiki.libsdl.org/SDL3/FrontPage) for handling the UI,
 and [CMake](https://cmake.org/) for project setup.
 
