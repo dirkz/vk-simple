@@ -40,6 +40,7 @@ struct Vma
     {
         if (this != &rhs)
         {
+            std::swap(m_allocator, rhs.m_allocator);
         }
 
         return *this;
