@@ -255,14 +255,12 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
-    VkPhysicalDeviceBufferDeviceAddressFeatures deviceAddressFeatures{};
-    deviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
-    VkPhysicalDeviceFeatures2 deviceFeatures{};
-    deviceFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-    deviceFeatures.pNext = &deviceAddressFeatures;
-    vkGetPhysicalDeviceFeatures2(*device, &deviceFeatures);
+    auto features = device.template getFeatures2<vk::PhysicalDeviceFeatures2,
+                                                 vk::PhysicalDeviceBufferDeviceAddressFeatures>();
+    vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures =
+        features.get<vk::PhysicalDeviceBufferDeviceAddressFeatures>();
 
-    if (!deviceAddressFeatures.bufferDeviceAddress)
+    if (!bufferDeviceAddressFeatures.bufferDeviceAddress)
     {
         return false;
     }
