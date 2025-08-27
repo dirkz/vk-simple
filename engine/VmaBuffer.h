@@ -20,6 +20,11 @@ struct VmaBuffer
 
     VmaBuffer &operator=(const VmaBuffer &) = delete;
 
+    VkBuffer Buffer() const
+    {
+        return m_buffer;
+    }
+
   private:
     VmaAllocator m_allocator;
     VkBuffer m_buffer;
