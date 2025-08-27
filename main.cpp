@@ -8,7 +8,9 @@
 // (VMA will complain about it missing during runtime even if the value
 // is used directly).
 // And this clashes with our use of `sdl::CreateWindow`.
+#ifdef WIN32
 #undef CreateWindow
+#endif
 
 using namespace vkdeck;
 
