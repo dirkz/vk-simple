@@ -255,6 +255,18 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
+    VkPhysicalDeviceBufferDeviceAddressFeatures deviceAddressFeatures{};
+    deviceAddressFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+    VkPhysicalDeviceFeatures2 deviceFeatures{};
+    deviceFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    deviceFeatures.pNext = &deviceAddressFeatures;
+    vkGetPhysicalDeviceFeatures2(*device, &deviceFeatures);
+
+    if (!deviceAddressFeatures.bufferDeviceAddress)
+    {
+        return false;
+    }
+
     QueueFamilyIndices indices{device, m_surface};
 
     bool extensionsSupported = CheckDeviceExtensionSupport(device);
@@ -326,9 +338,15 @@ void Engine::CreateLogicalDevice()
     std::transform(deviceExtensions.begin(), deviceExtensions.end(), extensionNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
 
+    vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures{};
+    bufferDeviceAddressFeatures.bufferDeviceAddress = vk::True;
+
     vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames, extensionNames};
 
-    m_device = m_physicalDevice.createDevice(createInfo);
+    vk::StructureChain<vk::DeviceCreateInfo, vk::PhysicalDeviceBufferDeviceAddressFeatures>
+        createChain{createInfo, bufferDeviceAddressFeatures};
+
+    m_device = m_physicalDevice.createDevice(createChain.get<vk::DeviceCreateInfo>());
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
     m_presentQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
