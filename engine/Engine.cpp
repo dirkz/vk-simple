@@ -31,7 +31,6 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateSurface();
     PickPhysicalDevice();
     CreateLogicalDevice();
-    CreateVma();
     CreateSwapchain();
     CreateImageViews();
     CreateRenderPass();
@@ -255,16 +254,6 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
-    auto features = device.template getFeatures2<vk::PhysicalDeviceFeatures2,
-                                                 vk::PhysicalDeviceBufferDeviceAddressFeatures>();
-    vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures =
-        features.get<vk::PhysicalDeviceBufferDeviceAddressFeatures>();
-
-    if (!bufferDeviceAddressFeatures.bufferDeviceAddress)
-    {
-        return false;
-    }
-
     QueueFamilyIndices indices{device, m_surface};
 
     bool extensionsSupported = CheckDeviceExtensionSupport(device);
@@ -324,35 +313,16 @@ void Engine::CreateLogicalDevice()
     // Those have already been checked to be supported.
     std::vector<std::string> deviceExtensions = PhysicalDeviceExtensions;
 
-    // Get desired VMA extensions that are supported by the physical device
-    // and add them to our list.
-    std::set<std::string> vmaExtensions = Vma::DesiredPhysicalDeviceExtensions(m_physicalDevice);
-    for (const std::string &vmaExtension : vmaExtensions)
-    {
-        deviceExtensions.push_back(vmaExtension);
-    }
-
     std::vector<const char *> extensionNames(deviceExtensions.size());
     std::transform(deviceExtensions.begin(), deviceExtensions.end(), extensionNames.begin(),
                    [](const std::string &s) { return s.c_str(); });
 
-    vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures{};
-    bufferDeviceAddressFeatures.bufferDeviceAddress = vk::True;
-
     vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames, extensionNames};
 
-    vk::StructureChain<vk::DeviceCreateInfo, vk::PhysicalDeviceBufferDeviceAddressFeatures>
-        createChain{createInfo, bufferDeviceAddressFeatures};
-
-    m_device = m_physicalDevice.createDevice(createChain.get<vk::DeviceCreateInfo>());
+    m_device = m_physicalDevice.createDevice(createInfo);
 
     m_graphicsQueue = m_device.getQueue(m_queueFamilyIndices.GraphicsQueue(), 0);
     m_presentQueue = m_device.getQueue(m_queueFamilyIndices.PresentQueue(), 0);
-}
-
-void Engine::CreateVma()
-{
-    m_vma = Vma{m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device};
 }
 
 void Engine::CreateSwapchain()
@@ -509,10 +479,6 @@ void Engine::CreateCommandPool()
 
 void Engine::CreateVertexBuffer()
 {
-    VmaBuffer buffer =
-        m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer,
-                           VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
-
     vk::BufferCreateInfo bufferCreateInfo{{},
                                           sizeof(Vertex) * Vertices.size(),
                                           vk::BufferUsageFlagBits::eVertexBuffer,

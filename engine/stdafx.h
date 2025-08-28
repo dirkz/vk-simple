@@ -9,9 +9,6 @@
 #include <vulkan/vk_enum_string_helper.h>
 #include <vulkan/vulkan_raii.hpp>
 
-#define VMA_VULKAN_VERSION 1004000 // Vulkan 1.4
-#include <vk_mem_alloc.h>
-
 #include <glm/glm.hpp>
 
 #include <algorithm>
