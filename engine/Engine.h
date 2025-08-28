@@ -68,8 +68,7 @@ struct Engine
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
 
-    vk::raii::Buffer m_vertexBuffer = nullptr;
-    vk::raii::DeviceMemory m_vertexBufferMemory = nullptr;
+    VmaBuffer m_vertexBuffer = nullptr;
 
     std::array<FrameData, 2> m_frameData{nullptr, nullptr};
     uint32_t m_currentFrame = 0;

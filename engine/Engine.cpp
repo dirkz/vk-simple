@@ -509,36 +509,11 @@ void Engine::CreateCommandPool()
 
 void Engine::CreateVertexBuffer()
 {
-    VmaBuffer buffer =
+    m_vertexBuffer =
         m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer,
                            VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
 
-    vk::BufferCreateInfo bufferCreateInfo{{},
-                                          sizeof(Vertex) * Vertices.size(),
-                                          vk::BufferUsageFlagBits::eVertexBuffer,
-                                          vk::SharingMode::eExclusive};
-
-    m_vertexBuffer = m_device.createBuffer(bufferCreateInfo);
-
-    vk::MemoryRequirements memoryRequirements = m_vertexBuffer.getMemoryRequirements();
-
-    const uint32_t memoryTypeIndex = Buffer::FindMemoryType(
-        m_physicalDevice, memoryRequirements.memoryTypeBits,
-        vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent);
-
-    vk::MemoryAllocateInfo allocateInfo{memoryRequirements.size, memoryTypeIndex};
-
-    m_vertexBufferMemory = m_device.allocateMemory(allocateInfo);
-
-    vk::BindBufferMemoryInfo bindBufferMemoryInfo{m_vertexBuffer, m_vertexBufferMemory, 0};
-    m_device.bindBufferMemory2(bindBufferMemoryInfo);
-
-    vk::MemoryMapInfo memoryMapInfo{{}, m_vertexBufferMemory, 0, bufferCreateInfo.size};
-    void *vertexData = m_device.mapMemory2(memoryMapInfo);
-    memcpy(vertexData, Vertices.data(), bufferCreateInfo.size);
-
-    vk::MemoryUnmapInfo memoryUnmapInfo{{}, m_vertexBufferMemory};
-    m_device.unmapMemory2(memoryUnmapInfo);
+    m_vertexBuffer.CopyMemoryToAllocation(Vertices.data());
 }
 
 void Engine::CreateFrameData()
@@ -570,7 +545,7 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
-    commandBuffer.bindVertexBuffers(0, *m_vertexBuffer, static_cast<vk::DeviceSize>(0));
+    commandBuffer.bindVertexBuffers(0, m_vertexBuffer.Buffer(), static_cast<vk::DeviceSize>(0));
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
 
