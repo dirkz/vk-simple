@@ -14,7 +14,7 @@ struct StagingCommandPool
 
     StagingCommandPool &operator=(const StagingCommandPool &) = delete;
 
-    StagingCommandPool &operator=(StagingCommandPool &&rhs)
+    StagingCommandPool &operator=(StagingCommandPool &&rhs) noexcept
     {
         if (this != &rhs)
         {
@@ -23,8 +23,11 @@ struct StagingCommandPool
         return *this;
     }
 
+    vk::raii::CommandBuffer &BeginNewCommandBuffer(vk::raii::Device &device);
+
   private:
     vk::raii::CommandPool m_commandPool = nullptr;
+    std::vector<vk::raii::CommandBuffer> m_commandBuffers;
 };
 
 } // namespace vkdeck
