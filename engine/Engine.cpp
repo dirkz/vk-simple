@@ -38,6 +38,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
+    CreateStagingCommandPool();
     CreateVertexBuffer();
     CreateFrameData();
 }
@@ -505,6 +506,11 @@ void Engine::CreateCommandPool()
         vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
 
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
+}
+
+void Engine::CreateStagingCommandPool()
+{
+    m_stagingCommandPool = StagingCommandPool{m_device, m_queueFamilyIndices.GraphicsQueue()};
 }
 
 void Engine::CreateVertexBuffer()

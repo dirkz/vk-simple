@@ -5,6 +5,7 @@
 #include "FrameData.h"
 #include "IVulkanWindow.h"
 #include "QueueFamilyIndices.h"
+#include "StagingCommandPool.h"
 #include "Swapchain.h"
 #include "Vma.h"
 
@@ -39,6 +40,7 @@ struct Engine
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
+    void CreateStagingCommandPool();
     void CreateVertexBuffer();
 
     /// <summary>
@@ -67,6 +69,7 @@ struct Engine
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
+    StagingCommandPool m_stagingCommandPool = nullptr;
 
     VmaBuffer m_vertexBuffer = nullptr;
 
