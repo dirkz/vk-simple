@@ -26,6 +26,7 @@ struct FrameData
 
     FrameData() = delete;
     FrameData(FrameData &) = delete;
+
     FrameData &operator=(FrameData const &) = delete;
 
     void RecreateSemaphore(vk::raii::Device &device, vk::raii::Semaphore &semaphore);

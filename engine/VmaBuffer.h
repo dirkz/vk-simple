@@ -16,6 +16,16 @@ struct VmaBuffer
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
 
+    ~VmaBuffer()
+    {
+        if (m_allocation)
+        {
+            vmaDestroyBuffer(m_allocator, m_buffer, m_allocation);
+        }
+    };
+
+    VmaBuffer &operator=(const VmaBuffer &) = delete;
+
     VmaBuffer &operator=(VmaBuffer &&rhs) noexcept
     {
         if (this != &rhs)
@@ -27,16 +37,6 @@ struct VmaBuffer
         }
         return *this;
     }
-
-    ~VmaBuffer()
-    {
-        if (m_allocation)
-        {
-            vmaDestroyBuffer(m_allocator, m_buffer, m_allocation);
-        }
-    };
-
-    VmaBuffer &operator=(const VmaBuffer &) = delete;
 
     vk::Buffer Buffer() const
     {

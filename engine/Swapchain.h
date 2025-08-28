@@ -19,6 +19,7 @@ struct Swapchain
 
     Swapchain() = delete;
     Swapchain(Swapchain &) = delete;
+
     Swapchain &operator=(Swapchain const &) = delete;
 
     Swapchain &operator=(Swapchain &&rhs) noexcept
