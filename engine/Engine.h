@@ -54,6 +54,8 @@ struct Engine
 
     void RecreateSwapchain();
 
+    void UpdateUniformBuffer(uint32_t frameDataIndex);
+
     void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
 
     FrameData &CurrentFrameData();

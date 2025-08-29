@@ -64,6 +64,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 
 void Engine::DrawFrame()
 {
+    UpdateUniformBuffer(m_currentFrame);
+
     FrameData &frameData = CurrentFrameData();
     vk::raii::Fence &inflightFence = frameData.InflightFence();
     vk::raii::Semaphore &imageAvailableSemaphore = frameData.ImageAvailableSemaphore();
@@ -588,6 +590,10 @@ void Engine::RecreateSwapchain()
     CreateSwapchain();
     CreateImageViews();
     CreateFrameBuffers();
+}
+
+void Engine::UpdateUniformBuffer(uint32_t frameDataIndex)
+{
 }
 
 void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)
