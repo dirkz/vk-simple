@@ -64,10 +64,10 @@ void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &q
 }
 
 void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
-                                    VmaBuffer &src, vk::Buffer dst, vk::DeviceSize size)
+                                    VmaBuffer &src, vk::Buffer dst)
 {
     vk::Buffer srcBuffer = src.Buffer();
-    CopyBuffer(device, queue, srcBuffer, dst, size);
+    CopyBuffer(device, queue, srcBuffer, dst, src.Size());
     m_stagingBuffers.push_back(std::move(src));
 }
 

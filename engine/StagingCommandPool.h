@@ -53,9 +53,8 @@ struct StagingCommandPool
     /// Don't use it after the call!</param>
     /// <param name="dst">The destination buffer, who must be still around until `WaitForFences` has
     /// finished</param>
-    /// <param name="size"></param>
     void CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue, VmaBuffer &src,
-                    vk::Buffer dst, vk::DeviceSize size);
+                    vk::Buffer dst);
 
   private:
     vk::raii::CommandPool m_commandPool = nullptr;

@@ -54,6 +54,11 @@ struct VmaBuffer
         return m_buffer;
     }
 
+    vk::DeviceSize Size() const
+    {
+        return m_size;
+    }
+
     void CopyMemoryToAllocation(const void *src) const;
 
   private:

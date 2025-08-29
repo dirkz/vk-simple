@@ -529,8 +529,7 @@ void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
                                             vk::BufferUsageFlagBits::eVertexBuffer,
                                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
 
-    commandPool.CopyBuffer(m_device, m_graphicsQueue, stagingBuffer, m_vertexBuffer.Buffer(),
-                           bufferSize);
+    commandPool.CopyBuffer(m_device, m_graphicsQueue, stagingBuffer, m_vertexBuffer.Buffer());
 }
 
 void Engine::CreateFrameData()
