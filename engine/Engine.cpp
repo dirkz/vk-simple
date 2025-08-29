@@ -514,12 +514,12 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
+void Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
 {
     vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-    m_vertexBuffer = commandPool.StageBuffer(Vertices.data(), bufferSize,
-                                             vk::BufferUsageFlagBits::eVertexBuffer);
+    m_vertexBuffer = stagingCommandPool.StageBuffer(Vertices.data(), bufferSize,
+                                                    vk::BufferUsageFlagBits::eVertexBuffer);
 }
 
 void Engine::CreateFrameData()
