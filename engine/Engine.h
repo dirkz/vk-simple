@@ -46,7 +46,12 @@ struct Engine
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 
     /// <summary>
-    ///  Combines CreateCommandBuffers, CreateSyncObjects, CreateUniformBuffers.
+    ///  Combines:
+    ///   CreateCommandBuffers
+    ///   CreateSyncObjects
+    ///   CreateUniformBuffers
+    ///   CreateDescriptorPool
+    ///   CreateDescriptorSets
     /// </summary>
     void CreateFrameData();
 
