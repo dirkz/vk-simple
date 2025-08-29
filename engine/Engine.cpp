@@ -20,9 +20,12 @@ std::vector<std::string> PhysicalDeviceExtensions{vk::KHRSwapchainExtensionName,
                                                   vk::KHRSpirv14ExtensionName,
                                                   vk::KHRShaderFloatControlsExtensionName};
 
-const std::vector<Vertex> Vertices{{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-                                   {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-                                   {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
+const std::vector<Vertex> Vertices{{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+                                   {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+                                   {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+                                   {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}};
+
+const std::vector<uint16_t> Indices = {0, 1, 2, 2, 3, 0};
 
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
@@ -46,6 +49,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // staging buffer as a return value and keep it until `WaitForFences`
     // has been called.
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
+
+    VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
 
     stagingCommandPool.WaitForFences(m_device);
 
@@ -529,6 +534,18 @@ VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
     return std::move(stagingBuffer);
 }
 
+VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
+{
+    vk::DeviceSize bufferSize = sizeof(uint16_t) * Indices.size();
+
+    auto [indexBuffer, stagingBuffer] = stagingCommandPool.StageBuffer(
+        Vertices.data(), bufferSize, vk::BufferUsageFlagBits::eIndexBuffer);
+
+    m_indexBuffer = std::move(indexBuffer);
+
+    return std::move(stagingBuffer);
+}
+
 void Engine::CreateFrameData()
 {
     for (auto i = 0; i < m_frameData.size(); ++i)
@@ -559,10 +576,11 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
     commandBuffer.bindVertexBuffers(0, m_vertexBuffer.Buffer(), static_cast<vk::DeviceSize>(0));
+    commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint16);
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
 
-    commandBuffer.draw(3, 1, 0, 0);
+    commandBuffer.drawIndexed(Indices.size(), 1, 0, 0, 0);
 
     commandBuffer.endRenderPass();
     commandBuffer.end();

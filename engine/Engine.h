@@ -40,7 +40,9 @@ struct Engine
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
-    VmaBuffer CreateVertexBuffer(StagingCommandPool &commandPool);
+
+    VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);
+    VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 
     /// <summary>
     ///  Combines CreateCommandBuffers, CreateSyncObjects.
@@ -70,6 +72,7 @@ struct Engine
     vk::raii::CommandPool m_commandPool = nullptr;
 
     VmaBuffer m_vertexBuffer = nullptr;
+    VmaBuffer m_indexBuffer = nullptr;
 
     std::array<FrameData, 2> m_frameData{nullptr, nullptr};
     uint32_t m_currentFrame = 0;
