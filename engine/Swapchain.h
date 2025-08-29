@@ -90,6 +90,11 @@ struct Swapchain
         return m_renderFinishedSemaphores[imageIndex];
     }
 
+    float Ratio() const
+    {
+        return static_cast<float>(m_extent.width) / m_extent.height;
+    }
+
   private:
     vk::raii::SwapchainKHR m_swapchain = nullptr;
     std::vector<vk::Image> m_images;
