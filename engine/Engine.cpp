@@ -46,15 +46,18 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
-    // While the vertex buffer gets set by the method, accept the temporary
-    // staging buffer as a return value and keep it until `WaitForFences`
-    // has been called.
+    // These creation methods set the corresponding buffer member as a side
+    // effect and return the temporary staging buffer.
+    // This temporary buffer must be held unto until the upload has been completed.
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
-
     VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
 
     stagingCommandPool.WaitForFences(m_device);
 
+    // The temporary staging buffers are now not needed anymore,
+    // they will be discarded at the end of this method automatically.
+
+    CreateUniformBuffers();
     CreateFrameData();
 }
 
@@ -554,6 +557,9 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
     m_indexBuffer = std::move(indexBuffer);
 
     return std::move(stagingBuffer);
+}
+void Engine::CreateUniformBuffers()
+{
 }
 
 void Engine::CreateFrameData()
