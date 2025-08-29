@@ -530,7 +530,8 @@ void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
 
     vk::Buffer src = stagingBuffer.Buffer();
 
-    commandPool.CopyBuffer(m_device, m_graphicsQueue, src, m_vertexBuffer.Buffer(), bufferSize);
+    commandPool.CopyBuffer(m_device, m_graphicsQueue, stagingBuffer, m_vertexBuffer.Buffer(),
+                           bufferSize);
 }
 
 void Engine::CreateFrameData()

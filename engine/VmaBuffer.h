@@ -16,6 +16,17 @@ struct VmaBuffer
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
 
+    VmaBuffer(VmaBuffer &&rhs)
+    {
+        if (this != &rhs)
+        {
+            std::swap(m_allocator, rhs.m_allocator);
+            std::swap(m_buffer, rhs.m_buffer);
+            std::swap(m_allocation, rhs.m_allocation);
+            std::swap(m_size, rhs.m_size);
+        }
+    }
+
     ~VmaBuffer()
     {
         if (m_allocation)

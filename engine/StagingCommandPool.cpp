@@ -64,11 +64,11 @@ void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &q
 }
 
 void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
-                                    VmaBuffer *src, vk::Buffer dst, vk::DeviceSize size)
+                                    VmaBuffer &src, vk::Buffer dst, vk::DeviceSize size)
 {
-    vk::Buffer srcBuffer = src->Buffer();
+    vk::Buffer srcBuffer = src.Buffer();
     CopyBuffer(device, queue, srcBuffer, dst, size);
-    m_stagingBuffers.emplace_back(src);
+    m_stagingBuffers.push_back(std::move(src));
 }
 
 } // namespace vkdeck
