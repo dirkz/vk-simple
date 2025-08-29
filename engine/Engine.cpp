@@ -497,7 +497,7 @@ void Engine::CreateGraphicsPipeline()
         colorBlendAttachmentState};
 
     // No uniform buffers, no push constants yet.
-    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+    vk::PipelineLayoutCreateInfo pipelineLayoutCreateInfo{{}, *m_descriptorSetLayout};
 
     m_pipelineLayout = m_device.createPipelineLayout(pipelineLayoutCreateInfo);
 
