@@ -22,6 +22,7 @@ struct FrameData
             std::swap(m_commandBuffer, rhs.m_commandBuffer);
             std::swap(m_imageAvailableSemaphore, rhs.m_imageAvailableSemaphore);
             std::swap(m_inflightFence, rhs.m_inflightFence);
+            std::swap(m_uniformBuffer, rhs.m_uniformBuffer);
         }
         return *this;
     }
