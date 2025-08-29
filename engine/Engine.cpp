@@ -38,8 +38,13 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
-    CreateStagingCommandPool();
-    CreateVertexBuffer();
+
+    StagingCommandPool stagingCommandPool =
+        StagingCommandPool{m_device, m_queueFamilyIndices.GraphicsQueue()};
+    CreateVertexBuffer(stagingCommandPool);
+
+    stagingCommandPool.WaitForFences(m_device);
+
     CreateFrameData();
 }
 
@@ -508,18 +513,25 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-void Engine::CreateStagingCommandPool()
+void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
 {
-    m_stagingCommandPool = StagingCommandPool{m_device, m_queueFamilyIndices.GraphicsQueue()};
-}
+    vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-void Engine::CreateVertexBuffer()
-{
-    m_vertexBuffer =
-        m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(), vk::BufferUsageFlagBits::eVertexBuffer,
+    VmaBuffer stagingBuffer =
+        m_vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
                            VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
 
-    m_vertexBuffer.CopyMemoryToAllocation(Vertices.data());
+    stagingBuffer.CopyMemoryToAllocation(Vertices.data());
+
+    m_vertexBuffer = m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(),
+                                        vk::BufferUsageFlagBits::eTransferDst |
+                                            vk::BufferUsageFlagBits::eVertexBuffer,
+                                        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+
+    vk::Buffer src = stagingBuffer.Buffer();
+    vk::Buffer dst = m_vertexBuffer.Buffer();
+
+    commandPool.CopyBuffer(m_device, m_graphicsQueue, src, dst, bufferSize);
 }
 
 void Engine::CreateFrameData()

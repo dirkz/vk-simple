@@ -29,13 +29,13 @@ struct StagingCommandPool
 
     void WaitForFences(vk::raii::Device &device);
 
-    void CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue, vk::raii::Buffer &src,
-                    vk::raii::Buffer &dst, vk::DeviceSize size);
+    void CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue, vk::Buffer &src,
+                    vk::Buffer &dst, vk::DeviceSize size);
 
   private:
     vk::raii::CommandPool m_commandPool = nullptr;
     std::vector<vk::raii::CommandBuffer> m_commandBuffers;
-    std::vector<vk::Fence> m_fences;
+    std::vector<vk::raii::Fence> m_fences;
 };
 
 } // namespace vkdeck

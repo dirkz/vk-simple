@@ -33,22 +33,27 @@ void StagingCommandPool::EndAndSubmitCommandBuffer(vk::raii::Device &device, vk:
     commandBuffer.end();
 
     vk::FenceCreateInfo fenceCreateInfo{};
-    vk::Fence fence = device.createFence(fenceCreateInfo);
+    vk::raii::Fence fence = device.createFence(fenceCreateInfo);
 
     vk::SubmitInfo submitInfo{{}, {}, *commandBuffer};
     queue.submit(submitInfo, fence);
-    m_fences.push_back(fence);
+    m_fences.push_back(std::move(fence));
 }
 
 void StagingCommandPool::WaitForFences(vk::raii::Device &device)
 {
+    std::vector<vk::Fence> fences{};
+    for (const vk::raii::Fence &fence : m_fences)
+    {
+        fences.push_back(*fence);
+    }
+
     vk::Result result =
-        device.waitForFences(m_fences, vk::True, std::numeric_limits<uint32_t>::max());
+        device.waitForFences(fences, vk::True, std::numeric_limits<uint32_t>::max());
 }
 
 void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
-                                    vk::raii::Buffer &src, vk::raii::Buffer &dst,
-                                    vk::DeviceSize size)
+                                    vk::Buffer &src, vk::Buffer &dst, vk::DeviceSize size)
 {
     vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer(device);
 
