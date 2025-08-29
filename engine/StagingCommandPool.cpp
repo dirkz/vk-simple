@@ -46,4 +46,16 @@ void StagingCommandPool::WaitForFences(vk::raii::Device &device)
         device.waitForFences(m_fences, vk::True, std::numeric_limits<uint32_t>::max());
 }
 
+void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
+                                    vk::raii::Buffer &src, vk::raii::Buffer &dst,
+                                    vk::DeviceSize size)
+{
+    vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer(device);
+
+    vk::BufferCopy bufferCopy{0, 0, size};
+    commandBuffer.copyBuffer(src, dst, bufferCopy);
+
+    EndAndSubmitCommandBuffer(device, queue, commandBuffer);
+}
+
 } // namespace vkdeck
