@@ -24,10 +24,15 @@ struct StagingCommandPool
     }
 
     vk::raii::CommandBuffer &BeginNewCommandBuffer(vk::raii::Device &device);
+    void EndAndSubmitCommandBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
+                                   vk::raii::CommandBuffer &commandBuffer);
+
+    void WaitForFences(vk::raii::Device &device);
 
   private:
     vk::raii::CommandPool m_commandPool = nullptr;
     std::vector<vk::raii::CommandBuffer> m_commandBuffers;
+    std::vector<vk::Fence> m_fences;
 };
 
 } // namespace vkdeck
