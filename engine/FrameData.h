@@ -2,12 +2,14 @@
 
 #include "stdafx.h"
 
+#include "Vma.h"
+
 namespace vkdeck
 {
 
 struct FrameData
 {
-    FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool);
+    FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma);
 
     FrameData(std::nullptr_t)
     {
@@ -46,10 +48,16 @@ struct FrameData
         return m_inflightFence;
     }
 
+    VmaBuffer &UniformObjectBuffer()
+    {
+        return m_uniformBuffer;
+    }
+
   private:
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
+    VmaBuffer m_uniformBuffer = nullptr;
 };
 
 } // namespace vkdeck

@@ -58,7 +58,6 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // The temporary staging buffers are now not needed anymore,
     // they will be discarded at the end of this method automatically.
 
-    CreateUniformBuffers();
     CreateFrameData();
 }
 
@@ -562,24 +561,11 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
     return std::move(stagingBuffer);
 }
 
-void Engine::CreateUniformBuffers()
-{
-    vk::DeviceSize bufferSize = sizeof(UniformBuffer);
-
-    for (auto i = 0; i < MaxFramesInFlight; ++i)
-    {
-        VmaBuffer buffer =
-            m_vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
-                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
-        m_uniformBuffers.push_back(std::move(buffer));
-    }
-}
-
 void Engine::CreateFrameData()
 {
     for (auto i = 0; i < m_frameData.size(); ++i)
     {
-        m_frameData[i] = FrameData(m_device, m_commandPool);
+        m_frameData[i] = FrameData(m_device, m_commandPool, m_vma);
     }
 }
 
