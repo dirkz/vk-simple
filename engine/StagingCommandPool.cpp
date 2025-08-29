@@ -20,7 +20,7 @@ vk::raii::CommandBuffer &StagingCommandPool::BeginNewCommandBuffer()
         m_device.allocateCommandBuffers(allocateInfo);
     m_commandBuffers.push_back(std::move(commandBuffers[0]));
 
-    vk::raii::CommandBuffer &commandBuffer = m_commandBuffers[0];
+    vk::raii::CommandBuffer &commandBuffer = m_commandBuffers[m_commandBuffers.size() - 1];
 
     vk::CommandBufferBeginInfo beginInfo{vk::CommandBufferUsageFlagBits::eOneTimeSubmit};
     commandBuffer.begin(beginInfo);
