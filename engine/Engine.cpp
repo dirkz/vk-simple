@@ -539,7 +539,7 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
     vk::DeviceSize bufferSize = sizeof(uint16_t) * Indices.size();
 
     auto [indexBuffer, stagingBuffer] = stagingCommandPool.StageBuffer(
-        Vertices.data(), bufferSize, vk::BufferUsageFlagBits::eIndexBuffer);
+        Indices.data(), bufferSize, vk::BufferUsageFlagBits::eIndexBuffer);
 
     m_indexBuffer = std::move(indexBuffer);
 
