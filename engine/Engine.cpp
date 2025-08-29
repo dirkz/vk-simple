@@ -3,6 +3,7 @@
 #include "Buffer.h"
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
+#include "UniformBuffer.h"
 #include "Vertex.h"
 
 namespace vkdeck
@@ -558,8 +559,18 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 
     return std::move(stagingBuffer);
 }
-void Engine::CreateUniformBuffers()
+
+void Engine::CreateUniformBuffers()
 {
+    vk::DeviceSize bufferSize = sizeof(UniformBuffer);
+
+    for (auto i = 0; i < MaxFramesInFlight; ++i)
+    {
+        VmaBuffer buffer =
+            m_vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
+                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+        m_uniformBuffers.push_back(std::move(buffer));
+    }
 }
 
 void Engine::CreateFrameData()
