@@ -40,7 +40,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateCommandPool();
 
     StagingCommandPool stagingCommandPool =
-        StagingCommandPool{m_device, m_queueFamilyIndices.GraphicsQueue()};
+        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
     CreateVertexBuffer(stagingCommandPool);
 
@@ -518,8 +518,8 @@ void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
 {
     vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-    m_vertexBuffer = commandPool.StageBuffer(m_device, m_graphicsQueue, m_vma, Vertices.data(),
-                                             bufferSize, vk::BufferUsageFlagBits::eVertexBuffer);
+    m_vertexBuffer = commandPool.StageBuffer(Vertices.data(), bufferSize,
+                                             vk::BufferUsageFlagBits::eVertexBuffer);
 }
 
 void Engine::CreateFrameData()
