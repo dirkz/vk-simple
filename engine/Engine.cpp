@@ -58,6 +58,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // The temporary staging buffers are now not needed anymore,
     // they will be discarded at the end of this method automatically.
 
+    CreateDescriptorPool();
     CreateFrameData();
 }
 
@@ -560,6 +561,13 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
     m_indexBuffer = std::move(indexBuffer);
 
     return std::move(stagingBuffer);
+}
+
+void Engine::CreateDescriptorPool()
+{
+    vk::DescriptorPoolSize poolSize{vk::DescriptorType::eUniformBuffer, MaxFramesInFlight};
+    vk::DescriptorPoolCreateInfo poolCreateInfo{{}, MaxFramesInFlight, poolSize};
+    m_device.createDescriptorPool(poolCreateInfo);
 }
 
 void Engine::CreateFrameData()
