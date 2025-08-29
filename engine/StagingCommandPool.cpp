@@ -71,4 +71,22 @@ void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &q
     m_stagingBuffers.push_back(std::move(src));
 }
 
+VmaBuffer StagingCommandPool::StageBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
+                                          Vma &vma, const void *pData, vk::DeviceSize size,
+                                          vk::BufferUsageFlags bufferUsage,
+                                          VmaAllocationCreateFlagBits createFlagBits)
+{
+    VmaBuffer stagingBuffer =
+        vma.CreateBuffer(size, vk::BufferUsageFlagBits::eTransferSrc,
+                         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+
+    stagingBuffer.CopyMemoryToAllocation(pData);
+
+    VmaBuffer buffer = vma.CreateBuffer(size, bufferUsage | vk::BufferUsageFlagBits::eTransferDst);
+
+    CopyBuffer(device, queue, stagingBuffer, buffer.Buffer());
+
+    return buffer;
+}
+
 } // namespace vkdeck

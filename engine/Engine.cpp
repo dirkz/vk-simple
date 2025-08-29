@@ -518,17 +518,8 @@ void Engine::CreateVertexBuffer(StagingCommandPool &commandPool)
 {
     vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-    VmaBuffer stagingBuffer =
-        m_vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eTransferSrc,
-                           VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
-
-    stagingBuffer.CopyMemoryToAllocation(Vertices.data());
-
-    m_vertexBuffer = m_vma.CreateBuffer(sizeof(Vertex) * Vertices.size(),
-                                        vk::BufferUsageFlagBits::eTransferDst |
-                                            vk::BufferUsageFlagBits::eVertexBuffer);
-
-    commandPool.CopyBuffer(m_device, m_graphicsQueue, stagingBuffer, m_vertexBuffer.Buffer());
+    m_vertexBuffer = commandPool.StageBuffer(m_device, m_graphicsQueue, m_vma, Vertices.data(),
+                                             bufferSize, vk::BufferUsageFlagBits::eVertexBuffer);
 }
 
 void Engine::CreateFrameData()

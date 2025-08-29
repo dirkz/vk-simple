@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#include "VmaBuffer.h"
+#include "Vma.h"
 
 namespace vkdeck
 {
@@ -55,6 +55,10 @@ struct StagingCommandPool
     /// finished</param>
     void CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue, VmaBuffer &src,
                     vk::Buffer dst);
+
+    VmaBuffer StageBuffer(vk::raii::Device &device, vk::raii::Queue &queue, Vma &vma,
+                          const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+                          VmaAllocationCreateFlagBits createFlagBits = {});
 
   private:
     vk::raii::CommandPool m_commandPool = nullptr;
