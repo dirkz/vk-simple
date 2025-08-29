@@ -5,7 +5,9 @@
 namespace vkdeck
 {
 
-FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma)
+FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma,
+                     vk::raii::DescriptorSet &descriptorSet)
+    : m_descriptorSet{std::move(descriptorSet)}
 {
     constexpr uint32_t commandBufferCount = 1;
     vk::CommandBufferAllocateInfo commandBufferAllocateInfo{

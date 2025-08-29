@@ -582,8 +582,10 @@ void Engine::CreateFrameData()
 {
     for (auto i = 0; i < m_frameData.size(); ++i)
     {
-        m_frameData[i] = FrameData(m_device, m_commandPool, m_vma);
+        m_frameData[i] = FrameData(m_device, m_commandPool, m_vma, m_descriptorSets[i]);
     }
+
+    m_descriptorSets.clear();
 }
 
 void Engine::RecreateSwapchain()

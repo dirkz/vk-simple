@@ -9,7 +9,8 @@ namespace vkdeck
 
 struct FrameData
 {
-    FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma);
+    FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma,
+              vk::raii::DescriptorSet &descriptorSet);
 
     FrameData(std::nullptr_t)
     {
@@ -23,6 +24,7 @@ struct FrameData
             std::swap(m_imageAvailableSemaphore, rhs.m_imageAvailableSemaphore);
             std::swap(m_inflightFence, rhs.m_inflightFence);
             std::swap(m_uniformBuffer, rhs.m_uniformBuffer);
+            std::swap(m_descriptorSet, rhs.m_descriptorSet);
         }
         return *this;
     }
@@ -59,6 +61,7 @@ struct FrameData
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
     VmaBuffer m_uniformBuffer = nullptr;
+    vk::raii::DescriptorSet m_descriptorSet = nullptr;
 };
 
 } // namespace vkdeck
