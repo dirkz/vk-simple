@@ -16,7 +16,7 @@ struct VmaBuffer
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
 
-    VmaBuffer(VmaBuffer &&rhs)
+    VmaBuffer(VmaBuffer &&rhs) noexcept
     {
         if (this != &rhs)
         {
