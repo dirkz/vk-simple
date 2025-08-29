@@ -59,6 +59,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // they will be discarded at the end of this method automatically.
 
     CreateDescriptorPool();
+    CreateDescriptorSets();
     CreateFrameData();
 }
 
@@ -567,7 +568,14 @@ void Engine::CreateDescriptorPool()
 {
     vk::DescriptorPoolSize poolSize{vk::DescriptorType::eUniformBuffer, MaxFramesInFlight};
     vk::DescriptorPoolCreateInfo poolCreateInfo{{}, MaxFramesInFlight, poolSize};
-    m_device.createDescriptorPool(poolCreateInfo);
+    m_descriptorPool = m_device.createDescriptorPool(poolCreateInfo);
+}
+
+void Engine::CreateDescriptorSets()
+{
+    std::vector<vk::DescriptorSetLayout> setLayouts{MaxFramesInFlight, m_descriptorSetLayout};
+    vk::DescriptorSetAllocateInfo allocateInfo{m_descriptorPool, setLayouts};
+    m_descriptorSets = m_device.allocateDescriptorSets(allocateInfo);
 }
 
 void Engine::CreateFrameData()

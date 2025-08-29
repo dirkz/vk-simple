@@ -46,13 +46,13 @@ struct Engine
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 
     void CreateDescriptorPool();
+    void CreateDescriptorSets();
 
     /// <summary>
     ///  Combines:
     ///   CreateCommandBuffers
     ///   CreateSyncObjects
     ///   CreateUniformBuffers
-    ///   CreateDescriptorSets
     /// </summary>
     void CreateFrameData();
 
@@ -85,6 +85,7 @@ struct Engine
     VmaBuffer m_indexBuffer = nullptr;
 
     vk::raii::DescriptorPool m_descriptorPool = nullptr;
+    std::vector<vk::raii::DescriptorSet> m_descriptorSets;
 
     std::array<FrameData, 2> m_frameData{nullptr, nullptr};
     uint32_t m_currentFrame = 0;
