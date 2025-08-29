@@ -3,7 +3,7 @@
 #include "Buffer.h"
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
-#include "UniformBuffer.h"
+#include "UniformObject.h"
 #include "Vertex.h"
 
 namespace vkdeck

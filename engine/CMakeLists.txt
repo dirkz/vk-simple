@@ -24,8 +24,8 @@ add_library(engine OBJECT
 	VmaHelpers.h
 	StagingCommandPool.h
 	StagingCommandPool.cpp
-	UniformBuffer.h
-	UniformBuffer.cpp)
+	UniformObject.h
+	UniformObject.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)

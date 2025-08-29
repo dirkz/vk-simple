@@ -1,6 +1,6 @@
 #include "FrameData.h"
 
-#include "UniformBuffer.h"
+#include "UniformObject.h"
 
 namespace vkdeck
 {
@@ -20,7 +20,7 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
     vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
     m_inflightFence = device.createFence(fenceCreateInfo);
 
-    vk::DeviceSize bufferSize = sizeof(UniformBuffer);
+    vk::DeviceSize bufferSize = sizeof(UniformObject);
     m_uniformBuffer = vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
                                        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
 }

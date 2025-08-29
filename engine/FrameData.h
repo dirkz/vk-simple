@@ -48,7 +48,7 @@ struct FrameData
         return m_inflightFence;
     }
 
-    VmaBuffer &UniformObjectBuffer()
+    VmaBuffer &UniformBuffer()
     {
         return m_uniformBuffer;
     }

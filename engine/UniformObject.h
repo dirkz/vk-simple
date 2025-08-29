@@ -5,7 +5,7 @@
 namespace vkdeck
 {
 
-struct UniformBuffer
+struct UniformObject
 {
     glm::mat4 &Model()
     {
