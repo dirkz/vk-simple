@@ -27,7 +27,7 @@ vk::raii::CommandBuffer &StagingCommandPool::BeginNewCommandBuffer(vk::raii::Dev
     return commandBuffer;
 }
 
-void StagingCommandPool::EndAndSubmitCommandBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
+void StagingCommandPool::EndCommandBufferAndSubmit(vk::raii::Device &device, vk::raii::Queue &queue,
                                                    vk::raii::CommandBuffer &commandBuffer)
 {
     commandBuffer.end();
@@ -60,7 +60,7 @@ void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &q
     vk::BufferCopy bufferCopy{0, 0, size};
     commandBuffer.copyBuffer(src, dst, bufferCopy);
 
-    EndAndSubmitCommandBuffer(device, queue, commandBuffer);
+    EndCommandBufferAndSubmit(device, queue, commandBuffer);
 }
 
 void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
