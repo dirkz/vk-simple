@@ -87,7 +87,7 @@ struct Engine
     vk::raii::DescriptorPool m_descriptorPool = nullptr;
     std::vector<vk::raii::DescriptorSet> m_descriptorSets;
 
-    std::array<FrameData, 2> m_frameData{nullptr, nullptr};
+    std::vector<FrameData> m_frameData;
     uint32_t m_currentFrame = 0;
 
     vk::raii::Queue m_graphicsQueue = nullptr;

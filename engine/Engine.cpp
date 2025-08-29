@@ -580,9 +580,10 @@ void Engine::CreateDescriptorSets()
 
 void Engine::CreateFrameData()
 {
-    for (auto i = 0; i < m_frameData.size(); ++i)
+    for (auto i = 0; i < MaxFramesInFlight; ++i)
     {
-        m_frameData[i] = FrameData(m_device, m_commandPool, m_vma, m_descriptorSets[i]);
+        m_frameData.push_back(
+            std::move(FrameData{m_device, m_commandPool, m_vma, m_descriptorSets[i]}));
     }
 
     m_descriptorSets.clear();
