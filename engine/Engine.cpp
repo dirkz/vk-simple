@@ -38,6 +38,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateSwapchain();
     CreateImageViews();
     CreateRenderPass();
+    CreateDescriptorSetLayout();
     CreateGraphicsPipeline();
     CreateFrameBuffers();
     CreateCommandPool();
@@ -416,6 +417,16 @@ void Engine::CreateRenderPass()
     m_renderPass = m_device.createRenderPass(renderPassCreateInfo);
 }
 
+void Engine::CreateDescriptorSetLayout()
+{
+    vk::DescriptorSetLayoutBinding layoutBinding{
+        0, vk::DescriptorType::eUniformBuffer, vk::ShaderStageFlagBits::eVertex, {}};
+    layoutBinding.descriptorCount = 1;
+
+    vk::DescriptorSetLayoutCreateInfo layoutCreateInfo{{}, layoutBinding};
+    m_descriptorSetLayout = m_device.createDescriptorSetLayout(layoutCreateInfo);
+}
+
 void Engine::CreateGraphicsPipeline()
 {
     ShaderModuleLoader shaderModuleLoader{"shader.slang.spv"};
@@ -580,7 +591,7 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
 
-    commandBuffer.drawIndexed(Indices.size(), 1, 0, 0, 0);
+    commandBuffer.drawIndexed(static_cast<uint32_t>(Indices.size()), 1, 0, 0, 0);
 
     commandBuffer.endRenderPass();
     commandBuffer.end();

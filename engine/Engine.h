@@ -37,6 +37,7 @@ struct Engine
     void CreateSwapchain();
     void CreateImageViews();
     void CreateRenderPass();
+    void CreateDescriptorSetLayout();
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
@@ -67,6 +68,7 @@ struct Engine
     Vma m_vma = nullptr;
     Swapchain m_swapchain = nullptr;
     vk::raii::RenderPass m_renderPass = nullptr;
+    vk::raii::DescriptorSetLayout m_descriptorSetLayout = nullptr;
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
