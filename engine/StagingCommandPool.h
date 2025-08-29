@@ -11,19 +11,11 @@ struct StagingCommandPool
 {
     StagingCommandPool(vk::raii::Device &device, vk::raii::Queue &queue, Vma &vma,
                        uint32_t queueFamilyIndex);
+
     StagingCommandPool(const StagingCommandPool &) = delete;
     StagingCommandPool() = delete;
 
     StagingCommandPool &operator=(const StagingCommandPool &) = delete;
-
-    StagingCommandPool &operator=(StagingCommandPool &&rhs) noexcept
-    {
-        if (this != &rhs)
-        {
-            std::swap(m_commandPool, rhs.m_commandPool);
-        }
-        return *this;
-    }
 
     vk::raii::CommandBuffer &BeginNewCommandBuffer();
     void EndCommandBufferAndSubmit(vk::raii::CommandBuffer &commandBuffer);
