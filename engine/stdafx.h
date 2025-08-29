@@ -20,6 +20,7 @@
 #include <filesystem>
 #include <fstream>
 #include <limits>
+#include <memory>
 #include <optional>
 #include <set>
 #include <stdexcept>

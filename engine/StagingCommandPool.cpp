@@ -53,7 +53,7 @@ void StagingCommandPool::WaitForFences(vk::raii::Device &device)
 }
 
 void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
-                                    vk::Buffer &src, vk::Buffer &dst, vk::DeviceSize size)
+                                    vk::Buffer src, vk::Buffer dst, vk::DeviceSize size)
 {
     vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer(device);
 
@@ -61,6 +61,14 @@ void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &q
     commandBuffer.copyBuffer(src, dst, bufferCopy);
 
     EndAndSubmitCommandBuffer(device, queue, commandBuffer);
+}
+
+void StagingCommandPool::CopyBuffer(vk::raii::Device &device, vk::raii::Queue &queue,
+                                    VmaBuffer *src, vk::Buffer dst, vk::DeviceSize size)
+{
+    vk::Buffer srcBuffer = src->Buffer();
+    CopyBuffer(device, queue, srcBuffer, dst, size);
+    m_stagingBuffers.emplace_back(src);
 }
 
 } // namespace vkdeck
