@@ -40,7 +40,7 @@ struct Engine
     void CreateGraphicsPipeline();
     void CreateFrameBuffers();
     void CreateCommandPool();
-    void CreateVertexBuffer(StagingCommandPool &commandPool);
+    VmaBuffer CreateVertexBuffer(StagingCommandPool &commandPool);
 
     /// <summary>
     ///  Combines CreateCommandBuffers, CreateSyncObjects.

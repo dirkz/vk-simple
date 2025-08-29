@@ -42,7 +42,10 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
-    CreateVertexBuffer(stagingCommandPool);
+    // While the vertex buffer gets set by the method, accept the temporary
+    // staging buffer as a return value and keep it until `WaitForFences`
+    // has been called.
+    VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
 
     stagingCommandPool.WaitForFences(m_device);
 
@@ -514,12 +517,16 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-void Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
+VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
 {
     vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-    m_vertexBuffer = stagingCommandPool.StageBuffer(Vertices.data(), bufferSize,
-                                                    vk::BufferUsageFlagBits::eVertexBuffer);
+    auto [vertexBuffer, stagingBuffer] = stagingCommandPool.StageBuffer(
+        Vertices.data(), bufferSize, vk::BufferUsageFlagBits::eVertexBuffer);
+
+    m_vertexBuffer = std::move(vertexBuffer);
+
+    return std::move(stagingBuffer);
 }
 
 void Engine::CreateFrameData()

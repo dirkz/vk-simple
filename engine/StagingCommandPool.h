@@ -32,17 +32,9 @@ struct StagingCommandPool
     /// <param name="size"></param>
     void CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSize size);
 
-    /// <summary>
-    /// Copies one buffer into another.
-    /// </summary>
-    /// <param name="src">The source buffer, who will be taken ownership of.
-    /// Don't use it after the call!</param>
-    /// <param name="dst">The destination buffer, who must be still around until `WaitForFences` has
-    /// finished</param>
-    void CopyBuffer(VmaBuffer &src, vk::Buffer dst);
-
-    VmaBuffer StageBuffer(const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
-                          VmaAllocationCreateFlagBits createFlagBits = {});
+    std::pair<VmaBuffer, VmaBuffer> StageBuffer(const void *pData, vk::DeviceSize size,
+                                                vk::BufferUsageFlags bufferUsage,
+                                                VmaAllocationCreateFlagBits createFlagBits = {});
 
   private:
     vk::raii::Device &m_device;
@@ -51,7 +43,6 @@ struct StagingCommandPool
     vk::raii::CommandPool m_commandPool = nullptr;
     std::vector<vk::raii::CommandBuffer> m_commandBuffers;
     std::vector<vk::raii::Fence> m_fences;
-    std::vector<VmaBuffer> m_stagingBuffers;
 };
 
 } // namespace vkdeck

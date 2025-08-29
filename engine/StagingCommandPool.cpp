@@ -62,16 +62,9 @@ void StagingCommandPool::CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSi
     EndCommandBufferAndSubmit(commandBuffer);
 }
 
-void StagingCommandPool::CopyBuffer(VmaBuffer &src, vk::Buffer dst)
-{
-    vk::Buffer srcBuffer = src.Buffer();
-    CopyBuffer(srcBuffer, dst, src.Size());
-    m_stagingBuffers.push_back(std::move(src));
-}
-
-VmaBuffer StagingCommandPool::StageBuffer(const void *pData, vk::DeviceSize size,
-                                          vk::BufferUsageFlags bufferUsage,
-                                          VmaAllocationCreateFlagBits createFlagBits)
+std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::StageBuffer(
+    const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+    VmaAllocationCreateFlagBits createFlagBits)
 {
     VmaBuffer stagingBuffer =
         m_vma.CreateBuffer(size, vk::BufferUsageFlagBits::eTransferSrc,
@@ -82,9 +75,9 @@ VmaBuffer StagingCommandPool::StageBuffer(const void *pData, vk::DeviceSize size
     VmaBuffer buffer =
         m_vma.CreateBuffer(size, bufferUsage | vk::BufferUsageFlagBits::eTransferDst);
 
-    CopyBuffer(stagingBuffer, buffer.Buffer());
+    CopyBuffer(stagingBuffer.Buffer(), buffer.Buffer(), size);
 
-    return buffer;
+    return std::make_pair(std::move(buffer), std::move(stagingBuffer));
 }
 
 } // namespace vkdeck
