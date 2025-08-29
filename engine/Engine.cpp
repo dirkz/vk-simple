@@ -41,6 +41,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_queueFamilyIndices.GraphicsQueue()};
+
     CreateVertexBuffer(stagingCommandPool);
 
     stagingCommandPool.WaitForFences(m_device);
