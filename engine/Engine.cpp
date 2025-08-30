@@ -54,7 +54,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
     // This temporary buffer must be held unto until the upload has been completed.
-    CreateTextureImage(stagingCommandPool);
+    VmaBuffer tmpTextureStagingBuffer = CreateTextureImage(stagingCommandPool);
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
     VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
 
@@ -574,6 +574,10 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
     stagingBuffer.CopyMemoryToAllocation(pixels);
 
     stbi_image_free(pixels);
+
+    m_textureImage =
+        m_vma.CreateImage(texWidth, texHeight, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
+                          vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
 
     return stagingBuffer;
 }

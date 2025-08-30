@@ -83,6 +83,7 @@ struct Engine
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
 
+    VmaImage m_textureImage = nullptr;
     VmaBuffer m_vertexBuffer = nullptr;
     VmaBuffer m_indexBuffer = nullptr;
 
