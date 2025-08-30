@@ -66,11 +66,13 @@ struct Swapchain
 
     vk::Viewport Viewport() const
     {
+        constexpr float x = 0.f;
+        const float y = static_cast<float>(Height());
+        const float width = static_cast<float>(Width());
+        const float height = -static_cast<float>(Height());
         constexpr float minDepth = 0.f;
         constexpr float maxDepth = 1.f;
-        return vk::Viewport{
-            0.f,      0.f,     static_cast<float>(Width()), static_cast<float>(Height()),
-            minDepth, maxDepth};
+        return vk::Viewport{x, y, width, height, minDepth, maxDepth};
     }
 
     vk::Rect2D ScissorRect() const

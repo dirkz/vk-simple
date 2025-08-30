@@ -475,17 +475,18 @@ void Engine::CreateGraphicsPipeline()
     constexpr float depthBiasClamp = 0.f;
     constexpr float depthBiasSlopeFactor = 0.f;
     constexpr float lineWidth = 1.f;
-    vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{{},
-                                                                       depthClampEnable,
-                                                                       rasterizerDiscardEnable,
-                                                                       vk::PolygonMode::eFill,
-                                                                       vk::CullModeFlagBits::eBack,
-                                                                       vk::FrontFace::eClockwise,
-                                                                       depthBiasEnable,
-                                                                       depthBiasConstantFactor,
-                                                                       depthBiasClamp,
-                                                                       depthBiasSlopeFactor,
-                                                                       lineWidth};
+    vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{
+        {},
+        depthClampEnable,
+        rasterizerDiscardEnable,
+        vk::PolygonMode::eFill,
+        vk::CullModeFlagBits::eBack,
+        vk::FrontFace::eCounterClockwise,
+        depthBiasEnable,
+        depthBiasConstantFactor,
+        depthBiasClamp,
+        depthBiasSlopeFactor,
+        lineWidth};
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
     vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{};
