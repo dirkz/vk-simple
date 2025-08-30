@@ -545,7 +545,7 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-void Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
+VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 {
     std::filesystem::path basePath{sdl::GetBasePath()};
     std::filesystem::path texturePath = basePath / "textures" / "texture.jpg";
@@ -567,7 +567,17 @@ void Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * texChannels};
 
+    VmaBuffer stagingBuffer =
+        m_vma.CreateBuffer(imageSize, vk::BufferUsageFlagBits::eTransferSrc,
+                           static_cast<VmaAllocationCreateFlagBits>(
+                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                               VMA_ALLOCATION_CREATE_MAPPED_BIT));
+
+    stagingBuffer.CopyMemoryToAllocation(pixels);
+
     stbi_image_free(pixels);
+
+    return stagingBuffer;
 }
 
 VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
