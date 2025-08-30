@@ -16,6 +16,23 @@ struct FrameData
     {
     }
 
+    FrameData() = delete;
+    FrameData(FrameData &) = delete;
+
+    /// <summary>
+    /// For use in `std::vector`.
+    /// </summary>
+    /// <param name="rhs"></param>
+    FrameData(FrameData &&rhs)
+    {
+
+        std::swap(m_commandBuffer, rhs.m_commandBuffer);
+        std::swap(m_imageAvailableSemaphore, rhs.m_imageAvailableSemaphore);
+        std::swap(m_inflightFence, rhs.m_inflightFence);
+        std::swap(m_uniformBuffer, rhs.m_uniformBuffer);
+        std::swap(m_descriptorSet, rhs.m_descriptorSet);
+    }
+
     FrameData &operator=(FrameData &&rhs) noexcept
     {
         if (this != &rhs)
@@ -28,9 +45,6 @@ struct FrameData
         }
         return *this;
     }
-
-    FrameData() = delete;
-    FrameData(FrameData &) = delete;
 
     FrameData &operator=(FrameData const &) = delete;
 

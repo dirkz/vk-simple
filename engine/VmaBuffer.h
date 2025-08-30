@@ -16,6 +16,10 @@ struct VmaBuffer
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
 
+    /// <summary>
+    /// For use in `std::vector`.
+    /// </summary>
+    /// <param name="rhs"></param>
     VmaBuffer(VmaBuffer &&rhs) noexcept
     {
         if (this != &rhs)
@@ -35,8 +39,6 @@ struct VmaBuffer
         }
     };
 
-    VmaBuffer &operator=(const VmaBuffer &) = delete;
-
     VmaBuffer &operator=(VmaBuffer &&rhs) noexcept
     {
         if (this != &rhs)
@@ -48,6 +50,8 @@ struct VmaBuffer
         }
         return *this;
     }
+
+    VmaBuffer &operator=(const VmaBuffer &) = delete;
 
     vk::Buffer Buffer() const
     {
