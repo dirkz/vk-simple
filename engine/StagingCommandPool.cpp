@@ -62,7 +62,7 @@ void StagingCommandPool::CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSi
     EndCommandBufferAndSubmit(commandBuffer);
 }
 
-std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::StageBuffer(
+std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::CreateDeviceBufferFromMemory(
     const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
     VmaAllocationCreateFlagBits createFlagBits)
 {

@@ -544,7 +544,7 @@ VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
 {
     vk::DeviceSize bufferSize = sizeof(Vertex) * Vertices.size();
 
-    auto [vertexBuffer, stagingBuffer] = stagingCommandPool.StageBuffer(
+    auto [vertexBuffer, stagingBuffer] = stagingCommandPool.CreateDeviceBufferFromMemory(
         Vertices.data(), bufferSize, vk::BufferUsageFlagBits::eVertexBuffer);
 
     m_vertexBuffer = std::move(vertexBuffer);
@@ -556,7 +556,7 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 {
     vk::DeviceSize bufferSize = sizeof(uint16_t) * Indices.size();
 
-    auto [indexBuffer, stagingBuffer] = stagingCommandPool.StageBuffer(
+    auto [indexBuffer, stagingBuffer] = stagingCommandPool.CreateDeviceBufferFromMemory(
         Indices.data(), bufferSize, vk::BufferUsageFlagBits::eIndexBuffer);
 
     m_indexBuffer = std::move(indexBuffer);

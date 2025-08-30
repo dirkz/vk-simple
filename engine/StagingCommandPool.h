@@ -32,9 +32,9 @@ struct StagingCommandPool
     /// <param name="size">Number of bytes to copy</param>
     void CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSize size);
 
-    std::pair<VmaBuffer, VmaBuffer> StageBuffer(const void *pData, vk::DeviceSize size,
-                                                vk::BufferUsageFlags bufferUsage,
-                                                VmaAllocationCreateFlagBits createFlagBits = {});
+    std::pair<VmaBuffer, VmaBuffer> CreateDeviceBufferFromMemory(
+        const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
+        VmaAllocationCreateFlagBits createFlagBits = {});
 
   private:
     vk::raii::Device &m_device;
