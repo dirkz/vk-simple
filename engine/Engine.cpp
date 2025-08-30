@@ -475,18 +475,17 @@ void Engine::CreateGraphicsPipeline()
     constexpr float depthBiasClamp = 0.f;
     constexpr float depthBiasSlopeFactor = 0.f;
     constexpr float lineWidth = 1.f;
-    vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{
-        {},
-        depthClampEnable,
-        rasterizerDiscardEnable,
-        vk::PolygonMode::eFill,
-        vk::CullModeFlagBits::eBack,
-        vk::FrontFace::eClockwise,
-        depthBiasEnable,
-        depthBiasConstantFactor,
-        depthBiasClamp,
-        depthBiasSlopeFactor,
-        lineWidth};
+    vk::PipelineRasterizationStateCreateInfo rasterizerStateCreateInfo{{},
+                                                                       depthClampEnable,
+                                                                       rasterizerDiscardEnable,
+                                                                       vk::PolygonMode::eFill,
+                                                                       vk::CullModeFlagBits::eBack,
+                                                                       vk::FrontFace::eClockwise,
+                                                                       depthBiasEnable,
+                                                                       depthBiasConstantFactor,
+                                                                       depthBiasClamp,
+                                                                       depthBiasSlopeFactor,
+                                                                       lineWidth};
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
     vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{};
@@ -609,11 +608,11 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     float ratio = m_swapchain.Ratio();
 
     glm::mat4 model =
-        glm::rotate(glm::mat4{1.f}, time * glm::radians(1.f), glm::vec3{0.f, 0.f, 1.f});
+        glm::rotate(glm::mat4{1.f}, time * glm::radians(5.f), glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 view =
-        glm::lookAt(glm::vec3{0.f, 0.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
+        glm::lookAt(glm::vec3{0.f, -2.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 projection = glm::perspective(glm::radians(45.f), ratio, 0.1f, 10.f);
-    UniformObject ubo{model, glm::mat4{1.f}, glm::mat4{1.f}};
+    UniformObject ubo{model, view, projection};
 
     frameData.UniformBuffer().CopyMemoryToAllocation(&ubo);
 }
