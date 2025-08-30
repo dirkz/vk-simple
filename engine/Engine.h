@@ -42,6 +42,7 @@ struct Engine
     void CreateFrameBuffers();
     void CreateCommandPool();
 
+    void CreateTextureImage(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 

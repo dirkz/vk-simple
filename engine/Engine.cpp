@@ -1,4 +1,8 @@
 #include "Engine.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
+#include "Engine.h"
 
 #include "Buffer.h"
 #include "ShaderModuleLoader.h"
@@ -47,9 +51,10 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
-    // These creation methods set the corresponding buffer member as a side
+    // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
     // This temporary buffer must be held unto until the upload has been completed.
+    CreateTextureImage(stagingCommandPool);
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
     VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
 
@@ -538,6 +543,31 @@ void Engine::CreateCommandPool()
         vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
 
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
+}
+
+void Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
+{
+    std::filesystem::path basePath{sdl::GetBasePath()};
+    std::filesystem::path texturePath = basePath / "textures" / "texture.jpg";
+    std::string texturePathString = texturePath.string();
+
+    int texWidth, texHeight, texChannels;
+    stbi_uc *pixels =
+        stbi_load(texturePathString.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+
+    if (!pixels)
+    {
+        throw std::runtime_error{"cannot load texture"};
+    }
+
+    if (texChannels != 3)
+    {
+        throw std::runtime_error{"unsupported texture format, invalid number of channels"};
+    }
+
+    vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * texChannels};
+
+    stbi_image_free(pixels);
 }
 
 VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
