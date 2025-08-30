@@ -24,7 +24,8 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
 
     vk::DeviceSize uniformBufferSize = sizeof(UniformObject);
     m_uniformBuffer = vma.CreateBuffer(uniformBufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
-                                       VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+                                       VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                                           VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
     vk::DescriptorBufferInfo descriptorBufferInfo{m_uniformBuffer.Buffer(), 0, uniformBufferSize};
 
