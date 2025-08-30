@@ -25,11 +25,11 @@ struct StagingCommandPool
     /// <summary>
     /// Copies one buffer into another.
     /// </summary>
-    /// <param name="src">The source buffer, who must be still around until `WaitForFences` has
+    /// <param name="src">The source buffer, which must be still around until `WaitForFences` has
     /// finished</param>
-    /// <param name="dst">The destination buffer, who must be still around until `WaitForFences` has
-    /// finished</param>
-    /// <param name="size"></param>
+    /// <param name="dst">The destination buffer, which must be still around until `WaitForFences`
+    /// has finished</param>
+    /// <param name="size">Number of bytes to copy</param>
     void CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSize size);
 
     std::pair<VmaBuffer, VmaBuffer> StageBuffer(const void *pData, vk::DeviceSize size,
