@@ -609,9 +609,9 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     float ratio = m_swapchain.Ratio();
 
     glm::mat4 model =
-        glm::rotate(glm::mat4{1.f}, time * glm::radians(90.f), glm::vec3{0.f, 0.f, 1.f});
+        glm::rotate(glm::mat4{1.f}, time * glm::radians(1.f), glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 view =
-        glm::lookAt(glm::vec3{2.f, 2.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
+        glm::lookAt(glm::vec3{0.f, 2.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 projection = glm::perspective(glm::radians(45.f), ratio, 0.1f, 10.f);
     UniformObject ubo{model, view, projection};
 
