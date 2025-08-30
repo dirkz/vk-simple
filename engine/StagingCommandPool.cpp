@@ -64,13 +64,11 @@ void StagingCommandPool::CopyBuffer(vk::Buffer src, vk::Buffer dst, vk::DeviceSi
 
 std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::CreateDeviceBufferFromMemory(
     const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
-    VmaAllocationCreateFlagBits createFlagBits)
+    VmaAllocationCreateFlags createFlagBits)
 {
-    VmaBuffer stagingBuffer =
-        m_vma.CreateBuffer(size, vk::BufferUsageFlagBits::eTransferSrc,
-                           static_cast<VmaAllocationCreateFlagBits>(
-                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
-                               VMA_ALLOCATION_CREATE_MAPPED_BIT));
+    VmaBuffer stagingBuffer = m_vma.CreateBuffer(
+        size, vk::BufferUsageFlagBits::eTransferSrc,
+        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
     stagingBuffer.CopyMemoryToAllocation(pData);
 

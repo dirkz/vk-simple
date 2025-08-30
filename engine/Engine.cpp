@@ -567,11 +567,9 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * texChannels};
 
-    VmaBuffer stagingBuffer =
-        m_vma.CreateBuffer(imageSize, vk::BufferUsageFlagBits::eTransferSrc,
-                           static_cast<VmaAllocationCreateFlagBits>(
-                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
-                               VMA_ALLOCATION_CREATE_MAPPED_BIT));
+    VmaBuffer stagingBuffer = m_vma.CreateBuffer(
+        imageSize, vk::BufferUsageFlagBits::eTransferSrc,
+        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
     stagingBuffer.CopyMemoryToAllocation(pixels);
 

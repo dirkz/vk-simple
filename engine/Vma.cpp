@@ -101,7 +101,7 @@ Vma::~Vma()
 }
 
 VmaBuffer Vma::CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
-                            VmaAllocationCreateFlagBits createFlagBits, VmaMemoryUsage memoryUsage)
+                            VmaAllocationCreateFlags createFlagBits, VmaMemoryUsage memoryUsage)
 {
     vk::BufferCreateInfo bufferCreateInfo1{{}, size, bufferUsage, vk::SharingMode::eExclusive};
     VkBufferCreateInfo bufferCreateInfo = bufferCreateInfo1;

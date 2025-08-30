@@ -34,7 +34,7 @@ struct StagingCommandPool
 
     std::pair<VmaBuffer, VmaBuffer> CreateDeviceBufferFromMemory(
         const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
-        VmaAllocationCreateFlagBits createFlagBits = {});
+        VmaAllocationCreateFlags createFlagBits = {});
 
   private:
     vk::raii::Device &m_device;
