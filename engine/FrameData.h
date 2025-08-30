@@ -23,7 +23,7 @@ struct FrameData
     /// For use in `std::vector`.
     /// </summary>
     /// <param name="rhs"></param>
-    FrameData(FrameData &&rhs)
+    FrameData(FrameData &&rhs) noexcept
     {
 
         std::swap(m_commandBuffer, rhs.m_commandBuffer);
