@@ -22,9 +22,16 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
     vk::FenceCreateInfo fenceCreateInfo{vk::FenceCreateFlagBits::eSignaled};
     m_inflightFence = device.createFence(fenceCreateInfo);
 
-    vk::DeviceSize bufferSize = sizeof(UniformObject);
-    m_uniformBuffer = vma.CreateBuffer(bufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
+    vk::DeviceSize uniformBufferSize = sizeof(UniformObject);
+    m_uniformBuffer = vma.CreateBuffer(uniformBufferSize, vk::BufferUsageFlagBits::eUniformBuffer,
                                        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT);
+
+    vk::DescriptorBufferInfo descriptorBufferInfo{m_uniformBuffer.Buffer(), 0, uniformBufferSize};
+
+    vk::WriteDescriptorSet writeDescriptorSet{
+        m_descriptorSet, 0, 0, vk::DescriptorType::eUniformBuffer, {}, descriptorBufferInfo};
+
+    device.updateDescriptorSets(writeDescriptorSet, {});
 }
 
 void FrameData::RecreateSemaphore(vk::raii::Device &device, vk::raii::Semaphore &semaphore)
