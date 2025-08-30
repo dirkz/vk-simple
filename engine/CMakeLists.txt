@@ -25,7 +25,9 @@ add_library(engine OBJECT
 	StagingCommandPool.h
 	StagingCommandPool.cpp
 	UniformObject.h
-	UniformObject.cpp)
+	UniformObject.cpp
+	VmaImage.h
+	VmaImage.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
