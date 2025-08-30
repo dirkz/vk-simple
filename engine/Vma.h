@@ -4,6 +4,7 @@
 
 #include "VmaBuffer.h"
 #include "VmaHelpers.h"
+#include "VmaImage.h"
 
 namespace vkdeck
 {
@@ -52,6 +53,11 @@ struct Vma
     VmaBuffer CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
                            VmaAllocationCreateFlags createFlagBits = {},
                            VmaMemoryUsage memoryUsage = VMA_MEMORY_USAGE_AUTO);
+
+    VmaImage CreateImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling,
+                         vk::ImageUsageFlags usageFlags,
+                         VmaAllocationCreateFlags createFlagBits = {},
+                         VmaMemoryUsage memoryUsage = VMA_MEMORY_USAGE_AUTO);
 
   private:
     VmaAllocator m_allocator = nullptr;

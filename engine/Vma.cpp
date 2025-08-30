@@ -120,4 +120,30 @@ VmaBuffer Vma::CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsag
     return VmaBuffer{m_allocator, buffer, allocation, size};
 }
 
+VmaImage Vma::CreateImage(uint32_t width, uint32_t height, vk::Format format,
+                          vk::ImageTiling tiling, vk::ImageUsageFlags usageFlags,
+                          VmaAllocationCreateFlags createFlagBits, VmaMemoryUsage memoryUsage)
+{
+    const vk::Extent3D extent{width, height, 1};
+    constexpr uint32_t mipLevels = 1;
+    constexpr uint32_t arrayLayers = 1;
+    vk::ImageCreateInfo imageCreateInfo{
+        {},          vk::ImageType::e2D,          format, extent,     mipLevels,
+        arrayLayers, vk::SampleCountFlagBits::e1, tiling, usageFlags, vk::SharingMode::eExclusive,
+        {},          vk::ImageLayout::eUndefined};
+    VkImageCreateInfo createInfo = imageCreateInfo;
+
+    VmaAllocationCreateInfo allocationCreateInfo{};
+    allocationCreateInfo.flags = createFlagBits;
+    allocationCreateInfo.usage = memoryUsage;
+
+    VkImage image;
+    VmaAllocation allocation;
+    VkResult result = vmaCreateImage(m_allocator, &createInfo, &allocationCreateInfo, &image,
+                                     &allocation, nullptr);
+    CheckResult(result);
+
+    return VmaImage{m_allocator, image, allocation};
+}
+
 } // namespace vkdeck
