@@ -7,7 +7,7 @@ namespace vkdeck
 
 struct UniformObject
 {
-    UniformObject(glm::mat4 &model, glm::mat4 &view, glm::mat4 &projection)
+    UniformObject(glm::mat4 model, glm::mat4 view, glm::mat4 projection)
         : m_model{model}, m_view{view}, m_projection{projection} {};
 
     glm::mat4 &Model()

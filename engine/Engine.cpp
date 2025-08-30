@@ -21,12 +21,12 @@ std::vector<std::string> PhysicalDeviceExtensions{vk::KHRSwapchainExtensionName,
                                                   vk::KHRSpirv14ExtensionName,
                                                   vk::KHRShaderFloatControlsExtensionName};
 
-const std::vector<Vertex> Vertices{{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-                                   {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-                                   {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-                                   {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}};
+const std::vector<Vertex> Vertices{{{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}},
+                                   {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+                                   {{0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}},
+                                   {{-0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}}};
 
-const std::vector<uint16_t> Indices = {0, 1, 2, 2, 3, 0};
+const std::vector<uint16_t> Indices = {0, 1, 2, 0, 2, 3};
 
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
@@ -480,8 +480,8 @@ void Engine::CreateGraphicsPipeline()
         depthClampEnable,
         rasterizerDiscardEnable,
         vk::PolygonMode::eFill,
-        vk::CullModeFlagBits::eBack,
-        vk::FrontFace::eCounterClockwise,
+        vk::CullModeFlagBits::eNone,
+        vk::FrontFace::eClockwise,
         depthBiasEnable,
         depthBiasConstantFactor,
         depthBiasClamp,
@@ -611,9 +611,9 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     glm::mat4 model =
         glm::rotate(glm::mat4{1.f}, time * glm::radians(1.f), glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 view =
-        glm::lookAt(glm::vec3{0.f, 2.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
+        glm::lookAt(glm::vec3{0.f, 0.f, 2.f}, glm::vec3{0.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
     glm::mat4 projection = glm::perspective(glm::radians(45.f), ratio, 0.1f, 10.f);
-    UniformObject ubo{model, view, projection};
+    UniformObject ubo{glm::mat4{1.f}, glm::mat4{1.f}, glm::mat4{1.f}};
 
     frameData.UniformBuffer().CopyMemoryToAllocation(&ubo);
 }
