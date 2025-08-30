@@ -45,7 +45,8 @@ std::set<std::string> Vma::DesiredPhysicalDeviceExtensions(
     return extensions;
 }
 
-VmaAllocatorCreateFlagBits Vma::CreateFlagBits(const vk::raii::PhysicalDevice &physicalDevice)
+VmaAllocatorCreateFlagBits Vma::PhysicalDeviceCreateFlagBits(
+    const vk::raii::PhysicalDevice &physicalDevice)
 {
     VmaAllocatorCreateFlagBits flags{};
 
@@ -78,7 +79,7 @@ Vma::Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &in
     vulkanFunctions.vkGetInstanceProcAddr = vkGetInstanceProcAddr;
     vulkanFunctions.vkGetDeviceProcAddr = vkGetDeviceProcAddr;
 
-    VmaAllocatorCreateFlagBits flags = CreateFlagBits(physicalDevice);
+    VmaAllocatorCreateFlagBits flags = PhysicalDeviceCreateFlagBits(physicalDevice);
     VmaAllocatorCreateInfo allocatorCreateInfo{};
     allocatorCreateInfo.flags = flags;
     allocatorCreateInfo.vulkanApiVersion = vk::ApiVersion14;

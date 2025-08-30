@@ -24,7 +24,7 @@ struct Vma
     /// </summary>
     /// <param name="physicalDevice">The physical device to check</param>
     /// <returns></returns>
-    static VmaAllocatorCreateFlagBits CreateFlagBits(
+    static VmaAllocatorCreateFlagBits PhysicalDeviceCreateFlagBits(
         const vk::raii::PhysicalDevice &physicalDevice);
 
     Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
