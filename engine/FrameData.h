@@ -70,6 +70,11 @@ struct FrameData
         return m_uniformBuffer;
     }
 
+    vk::raii::DescriptorSet &DescriptorSet()
+    {
+        return m_descriptorSet;
+    }
+
   private:
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;

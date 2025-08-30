@@ -92,7 +92,7 @@ void Engine::DrawFrame()
     m_device.resetFences(*inflightFence);
 
     commandBuffer.reset();
-    RecordCommandBuffer(commandBuffer, imageIndex);
+    RecordCommandBuffer(commandBuffer, frameData, imageIndex);
 
     vk::raii::Semaphore &renderFinishedSemaphore =
         m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
@@ -617,7 +617,8 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     frameData.UniformBuffer().CopyMemoryToAllocation(&ubo);
 }
 
-void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex)
+void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameData &frameData,
+                                 uint32_t imageIndex)
 {
     vk::CommandBufferBeginInfo commandBufferBeginInfo{};
     commandBuffer.begin(commandBufferBeginInfo);
@@ -633,6 +634,8 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_
     commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint16);
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
+    commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout, 0,
+                                     {frameData.DescriptorSet()}, {});
 
     commandBuffer.drawIndexed(static_cast<uint32_t>(Indices.size()), 1, 0, 0, 0);
 

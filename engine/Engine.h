@@ -60,7 +60,8 @@ struct Engine
 
     void UpdateUniformBuffer(FrameData &frameData);
 
-    void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, uint32_t imageIndex);
+    void RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameData &frameData,
+                             uint32_t imageIndex);
 
     FrameData &CurrentFrameData();
 
