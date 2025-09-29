@@ -92,14 +92,36 @@ void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format forma
     vk::ImageSubresourceRange imageSubresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
                                                     levelCount, baseArrayLayer, layerCount};
 
-    vk::AccessFlags srcAccessMask{}; // TODO
-    vk::AccessFlags dstAccessMask{}; // TODO
+    vk::AccessFlags srcAccessMask{};
+    vk::AccessFlags dstAccessMask{};
+    vk::PipelineStageFlags srcStageMask{};
+    vk::PipelineStageFlags dstStageMask{};
+
+    if (oldLayout == vk::ImageLayout::eUndefined &&
+        newLayout == vk::ImageLayout::eTransferDstOptimal)
+    {
+        srcAccessMask = {};
+        dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+        srcStageMask = vk::PipelineStageFlagBits::eTopOfPipe;
+        dstStageMask = vk::PipelineStageFlagBits::eTransfer;
+    }
+    else if (oldLayout == vk::ImageLayout::eTransferDstOptimal &&
+             newLayout == vk::ImageLayout::eShaderReadOnlyOptimal)
+    {
+        srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+        dstAccessMask = vk::AccessFlagBits::eShaderRead;
+        srcStageMask = vk::PipelineStageFlagBits::eTransfer;
+        dstStageMask = vk::PipelineStageFlagBits::eFragmentShader;
+    }
+    else
+    {
+        throw std::runtime_error{"unsupported layout transition"};
+    }
+
     vk::ImageMemoryBarrier imageMemoryBarrier{
         srcAccessMask,          dstAccessMask,          oldLayout, newLayout,
         vk::QueueFamilyIgnored, vk::QueueFamilyIgnored, image,     imageSubresourceRange};
 
-    constexpr vk::PipelineStageFlags srcStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
-    constexpr vk::PipelineStageFlags dstStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
     commandBuffer.pipelineBarrier(srcStageMask, dstStageMask, vk::DependencyFlagBits{}, {}, {},
                                   imageMemoryBarrier);
 
