@@ -76,7 +76,12 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity};
 
-    vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1};
+    constexpr uint32_t baseMipLevel = 0;
+    constexpr uint32_t levelCount = 1;
+    constexpr uint32_t baseArrayLayer = 0;
+    constexpr uint32_t layerCount = 1;
+    vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
+                                               levelCount, baseArrayLayer, layerCount};
 
     m_imageViews.clear();
 
