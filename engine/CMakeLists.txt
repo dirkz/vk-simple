@@ -27,7 +27,9 @@ add_library(engine OBJECT
 	UniformObject.h
 	UniformObject.cpp
 	VmaImage.h
-	VmaImage.cpp)
+	VmaImage.cpp
+	DebugUtils.h
+	DebugUtils.cpp)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET engine PROPERTY CXX_STANDARD 20)
