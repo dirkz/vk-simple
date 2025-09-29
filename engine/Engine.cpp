@@ -612,6 +612,8 @@ void Engine::CreateTextureSampler()
                                      maxLod,
                                      vk::BorderColor::eIntOpaqueBlack,
                                      unnormalizedCoordinates};
+
+    m_textureSampler = m_device.createSampler(createInfo);
 }
 
 void Engine::CreateDescriptorPool()

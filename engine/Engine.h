@@ -91,6 +91,7 @@ struct Engine
     VmaBuffer m_indexBuffer = nullptr;
 
     vk::raii::ImageView m_textureImageView = nullptr;
+    vk::raii::Sampler m_textureSampler = nullptr;
 
     vk::raii::DescriptorPool m_descriptorPool = nullptr;
     std::vector<vk::raii::DescriptorSet> m_descriptorSets;
