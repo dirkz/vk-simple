@@ -24,9 +24,13 @@ endif()
 
 # TODO: Add tests and install targets if needed.
 
-find_package(Vulkan REQUIRED)
+# Set the output directory for built objects.
+# This makes sure that the dynamic library goes into the build directory automatically.
+# This should help with dynamically linking to SDL3.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
-option(SDL_STATIC "Build SDL as a static library" ON)
+find_package(Vulkan REQUIRED)
 
 add_subdirectory(glm)
 add_subdirectory(SDL-Hpp EXCLUDE_FROM_ALL)
