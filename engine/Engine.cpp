@@ -523,7 +523,7 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
         throw std::runtime_error{"unsupported texture format, invalid number of channels"};
     }
 
-    vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * texChannels};
+    vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * 4};
 
     VmaBuffer stagingBuffer = m_vma.CreateBuffer(
         imageSize, vk::BufferUsageFlagBits::eTransferSrc,
