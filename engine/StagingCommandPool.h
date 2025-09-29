@@ -36,6 +36,9 @@ struct StagingCommandPool
         const void *pData, vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
         VmaAllocationCreateFlags createFlagBits = {});
 
+    void TransitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout,
+                               vk::ImageLayout newLayout);
+
   private:
     vk::raii::Device &m_device;
     vk::raii::Queue &m_queue;

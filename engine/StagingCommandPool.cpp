@@ -80,4 +80,30 @@ std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::CreateDeviceBufferFromMemory
     return std::make_pair(std::move(buffer), std::move(stagingBuffer));
 }
 
+void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format format,
+                                               vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
+{
+    vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer();
+
+    constexpr uint32_t baseMipLevel = 0;
+    constexpr uint32_t levelCount = 1;
+    constexpr uint32_t baseArrayLayer = 0;
+    constexpr uint32_t layerCount = 1;
+    vk::ImageSubresourceRange subresource{vk::ImageAspectFlagBits::eColor, baseMipLevel, levelCount,
+                                          baseArrayLayer, layerCount};
+
+    vk::AccessFlags srcAccessMask{}; // TODO
+    vk::AccessFlags dstAccessMask{}; // TODO
+    vk::ImageMemoryBarrier imageMemoryBarrier{
+        srcAccessMask,          dstAccessMask,          oldLayout, newLayout,
+        vk::QueueFamilyIgnored, vk::QueueFamilyIgnored, image,     subresource};
+
+    constexpr vk::PipelineStageFlags srcStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
+    constexpr vk::PipelineStageFlags dstStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
+    commandBuffer.pipelineBarrier(srcStageMask, dstStageMask, vk::DependencyFlagBits{}, {}, {},
+                                  imageMemoryBarrier);
+
+    EndCommandBufferAndSubmit(commandBuffer);
+}
+
 } // namespace vkdeck
