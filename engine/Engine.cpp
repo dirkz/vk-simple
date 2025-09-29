@@ -578,7 +578,8 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 
     return std::move(stagingBuffer);
 }
-void Engine::CreateTextureImageView()
+
+void Engine::CreateTextureImageView()
 {
     m_textureImageView =
         Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat);
