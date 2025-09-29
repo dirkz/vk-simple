@@ -39,6 +39,8 @@ struct StagingCommandPool
     void TransitionImageLayout(vk::Image image, vk::Format format, vk::ImageLayout oldLayout,
                                vk::ImageLayout newLayout);
 
+    void CopyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width, uint32_t height);
+
   private:
     vk::raii::Device &m_device;
     vk::raii::Queue &m_queue;

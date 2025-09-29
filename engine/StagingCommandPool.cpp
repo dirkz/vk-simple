@@ -89,19 +89,46 @@ void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format forma
     constexpr uint32_t levelCount = 1;
     constexpr uint32_t baseArrayLayer = 0;
     constexpr uint32_t layerCount = 1;
-    vk::ImageSubresourceRange subresource{vk::ImageAspectFlagBits::eColor, baseMipLevel, levelCount,
-                                          baseArrayLayer, layerCount};
+    vk::ImageSubresourceRange imageSubresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
+                                                    levelCount, baseArrayLayer, layerCount};
 
     vk::AccessFlags srcAccessMask{}; // TODO
     vk::AccessFlags dstAccessMask{}; // TODO
     vk::ImageMemoryBarrier imageMemoryBarrier{
         srcAccessMask,          dstAccessMask,          oldLayout, newLayout,
-        vk::QueueFamilyIgnored, vk::QueueFamilyIgnored, image,     subresource};
+        vk::QueueFamilyIgnored, vk::QueueFamilyIgnored, image,     imageSubresourceRange};
 
     constexpr vk::PipelineStageFlags srcStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
     constexpr vk::PipelineStageFlags dstStageMask = vk::PipelineStageFlagBits::eAllGraphics; // TODO
     commandBuffer.pipelineBarrier(srcStageMask, dstStageMask, vk::DependencyFlagBits{}, {}, {},
                                   imageMemoryBarrier);
+
+    EndCommandBufferAndSubmit(commandBuffer);
+}
+
+void StagingCommandPool::CopyBufferToImage(vk::Buffer buffer, vk::Image image, uint32_t width,
+                                           uint32_t height)
+{
+    vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer();
+
+    constexpr vk::DeviceSize bufferOffset = 0;
+    constexpr uint32_t bufferRowLength = 0;   // tightly packed
+    constexpr uint32_t bufferImageHeight = 0; // tightly packed
+
+    constexpr uint32_t mipLevel = 0;
+    constexpr uint32_t baseArrayLayer = 0;
+    constexpr uint32_t layerCount = 1;
+    vk::ImageSubresourceLayers imageSubresourceLayers{vk::ImageAspectFlagBits::eColor, mipLevel,
+                                                      baseArrayLayer, layerCount};
+
+    vk::Offset3D imageOffset{0, 0, 0};
+    vk::Extent3D imageExtent{0, 0, 1};
+
+    vk::BufferImageCopy bufferImageCopy{bufferOffset,           bufferRowLength, bufferImageHeight,
+                                        imageSubresourceLayers, imageOffset,     imageExtent};
+
+    commandBuffer.copyBufferToImage(buffer, image, vk::ImageLayout::eTransferDstOptimal,
+                                    bufferImageCopy);
 
     EndCommandBufferAndSubmit(commandBuffer);
 }
