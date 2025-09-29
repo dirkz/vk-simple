@@ -70,7 +70,8 @@ Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device 
     }
 }
 
-void Swapchain::CreateImageViews(vk::raii::Device &device)
+vk::raii::ImageView Swapchain::CreateImageView(vk::raii::Device &device, vk::Image image,
+                                               vk::Format format)
 {
     vk::ComponentMapping componentMapping{
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
@@ -83,18 +84,21 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
     vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
                                                levelCount, baseArrayLayer, layerCount};
 
+    vk::ImageViewCreateInfo createInfo{
+        {}, image, vk::ImageViewType::e2D, format, componentMapping, subresourceRange};
+
+    vk::raii::ImageView imageView = device.createImageView(createInfo);
+
+    return imageView;
+}
+
+void Swapchain::CreateImageViews(vk::raii::Device &device)
+{
     m_imageViews.clear();
 
     for (auto i = 0; i < m_images.size(); ++i)
     {
-        vk::ImageViewCreateInfo createInfo{{},
-                                           m_images[i],
-                                           vk::ImageViewType::e2D,
-                                           m_imageFormat,
-                                           componentMapping,
-                                           subresourceRange};
-
-        vk::raii::ImageView imageView = device.createImageView(createInfo);
+        vk::raii::ImageView imageView = CreateImageView(device, m_images[i], m_imageFormat);
         m_imageViews.push_back(std::move(imageView));
     }
 }
