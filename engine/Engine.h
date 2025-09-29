@@ -47,6 +47,7 @@ struct Engine
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 
     void CreateTextureImageView();
+    void CreateTextureSampler();
 
     void CreateDescriptorPool();
     void CreateDescriptorSets();

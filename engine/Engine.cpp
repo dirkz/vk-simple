@@ -67,6 +67,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // they will be discarded at the end of this method automatically.
 
     CreateTextureImageView();
+    CreateTextureSampler();
 
     CreateDescriptorPool();
     CreateDescriptorSets();
@@ -583,6 +584,34 @@ void Engine::CreateTextureImageView()
 {
     m_textureImageView =
         Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat);
+}
+
+void Engine::CreateTextureSampler()
+{
+    vk::PhysicalDeviceProperties deviceProperties = m_physicalDevice.getProperties();
+
+    constexpr float mipLodBias = 0.f;
+    constexpr float minLod = 0.f;
+    constexpr float maxLod = 0.f;
+    constexpr vk::Bool32 anisotropyEnable = vk::True;
+    constexpr vk::Bool32 compareEnable = vk::False;
+    constexpr vk::Bool32 unnormalizedCoordinates = vk::False;
+    vk::SamplerCreateInfo createInfo{{},
+                                     vk::Filter::eLinear,
+                                     vk::Filter::eLinear,
+                                     vk::SamplerMipmapMode::eLinear,
+                                     vk::SamplerAddressMode::eRepeat,
+                                     vk::SamplerAddressMode::eRepeat,
+                                     vk::SamplerAddressMode::eRepeat,
+                                     mipLodBias,
+                                     anisotropyEnable,
+                                     deviceProperties.limits.maxSamplerAnisotropy,
+                                     compareEnable,
+                                     vk::CompareOp::eAlways,
+                                     minLod,
+                                     maxLod,
+                                     vk::BorderColor::eIntOpaqueBlack,
+                                     unnormalizedCoordinates};
 }
 
 void Engine::CreateDescriptorPool()
