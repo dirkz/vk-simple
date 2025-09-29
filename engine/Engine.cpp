@@ -575,9 +575,15 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     stbi_image_free(pixels);
 
+    constexpr vk::Format format = vk::Format::eR8G8B8A8Srgb;
+
     m_textureImage =
-        m_vma.CreateImage(texWidth, texHeight, vk::Format::eR8G8B8A8Srgb, vk::ImageTiling::eOptimal,
+        m_vma.CreateImage(texWidth, texHeight, format, vk::ImageTiling::eOptimal,
                           vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
+
+    /*stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), format,
+                                             vk::ImageLayout::eUndefined,
+                                             vk::ImageLayout::eTransferDstOptimal);*/
 
     return stagingBuffer;
 }
@@ -609,7 +615,8 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 void Engine::CreateDescriptorPool()
 {
     vk::DescriptorPoolSize poolSize{vk::DescriptorType::eUniformBuffer, MaxFramesInFlight};
-    vk::DescriptorPoolCreateInfo poolCreateInfo{{}, MaxFramesInFlight, poolSize};
+    vk::DescriptorPoolCreateInfo poolCreateInfo{
+        vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet, MaxFramesInFlight, poolSize};
     m_descriptorPool = m_device.createDescriptorPool(poolCreateInfo);
 }
 
