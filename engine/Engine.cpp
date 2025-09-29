@@ -542,8 +542,13 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
     stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), format,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eTransferDstOptimal);
+
     stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage.Image(), texWidth,
                                          texHeight);
+
+    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), format,
+                                             vk::ImageLayout::eTransferDstOptimal,
+                                             vk::ImageLayout::eShaderReadOnlyOptimal);
 
     return stagingBuffer;
 }
