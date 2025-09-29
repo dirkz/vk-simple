@@ -46,6 +46,8 @@ struct Engine
     VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
 
+    void CreateTextureImageView();
+
     void CreateDescriptorPool();
     void CreateDescriptorSets();
 
@@ -86,6 +88,8 @@ struct Engine
     VmaImage m_textureImage = nullptr;
     VmaBuffer m_vertexBuffer = nullptr;
     VmaBuffer m_indexBuffer = nullptr;
+
+    vk::raii::ImageView m_textureImageView = nullptr;
 
     vk::raii::DescriptorPool m_descriptorPool = nullptr;
     std::vector<vk::raii::DescriptorSet> m_descriptorSets;

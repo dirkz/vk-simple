@@ -14,6 +14,8 @@
 namespace vkdeck
 {
 
+constexpr vk::Format TextureFormat = vk::Format::eR8G8B8A8Srgb;
+
 std::vector<std::string> ValidationLayers{"VK_LAYER_KHRONOS_validation"};
 
 #if NDEBUG
@@ -63,6 +65,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
 
     // The temporary staging buffers are now not needed anymore,
     // they will be discarded at the end of this method automatically.
+
+    CreateTextureImageView();
 
     CreateDescriptorPool();
     CreateDescriptorSets();
@@ -533,20 +537,18 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     stbi_image_free(pixels);
 
-    constexpr vk::Format format = vk::Format::eR8G8B8A8Srgb;
-
     m_textureImage =
-        m_vma.CreateImage(texWidth, texHeight, format, vk::ImageTiling::eOptimal,
+        m_vma.CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
                           vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), format,
+    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eTransferDstOptimal);
 
     stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage.Image(), texWidth,
                                          texHeight);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), format,
+    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
                                              vk::ImageLayout::eTransferDstOptimal,
                                              vk::ImageLayout::eShaderReadOnlyOptimal);
 
@@ -575,6 +577,11 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
     m_indexBuffer = std::move(indexBuffer);
 
     return std::move(stagingBuffer);
+}
+void Engine::CreateTextureImageView()
+{
+    m_textureImageView =
+        Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat);
 }
 
 void Engine::CreateDescriptorPool()
