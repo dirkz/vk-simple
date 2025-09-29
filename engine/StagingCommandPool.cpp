@@ -122,7 +122,7 @@ void StagingCommandPool::CopyBufferToImage(vk::Buffer buffer, vk::Image image, u
                                                       baseArrayLayer, layerCount};
 
     vk::Offset3D imageOffset{0, 0, 0};
-    vk::Extent3D imageExtent{0, 0, 1};
+    vk::Extent3D imageExtent{width, height, 1};
 
     vk::BufferImageCopy bufferImageCopy{bufferOffset,           bufferRowLength, bufferImageHeight,
                                         imageSubresourceLayers, imageOffset,     imageExtent};
