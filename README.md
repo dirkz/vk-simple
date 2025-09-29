@@ -1,4 +1,4 @@
-# vk-simple
+# vkdeck
 
 This is what happens when one follows [the original vulkan tutorial](https://vulkan-tutorial.com/),
 including its use of

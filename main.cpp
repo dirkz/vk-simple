@@ -19,7 +19,7 @@ int SDL_main(int argc, char *argv[])
     sdl::Init(SDL_INIT_VIDEO);
 
     SDL_Window *sdlWindow =
-        sdl::CreateWindow("vk-simple", 1280, 800, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
+        sdl::CreateWindow("vkdeck", 1280, 800, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
     {
         SDLVulkanWindow vulkanWindow = SDLVulkanWindow{sdlWindow};

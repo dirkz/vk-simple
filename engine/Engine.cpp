@@ -171,7 +171,7 @@ void Engine::CreateInstance()
         throw std::runtime_error{"Validation requested but not supported"};
     }
 
-    vk::ApplicationInfo appInfo{"vk-simple", VK_MAKE_VERSION(0, 0, 1), "vk-simple",
+    vk::ApplicationInfo appInfo{"vkdeck", VK_MAKE_VERSION(0, 0, 1), "vkdeck",
                                 VK_MAKE_VERSION(0, 0, 1), VK_API_VERSION_1_4};
 
     std::vector<std::string> instanceExtensions = GetRequiredExtensionNames();
