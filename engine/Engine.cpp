@@ -247,10 +247,16 @@ bool Engine::CheckDeviceExtensionSupport(vk::raii::PhysicalDevice &device)
 
 bool Engine::IsDeviceSuitable(vk::raii::PhysicalDevice &device)
 {
-    auto features = device.template getFeatures2<vk::PhysicalDeviceFeatures2,
-                                                 vk::PhysicalDeviceBufferDeviceAddressFeatures>();
+    vk::PhysicalDeviceFeatures features = device.getFeatures();
+    if (features.samplerAnisotropy != vk::True)
+    {
+        return false;
+    }
+
+    auto features2 = device.template getFeatures2<vk::PhysicalDeviceFeatures2,
+                                                  vk::PhysicalDeviceBufferDeviceAddressFeatures>();
     vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures =
-        features.get<vk::PhysicalDeviceBufferDeviceAddressFeatures>();
+        features2.get<vk::PhysicalDeviceBufferDeviceAddressFeatures>();
 
     if (!bufferDeviceAddressFeatures.bufferDeviceAddress)
     {
@@ -304,6 +310,7 @@ void Engine::CreateLogicalDevice()
     }
 
     vk::PhysicalDeviceFeatures deviceFeatures{};
+    deviceFeatures.samplerAnisotropy = vk::True;
 
     std::vector<const char *> layerNames{};
     if (EnableValidation)
@@ -331,7 +338,8 @@ void Engine::CreateLogicalDevice()
     vk::PhysicalDeviceBufferDeviceAddressFeatures bufferDeviceAddressFeatures{};
     bufferDeviceAddressFeatures.bufferDeviceAddress = vk::True;
 
-    vk::DeviceCreateInfo createInfo{{}, queueCreateInfos, layerNames, extensionNames};
+    vk::DeviceCreateInfo createInfo{
+        {}, queueCreateInfos, layerNames, extensionNames, &deviceFeatures};
 
     vk::StructureChain<vk::DeviceCreateInfo, vk::PhysicalDeviceBufferDeviceAddressFeatures>
         createChain{createInfo, bufferDeviceAddressFeatures};
