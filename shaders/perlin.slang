@@ -49,3 +49,32 @@ float Grad(int hash, float x, float y, float z)
     return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
+float Noise(float x, float y, float z)
+{
+    int X = (int)(floor(x)) & 255, // FIND UNIT CUBE THAT
+        Y = (int)(floor(y)) & 255, // CONTAINS POINT.
+        Z = (int)(floor(z)) & 255;
+
+    x -= floor(x); // FIND RELATIVE X,Y,Z
+    y -= floor(y); // OF POINT IN CUBE.
+    z -= floor(z);
+
+    float u = Fade(x), // COMPUTE FADE CURVES
+          v = Fade(y), // FOR EACH OF X,Y,Z.
+          w = Fade(z);
+
+    int A = P[X] + Y, AA = P[A] + Z, AB = P[A + 1] + Z,     // HASH COORDINATES OF
+        B = P[X + 1] + Y, BA = P[B] + Z, BB = P[B + 1] + Z; // THE 8 CUBE CORNERS,
+
+    return Lerp(
+        w,
+        Lerp(v,
+             Lerp(u, Grad(P[AA], x, y, z),        // AND ADD
+                  Grad(P[BA], x - 1, y, z)),      // BLENDED
+             Lerp(u, Grad(P[AB], x, y - 1, z),    // RESULTS
+                  Grad(P[BB], x - 1, y - 1, z))), // FROM  8
+        Lerp(v,
+             Lerp(u, Grad(P[AA + 1], x, y, z - 1),   // CORNERS
+                  Grad(P[BA + 1], x - 1, y, z - 1)), // OF CUBE
+             Lerp(u, Grad(P[AB + 1], x, y - 1, z - 1), Grad(P[BB + 1], x - 1, y - 1, z - 1))));
+}
