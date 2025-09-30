@@ -637,9 +637,9 @@ void Engine::CreateDescriptorPool()
 {
     vk::DescriptorPoolSize uniformDescriptorPoolSize{vk::DescriptorType::eUniformBuffer,
                                                      MaxFramesInFlight};
-    vk::DescriptorPoolSize samplerDescriptorPoolSize{vk::DescriptorType::eSampler,
+    vk::DescriptorPoolSize samplerDescriptorPoolSize{vk::DescriptorType::eCombinedImageSampler,
                                                      MaxFramesInFlight};
-    std::array poolSizes{uniformDescriptorPoolSize};
+    std::array poolSizes{uniformDescriptorPoolSize, samplerDescriptorPoolSize};
 
     vk::DescriptorPoolCreateInfo poolCreateInfo{
         vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet, MaxFramesInFlight, poolSizes};
