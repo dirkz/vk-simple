@@ -37,6 +37,11 @@ ConstantBuffer<Sampler2D> sampler;
 [shader("fragment")]
 float4 FragmentMain(VertexOutput input) : SV_Target
 {
-    float4 texColor = float4(input.Color * sampler.Sample(input.TexCoords).rgb, 1);
-	return texColor;
+    const float scale = 16.0;
+    float n = Noise(input.TexCoords.x * scale, input.TexCoords.y * scale, 0.5);
+    float3 displacement = float3(n / 5);
+
+    float4 sample = sampler.Sample(input.TexCoords);
+
+	return float4(sample.rgb + displacement, sample.a);
 }
