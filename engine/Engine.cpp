@@ -635,9 +635,15 @@ void Engine::CreateTextureSampler()
 
 void Engine::CreateDescriptorPool()
 {
-    vk::DescriptorPoolSize poolSize{vk::DescriptorType::eUniformBuffer, MaxFramesInFlight};
+    vk::DescriptorPoolSize uniformDescriptorPoolSize{vk::DescriptorType::eUniformBuffer,
+                                                     MaxFramesInFlight};
+    vk::DescriptorPoolSize samplerDescriptorPoolSize{vk::DescriptorType::eSampler,
+                                                     MaxFramesInFlight};
+    std::array poolSizes{uniformDescriptorPoolSize};
+
     vk::DescriptorPoolCreateInfo poolCreateInfo{
-        vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet, MaxFramesInFlight, poolSize};
+        vk::DescriptorPoolCreateFlagBits::eFreeDescriptorSet, MaxFramesInFlight, poolSizes};
+
     m_descriptorPool = m_device.createDescriptorPool(poolCreateInfo);
 }
 
