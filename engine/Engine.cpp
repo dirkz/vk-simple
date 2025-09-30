@@ -403,11 +403,20 @@ void Engine::CreateRenderPass()
 
 void Engine::CreateDescriptorSetLayout()
 {
-    vk::DescriptorSetLayoutBinding layoutBinding{
-        0, vk::DescriptorType::eUniformBuffer, vk::ShaderStageFlagBits::eVertex, {}};
-    layoutBinding.descriptorCount = 1;
+    constexpr uint32_t binding = 0;
+    vk::DescriptorSetLayoutBinding uniformLayoutBinding{
+        binding, vk::DescriptorType::eUniformBuffer, vk::ShaderStageFlagBits::eVertex, {}};
+    uniformLayoutBinding.descriptorCount = 1;
 
-    vk::DescriptorSetLayoutCreateInfo layoutCreateInfo{{}, layoutBinding};
+    vk::DescriptorSetLayoutBinding samplerLayoutBinding{binding + 1,
+                                                        vk::DescriptorType::eCombinedImageSampler,
+                                                        vk::ShaderStageFlagBits::eFragment,
+                                                        {}};
+    samplerLayoutBinding.descriptorCount = 1;
+
+    std::array bindings{uniformLayoutBinding, samplerLayoutBinding};
+    vk::DescriptorSetLayoutCreateInfo layoutCreateInfo{{}, bindings};
+
     m_descriptorSetLayout = m_device.createDescriptorSetLayout(layoutCreateInfo);
 }
 
