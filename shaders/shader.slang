@@ -35,6 +35,6 @@ ConstantBuffer<Sampler2D> sampler;
 [shader("fragment")]
 float4 FragmentMain(VertexOutput input) : SV_Target
 {
-    float4 texColor = sampler.Sample(input.TexCoords);
+    float4 texColor = float4(input.Color * sampler.Sample(input.TexCoords).rgb, 1);
 	return texColor;
 }
