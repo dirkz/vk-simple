@@ -6,7 +6,8 @@ namespace vkdeck
 {
 
 FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma,
-                     vk::raii::DescriptorSet &descriptorSet)
+                     vk::raii::DescriptorSet &descriptorSet, vk::Sampler sampler,
+                     vk::ImageView textureImageView)
     : m_descriptorSet{std::move(descriptorSet)}
 {
     constexpr uint32_t commandBufferCount = 1;
@@ -29,10 +30,22 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
 
     vk::DescriptorBufferInfo descriptorBufferInfo{m_uniformBuffer.Buffer(), 0, uniformBufferSize};
 
-    vk::WriteDescriptorSet writeDescriptorSet{
-        m_descriptorSet, 0, 0, vk::DescriptorType::eUniformBuffer, {}, descriptorBufferInfo};
+    constexpr uint32_t dstBinding = 0;
+    constexpr uint32_t dstArrayElement = 0;
 
-    device.updateDescriptorSets(writeDescriptorSet, {});
+    vk::WriteDescriptorSet uniformWriteDescriptorSet{
+        m_descriptorSet,     dstBinding, dstArrayElement, vk::DescriptorType::eUniformBuffer, {},
+        descriptorBufferInfo};
+
+    vk::DescriptorImageInfo descriptorImageInfo{sampler, textureImageView,
+                                                vk::ImageLayout::eShaderReadOnlyOptimal};
+
+    vk::WriteDescriptorSet samplerWriteDescriptorSet{
+        m_descriptorSet, dstBinding + 1, dstArrayElement, vk::DescriptorType::eCombinedImageSampler,
+        descriptorImageInfo};
+
+    std::array writeDescriptorSets{uniformWriteDescriptorSet, samplerWriteDescriptorSet};
+    device.updateDescriptorSets(writeDescriptorSets, {});
 }
 
 void FrameData::RecreateSemaphore(vk::raii::Device &device, vk::raii::Semaphore &semaphore)

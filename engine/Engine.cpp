@@ -658,7 +658,8 @@ void Engine::CreateFrameData()
 {
     for (auto i = 0; i < MaxFramesInFlight; ++i)
     {
-        m_frameData.emplace_back(m_device, m_commandPool, m_vma, m_descriptorSets[i]);
+        m_frameData.emplace_back(m_device, m_commandPool, m_vma, m_descriptorSets[i],
+                                 m_textureSampler, m_textureImageView);
     }
 
     m_descriptorSets.clear();

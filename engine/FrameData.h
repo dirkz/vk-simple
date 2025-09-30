@@ -10,7 +10,8 @@ namespace vkdeck
 struct FrameData
 {
     FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPool, Vma &vma,
-              vk::raii::DescriptorSet &descriptorSet);
+              vk::raii::DescriptorSet &descriptorSet, vk::Sampler sampler,
+              vk::ImageView textureImageView);
 
     FrameData(std::nullptr_t)
     {
