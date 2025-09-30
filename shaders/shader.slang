@@ -1,7 +1,7 @@
 struct VertexInput {
     float2 Position;
     float3 Color;
-    float2 TexCoord;
+    float2 TexCoords;
 };
 
 struct UniformObject {
@@ -15,7 +15,7 @@ ConstantBuffer<UniformObject> ubo;
 struct VertexOutput {
     float3 Color;
     float4 Position : SV_Position;
-    float2 TexCoord;
+    float2 TexCoords;
 };
 
 [shader("vertex")]
@@ -26,12 +26,14 @@ VertexOutput VertexMain(VertexInput input) {
     float4 projected = mul(ubo.Projection, viewed);
     output.Position = projected;
     output.Color = input.Color;
-    output.TexCoord = input.TexCoord;
+    output.TexCoords = input.TexCoords;
     return output;
 }
+
+ConstantBuffer<Sampler2D> sampler;
 
 [shader("fragment")]
 float4 FragmentMain(VertexOutput input) : SV_Target
 {
-	return float4(input.TexCoord, 0.0, 1.0);
+	return float4(input.TexCoords, 0, 1);
 }

@@ -26,13 +26,13 @@ struct Vertex
             location + 1, binding, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, m_color)};
 
         vk::VertexInputAttributeDescription descriptionTexCoordinate{
-            location + 2, binding, vk::Format::eR32G32Sfloat, offsetof(Vertex, m_texCoord)};
+            location + 2, binding, vk::Format::eR32G32Sfloat, offsetof(Vertex, m_texCoords)};
 
         return {descriptionPosition, descriptionColor, descriptionTexCoordinate};
     }
 
-    Vertex(glm::vec2 position, glm::vec3 color, glm::vec2 texCoord)
-        : m_position{position}, m_color{color}, m_texCoord{texCoord}
+    Vertex(glm::vec2 position, glm::vec3 color, glm::vec2 texCoords)
+        : m_position{position}, m_color{color}, m_texCoords{texCoords}
     {
     }
 
@@ -46,15 +46,15 @@ struct Vertex
         return m_color;
     }
 
-    glm::vec2 &TexCoord()
+    glm::vec2 &TexCoords()
     {
-        return m_texCoord;
+        return m_texCoords;
     }
 
   private:
     glm::vec2 m_position;
     glm::vec3 m_color;
-    glm::vec2 m_texCoord;
+    glm::vec2 m_texCoords;
 };
 
 } // namespace vkdeck
