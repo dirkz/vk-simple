@@ -39,7 +39,7 @@ float4 FragmentMain(VertexOutput input) : SV_Target
 {
     const float scale = 16.0;
     float n = Noise(input.TexCoords.x * scale, input.TexCoords.y * scale, 0.5);
-    float3 displacement = float3(n / 5);
+    float3 displacement = float3(n / 15);
 
     float4 sample = sampler.Sample(input.TexCoords);
 
