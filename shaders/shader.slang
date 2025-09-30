@@ -1,7 +1,7 @@
 #include "perlin.slang"
 
 struct VertexInput {
-    float2 Position;
+    float3 Position;
     float3 Color;
     float2 TexCoords;
 };
@@ -23,7 +23,7 @@ struct VertexOutput {
 [shader("vertex")]
 VertexOutput VertexMain(VertexInput input) {
     VertexOutput output;
-    float4 modelled = mul(ubo.Model, float4(input.Position, 0.0, 1.0));
+    float4 modelled = mul(ubo.Model, float4(input.Position, 1.0));
     float4 viewed = mul(ubo.View, modelled);
     float4 projected = mul(ubo.Projection, viewed);
     output.Position = projected;
