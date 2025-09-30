@@ -41,7 +41,7 @@ float Lerp(float t, float a, float b)
 
 float Grad(int hash, float x, float y, float z)
 {
-    int h = hash & 15;   // CONVERT LO 4 BITS OF HASH CODE
+    int h = hash & 15;       // CONVERT LO 4 BITS OF HASH CODE
     float u = h < 8 ? x : y, // INTO 12 GRADIENT DIRECTIONS.
         v = h < 4                ? y
             : h == 12 || h == 14 ? x
@@ -69,10 +69,10 @@ float Noise(float x, float y, float z)
     return Lerp(
         w,
         Lerp(v,
-             Lerp(u, Grad(P[AA], x, y, z),        // AND ADD
-                  Grad(P[BA], x - 1, y, z)),      // BLENDED
-             Lerp(u, Grad(P[AB], x, y - 1, z),    // RESULTS
-                  Grad(P[BB], x - 1, y - 1, z))), // FROM  8
+             Lerp(u, Grad(P[AA], x, y, z),           // AND ADD
+                  Grad(P[BA], x - 1, y, z)),         // BLENDED
+             Lerp(u, Grad(P[AB], x, y - 1, z),       // RESULTS
+                  Grad(P[BB], x - 1, y - 1, z))),    // FROM  8
         Lerp(v,
              Lerp(u, Grad(P[AA + 1], x, y, z - 1),   // CORNERS
                   Grad(P[BA + 1], x - 1, y, z - 1)), // OF CUBE
