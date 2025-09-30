@@ -15,6 +15,7 @@ ConstantBuffer<UniformObject> ubo;
 struct VertexOutput {
     float3 Color;
     float4 Position : SV_Position;
+    float2 TexCoord;
 };
 
 [shader("vertex")]
@@ -24,7 +25,7 @@ VertexOutput VertexMain(VertexInput input) {
     float4 viewed = mul(ubo.View, modelled);
     float4 projected = mul(ubo.Projection, viewed);
     output.Position = projected;
-    output.Color = input.Color;
+    output.TexCoord = input.TexCoord;
     return output;
 }
 
