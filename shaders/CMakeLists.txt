@@ -1,5 +1,9 @@
 set(SHADER_SOURCES shader.slang)
 
+# Maybe too primitive:
+# Every shader source file has a dependency on these.
+set(SHADER_DEPS perlin.slang)
+
 add_custom_target(shaders)
 
 function(create_shader source)
@@ -12,7 +16,7 @@ function(create_shader source)
 
 	add_custom_command(
 		OUTPUT ${SHADER_TARGET}
-		DEPENDS ${SHADER_SRC}
+		DEPENDS ${SHADER_SRC} ${SHADER_DEPS}
 		COMMAND slangc ${SHADER_SRC} ${OPTIONS1} ${ENTRIES} -o ${SHADER_TARGET}
 	)
 
