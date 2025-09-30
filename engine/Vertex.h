@@ -14,19 +14,25 @@ struct Vertex
         return description;
     }
 
-    static std::array<vk::VertexInputAttributeDescription, 2> AttributeDescriptions()
+    static std::array<vk::VertexInputAttributeDescription, 3> AttributeDescriptions()
     {
         constexpr uint32_t binding = 0;
         constexpr uint32_t location = 0;
-        vk::VertexInputAttributeDescription description1{
+
+        vk::VertexInputAttributeDescription descriptionPosition{
             location, binding, vk::Format::eR32G32Sfloat, offsetof(Vertex, m_position)};
-        vk::VertexInputAttributeDescription description2{
+
+        vk::VertexInputAttributeDescription descriptionColor{
             location + 1, binding, vk::Format::eR32G32B32Sfloat, offsetof(Vertex, m_color)};
 
-        return {description1, description2};
+        vk::VertexInputAttributeDescription descriptionTexCoordinate{
+            location + 2, binding, vk::Format::eR32G32Sfloat, offsetof(Vertex, m_texCoord)};
+
+        return {descriptionPosition, descriptionColor, descriptionTexCoordinate};
     }
 
-    Vertex(glm::vec2 position, glm::vec3 color) : m_position{position}, m_color{color}
+    Vertex(glm::vec2 position, glm::vec3 color, glm::vec2 texCoord)
+        : m_position{position}, m_color{color}, m_texCoord{texCoord}
     {
     }
 
@@ -40,9 +46,15 @@ struct Vertex
         return m_color;
     }
 
+    glm::vec2 &TexCoord()
+    {
+        return m_texCoord;
+    }
+
   private:
     glm::vec2 m_position;
     glm::vec3 m_color;
+    glm::vec2 m_texCoord;
 };
 
 } // namespace vkdeck

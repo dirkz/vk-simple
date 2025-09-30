@@ -1,6 +1,7 @@
 struct VertexInput {
     float2 Position;
     float3 Color;
+    float2 TexCoord;
 };
 
 struct UniformObject {

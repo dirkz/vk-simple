@@ -28,10 +28,10 @@ std::vector<std::string> PhysicalDeviceExtensions{vk::KHRSwapchainExtensionName,
                                                   vk::KHRSpirv14ExtensionName,
                                                   vk::KHRShaderFloatControlsExtensionName};
 
-const std::vector<Vertex> Vertices{{{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}},
-                                   {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-                                   {{0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}},
-                                   {{-0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}}};
+const std::vector<Vertex> Vertices{{{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f}, {0.f, 1.f}},
+                                   {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}, {1.f, 1.f}},
+                                   {{0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.f, 0.f}},
+                                   {{-0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}}};
 
 const std::vector<uint16_t> Indices = {0, 1, 2, 0, 2, 3};
 
