@@ -25,6 +25,7 @@ VertexOutput VertexMain(VertexInput input) {
     float4 viewed = mul(ubo.View, modelled);
     float4 projected = mul(ubo.Projection, viewed);
     output.Position = projected;
+    output.Color = input.Color;
     output.TexCoord = input.TexCoord;
     return output;
 }
@@ -32,6 +33,5 @@ VertexOutput VertexMain(VertexInput input) {
 [shader("fragment")]
 float4 FragmentMain(VertexOutput input) : SV_Target
 {
-    float3 color = input.Color;
-    return float4(color, 1.0);
+	return float4(input.TexCoord, 0.0, 1.0);
 }
