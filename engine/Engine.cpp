@@ -1,8 +1,7 @@
 #include "Engine.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
-#include "Engine.h"
 
 #include "Buffer.h"
 #include "DebugUtils.h"
