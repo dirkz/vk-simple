@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Vulkan Application",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/vkdeck",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {"name": "VK_LAYER_PATH__", "value": "path/to/vulkan/sdk/layers"}
+            ],
+            "externalConsole": false
+        }
+    ]
+}
