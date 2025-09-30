@@ -1,3 +1,5 @@
+#include "perlin.slang"
+
 struct VertexInput {
     float2 Position;
     float3 Color;
