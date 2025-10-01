@@ -60,6 +60,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
     // This temporary buffer must be held unto until the upload has been completed.
+    VmaBuffer tmpDepthResourcesStagingBuffer = CreateDepthResources(stagingCommandPool);
     VmaBuffer tmpTextureStagingBuffer = CreateTextureImage(stagingCommandPool);
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
     VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
@@ -526,6 +527,35 @@ void Engine::CreateCommandPool()
         vk::CommandPoolCreateFlagBits::eResetCommandBuffer, m_queueFamilyIndices.GraphicsQueue()};
 
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
+}
+
+vk::Format Engine::FindSupportedFormat(const std::span<vk::Format> &candidates,
+                                       vk::ImageTiling tiling, vk::FormatFeatureFlags features)
+{
+    for (const vk::Format &format : candidates)
+    {
+        vk::FormatProperties properties = m_physicalDevice.getFormatProperties(format);
+
+        if (tiling == vk::ImageTiling::eLinear &&
+            (properties.linearTilingFeatures & features) == features)
+        {
+            return format;
+        }
+        else if (tiling == vk::ImageTiling::eOptimal &&
+                 (properties.optimalTilingFeatures & features) == features)
+        {
+            return format;
+        }
+    }
+    throw std::runtime_error{"failed to find supported format"};
+}
+
+VmaBuffer Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
+{
+    // TODO: Fake it in order to make this compile (and run)
+    return m_vma.CreateBuffer(10, vk::BufferUsageFlagBits::eTransferSrc,
+                              VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
+                                  VMA_ALLOCATION_CREATE_MAPPED_BIT);
 }
 
 VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
