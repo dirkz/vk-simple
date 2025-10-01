@@ -557,8 +557,19 @@ vk::Format Engine::FindDepthFormat()
         vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 }
 
+bool Engine::HasStencilComponent(vk::Format format)
+{
+    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
+}
+
 VmaBuffer Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
+    vk::Format depthFormat = FindDepthFormat();
+
+    VmaImage depthImage = m_vma.CreateImage(
+        m_swapchain.Width(), m_swapchain.Height(), depthFormat, vk::ImageTiling::eOptimal,
+        vk::ImageUsageFlagBits::eDepthStencilAttachment);
+
     // TODO: Fake it in order to make this compile (and run)
     return m_vma.CreateBuffer(10, vk::BufferUsageFlagBits::eTransferSrc,
                               VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |

@@ -45,6 +45,7 @@ struct Engine
     vk::Format FindSupportedFormat(const std::vector<vk::Format> &candidates,
                                    vk::ImageTiling tiling, vk::FormatFeatureFlags features);
     vk::Format FindDepthFormat();
+    bool HasStencilComponent(vk::Format format);
 
     VmaBuffer CreateDepthResources(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateTextureImage(StagingCommandPool &stagingCommandPool);
