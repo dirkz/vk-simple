@@ -570,6 +570,8 @@ void Engine::CreateDepthResources()
     m_depthImage = m_vma.CreateImage(m_swapchain.Width(), m_swapchain.Height(), depthFormat,
                                      vk::ImageTiling::eOptimal,
                                      vk::ImageUsageFlagBits::eDepthStencilAttachment);
+    m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage.Image(), depthFormat,
+                                                  vk::ImageAspectFlagBits::eDepth);
 }
 
 VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
