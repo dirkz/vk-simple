@@ -558,11 +558,6 @@ vk::Format Engine::FindDepthFormat()
         vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 }
 
-bool Engine::HasStencilComponent(vk::Format format)
-{
-    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
-}
-
 void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
     vk::Format depthFormat = FindDepthFormat();
@@ -570,8 +565,13 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
     m_depthImage = m_vma.CreateImage(m_swapchain.Width(), m_swapchain.Height(), depthFormat,
                                      vk::ImageTiling::eOptimal,
                                      vk::ImageUsageFlagBits::eDepthStencilAttachment);
+
     m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage.Image(), depthFormat,
                                                   vk::ImageAspectFlagBits::eDepth);
+
+    stagingCommandPool.TransitionImageLayout(m_depthImage.Image(), depthFormat,
+                                             vk::ImageLayout::eUndefined,
+                                             vk::ImageLayout::eDepthStencilAttachmentOptimal);
 }
 
 VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)

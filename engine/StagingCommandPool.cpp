@@ -80,17 +80,33 @@ std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::CreateDeviceBufferFromMemory
     return std::make_pair(std::move(buffer), std::move(stagingBuffer));
 }
 
+static bool HasStencilComponent(vk::Format format)
+{
+    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
+}
+
 void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format format,
                                                vk::ImageLayout oldLayout, vk::ImageLayout newLayout)
 {
     vk::raii::CommandBuffer &commandBuffer = BeginNewCommandBuffer();
 
+    vk::ImageAspectFlags aspectMask = vk::ImageAspectFlagBits::eColor;
+
+    if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
+    {
+        aspectMask = vk::ImageAspectFlagBits::eDepth;
+        if (HasStencilComponent(format))
+        {
+            aspectMask |= vk::ImageAspectFlagBits::eStencil;
+        }
+    }
+
     constexpr uint32_t baseMipLevel = 0;
     constexpr uint32_t levelCount = 1;
     constexpr uint32_t baseArrayLayer = 0;
     constexpr uint32_t layerCount = 1;
-    vk::ImageSubresourceRange imageSubresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
-                                                    levelCount, baseArrayLayer, layerCount};
+    vk::ImageSubresourceRange imageSubresourceRange{aspectMask, baseMipLevel, levelCount,
+                                                    baseArrayLayer, layerCount};
 
     vk::AccessFlags srcAccessMask{};
     vk::AccessFlags dstAccessMask{};
