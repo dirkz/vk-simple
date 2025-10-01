@@ -646,8 +646,8 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 
 void Engine::CreateTextureImageView()
 {
-    m_textureImageView =
-        Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat);
+    m_textureImageView = Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat,
+                                                    vk::ImageAspectFlagBits::eColor);
 }
 
 void Engine::CreateTextureSampler()

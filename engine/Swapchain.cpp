@@ -71,7 +71,7 @@ Swapchain::Swapchain(vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device 
 }
 
 vk::raii::ImageView Swapchain::CreateImageView(vk::raii::Device &device, vk::Image image,
-                                               vk::Format format)
+                                               vk::Format format, vk::ImageAspectFlags aspectFlags)
 {
     vk::ComponentMapping componentMapping{
         vk::ComponentSwizzle::eIdentity, vk::ComponentSwizzle::eIdentity,
@@ -81,8 +81,8 @@ vk::raii::ImageView Swapchain::CreateImageView(vk::raii::Device &device, vk::Ima
     constexpr uint32_t levelCount = 1;
     constexpr uint32_t baseArrayLayer = 0;
     constexpr uint32_t layerCount = 1;
-    vk::ImageSubresourceRange subresourceRange{vk::ImageAspectFlagBits::eColor, baseMipLevel,
-                                               levelCount, baseArrayLayer, layerCount};
+    vk::ImageSubresourceRange subresourceRange{aspectFlags, baseMipLevel, levelCount,
+                                               baseArrayLayer, layerCount};
 
     vk::ImageViewCreateInfo createInfo{
         {}, image, vk::ImageViewType::e2D, format, componentMapping, subresourceRange};
@@ -98,7 +98,8 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
 
     for (auto i = 0; i < m_images.size(); ++i)
     {
-        vk::raii::ImageView imageView = CreateImageView(device, m_images[i], m_imageFormat);
+        vk::raii::ImageView imageView =
+            CreateImageView(device, m_images[i], m_imageFormat, vk::ImageAspectFlagBits::eColor);
         m_imageViews.push_back(std::move(imageView));
     }
 }
