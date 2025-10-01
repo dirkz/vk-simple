@@ -54,10 +54,10 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateFrameBuffers();
     CreateCommandPool();
 
-    CreateDepthResources();
-
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
+
+    CreateDepthResources(stagingCommandPool);
 
     // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
@@ -563,7 +563,7 @@ bool Engine::HasStencilComponent(vk::Format format)
     return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
 }
 
-void Engine::CreateDepthResources()
+void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
     vk::Format depthFormat = FindDepthFormat();
 

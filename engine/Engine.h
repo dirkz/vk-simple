@@ -47,8 +47,7 @@ struct Engine
     vk::Format FindDepthFormat();
     bool HasStencilComponent(vk::Format format);
 
-    void CreateDepthResources();
-
+    void CreateDepthResources(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateTextureImage(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
