@@ -47,7 +47,8 @@ struct Engine
     vk::Format FindDepthFormat();
     bool HasStencilComponent(vk::Format format);
 
-    VmaBuffer CreateDepthResources(StagingCommandPool &stagingCommandPool);
+    void CreateDepthResources();
+
     VmaBuffer CreateTextureImage(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateIndexBuffer(StagingCommandPool &stagingCommandPool);
@@ -91,6 +92,9 @@ struct Engine
     vk::raii::PipelineLayout m_pipelineLayout = nullptr;
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
+
+    VmaImage m_depthImage = nullptr;
+    vk::raii::ImageView m_depthImageView = nullptr;
 
     VmaImage m_textureImage = nullptr;
     VmaBuffer m_vertexBuffer = nullptr;

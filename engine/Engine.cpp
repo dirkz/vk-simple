@@ -54,13 +54,14 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateFrameBuffers();
     CreateCommandPool();
 
+    CreateDepthResources();
+
     StagingCommandPool stagingCommandPool =
         StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
     // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
     // This temporary buffer must be held unto until the upload has been completed.
-    VmaBuffer tmpDepthResourcesStagingBuffer = CreateDepthResources(stagingCommandPool);
     VmaBuffer tmpTextureStagingBuffer = CreateTextureImage(stagingCommandPool);
     VmaBuffer tmpVertexStagingBuffer = CreateVertexBuffer(stagingCommandPool);
     VmaBuffer tmpIndexStagingBuffer = CreateIndexBuffer(stagingCommandPool);
@@ -562,18 +563,13 @@ bool Engine::HasStencilComponent(vk::Format format)
     return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
 }
 
-VmaBuffer Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
+void Engine::CreateDepthResources()
 {
     vk::Format depthFormat = FindDepthFormat();
 
-    VmaImage depthImage = m_vma.CreateImage(
-        m_swapchain.Width(), m_swapchain.Height(), depthFormat, vk::ImageTiling::eOptimal,
-        vk::ImageUsageFlagBits::eDepthStencilAttachment);
-
-    // TODO: Fake it in order to make this compile (and run)
-    return m_vma.CreateBuffer(10, vk::BufferUsageFlagBits::eTransferSrc,
-                              VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
-                                  VMA_ALLOCATION_CREATE_MAPPED_BIT);
+    m_depthImage = m_vma.CreateImage(m_swapchain.Width(), m_swapchain.Height(), depthFormat,
+                                     vk::ImageTiling::eOptimal,
+                                     vk::ImageUsageFlagBits::eDepthStencilAttachment);
 }
 
 VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
