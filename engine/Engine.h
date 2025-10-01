@@ -42,8 +42,9 @@ struct Engine
     void CreateFrameBuffers();
     void CreateCommandPool();
 
-    vk::Format FindSupportedFormat(const std::span<vk::Format> &candidates, vk::ImageTiling tiling,
-                                   vk::FormatFeatureFlags features);
+    vk::Format FindSupportedFormat(const std::vector<vk::Format> &candidates,
+                                   vk::ImageTiling tiling, vk::FormatFeatureFlags features);
+    vk::Format FindDepthFormat();
 
     VmaBuffer CreateDepthResources(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateTextureImage(StagingCommandPool &stagingCommandPool);

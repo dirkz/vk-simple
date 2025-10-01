@@ -529,7 +529,7 @@ void Engine::CreateCommandPool()
     m_commandPool = m_device.createCommandPool(commandPoolCreateInfo);
 }
 
-vk::Format Engine::FindSupportedFormat(const std::span<vk::Format> &candidates,
+vk::Format Engine::FindSupportedFormat(const std::vector<vk::Format> &candidates,
                                        vk::ImageTiling tiling, vk::FormatFeatureFlags features)
 {
     for (const vk::Format &format : candidates)
@@ -548,6 +548,13 @@ vk::Format Engine::FindSupportedFormat(const std::span<vk::Format> &candidates,
         }
     }
     throw std::runtime_error{"failed to find supported format"};
+}
+
+vk::Format Engine::FindDepthFormat()
+{
+    return FindSupportedFormat(
+        {vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint},
+        vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
 }
 
 VmaBuffer Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
