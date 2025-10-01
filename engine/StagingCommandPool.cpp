@@ -129,6 +129,15 @@ void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format forma
         srcStageMask = vk::PipelineStageFlagBits::eTransfer;
         dstStageMask = vk::PipelineStageFlagBits::eFragmentShader;
     }
+    else if (oldLayout == vk::ImageLayout::eUndefined &&
+             newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal)
+    {
+        srcAccessMask = {};
+        dstAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentRead |
+                        vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+        srcStageMask = vk::PipelineStageFlagBits::eTopOfPipe;
+        dstStageMask = vk::PipelineStageFlagBits::eEarlyFragmentTests;
+    }
     else
     {
         throw std::runtime_error{"unsupported layout transition"};
