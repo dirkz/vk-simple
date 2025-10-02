@@ -112,7 +112,7 @@ void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPas
     const uint32_t layers = 1;
     for (auto i = 0; i < m_imageViews.size(); ++i)
     {
-        std::vector<vk::ImageView> attachments{m_imageViews[i]};
+        std::vector<vk::ImageView> attachments{m_imageViews[i], depthImageView};
 
         vk::FramebufferCreateInfo frameBufferCreateInfo{{},      renderPass, attachments,
                                                         Width(), Height(),   layers};
