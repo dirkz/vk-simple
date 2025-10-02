@@ -782,9 +782,11 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameDa
     commandBuffer.begin(commandBufferBeginInfo);
 
     const vk::Rect2D renderArea{{0, 0}, m_swapchain.Extent()};
-    constexpr vk::ClearValue clearValue{{0.f, 0.f, 0.f, 1.f}};
+    constexpr vk::ClearValue colorAttachmentClearValue{vk::ClearColorValue{0.f, 0.f, 0.f, 1.f}};
+    constexpr vk::ClearValue depthStencilAttachmentClearValue{vk::ClearDepthStencilValue{1, 0}};
+    std::array clearValues{colorAttachmentClearValue, depthStencilAttachmentClearValue};
     vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
-                                                renderArea, clearValue};
+                                                renderArea, clearValues};
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
