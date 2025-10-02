@@ -1,5 +1,7 @@
 #include "StagingCommandPool.h"
 
+#include "Util.h"
+
 namespace vkdeck
 {
 StagingCommandPool::StagingCommandPool(vk::raii::Device &device, vk::raii::Queue &queue, Vma &vma,
@@ -78,11 +80,6 @@ std::pair<VmaBuffer, VmaBuffer> StagingCommandPool::CreateDeviceBufferFromMemory
     CopyBuffer(stagingBuffer.Buffer(), buffer.Buffer(), size);
 
     return std::make_pair(std::move(buffer), std::move(stagingBuffer));
-}
-
-static bool HasStencilComponent(vk::Format format)
-{
-    return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
 }
 
 void StagingCommandPool::TransitionImageLayout(vk::Image image, vk::Format format,
