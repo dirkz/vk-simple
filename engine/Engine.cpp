@@ -510,7 +510,26 @@ void Engine::CreateGraphicsPipeline()
                                                                        lineWidth};
 
     vk::PipelineMultisampleStateCreateInfo multisampleStateCreateInfo{};
-    vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{};
+
+    constexpr vk::Bool32 depthTestEnable = vk::True;
+    constexpr vk::Bool32 depthWriteEnable = vk::True;
+    constexpr vk::CompareOp depthCompareOp = vk::CompareOp::eLess;
+    constexpr vk::Bool32 depthBoundsTestEnable = vk::False;
+    constexpr vk::Bool32 stencilTestEnable = vk::False;
+    constexpr vk::StencilOpState front{};
+    constexpr vk::StencilOpState back{};
+    constexpr float minDepthBounds{};
+    constexpr float maxDepthBounds{};
+    vk::PipelineDepthStencilStateCreateInfo depthStencilCreateInfo{{},
+                                                                   depthTestEnable,
+                                                                   depthWriteEnable,
+                                                                   depthCompareOp,
+                                                                   depthBoundsTestEnable,
+                                                                   stencilTestEnable,
+                                                                   front,
+                                                                   back,
+                                                                   minDepthBounds,
+                                                                   maxDepthBounds};
 
     // Even without any blending, have to make sure all colors are written out.
     // https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Fixed_functions#page_Color-blending
