@@ -548,7 +548,7 @@ void Engine::CreateGraphicsPipeline()
 
 void Engine::CreateFrameBuffers()
 {
-    m_swapchain.CreateFrameBuffers(m_device, m_renderPass);
+    m_swapchain.CreateFrameBuffers(m_device, m_renderPass, m_depthImageView);
 }
 
 void Engine::CreateCommandPool()

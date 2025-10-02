@@ -39,7 +39,8 @@ struct Swapchain
     static vk::raii::ImageView CreateImageView(vk::raii::Device &device, vk::Image image,
                                                vk::Format format, vk::ImageAspectFlags aspectFlags);
     void CreateImageViews(vk::raii::Device &device);
-    void CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass);
+    void CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass,
+                            vk::ImageView depthImageView);
 
     uint32_t Width() const
     {

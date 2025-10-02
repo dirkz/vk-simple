@@ -104,16 +104,21 @@ void Swapchain::CreateImageViews(vk::raii::Device &device)
     }
 }
 
-void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass)
+void Swapchain::CreateFrameBuffers(vk::raii::Device &device, vk::raii::RenderPass &renderPass,
+                                   vk::ImageView depthImageView)
 {
     m_frameBuffers.clear();
 
     const uint32_t layers = 1;
     for (auto i = 0; i < m_imageViews.size(); ++i)
     {
-        vk::FramebufferCreateInfo frameBufferCreateInfo{{},      renderPass, *m_imageViews[i],
+        std::vector<vk::ImageView> attachments{m_imageViews[i]};
+
+        vk::FramebufferCreateInfo frameBufferCreateInfo{{},      renderPass, attachments,
                                                         Width(), Height(),   layers};
+
         vk::raii::Framebuffer frameBuffer = device.createFramebuffer(frameBufferCreateInfo);
+
         m_frameBuffers.push_back(std::move(frameBuffer));
     }
 }
