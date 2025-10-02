@@ -8,6 +8,7 @@
 #include "ShaderModuleLoader.h"
 #include "SwapchainSupportDetails.h"
 #include "UniformObject.h"
+#include "Util.h"
 #include "Vertex.h"
 
 namespace vkdeck
@@ -377,6 +378,8 @@ void Engine::CreateImageViews()
 
 void Engine::CreateRenderPass()
 {
+    constexpr uint32_t attachment = 0;
+
     vk::AttachmentDescription colorAttachment{{},
                                               m_swapchain.Format(),
                                               vk::SampleCountFlagBits::e1,
@@ -387,21 +390,47 @@ void Engine::CreateRenderPass()
                                               vk::ImageLayout::eUndefined,
                                               vk::ImageLayout::ePresentSrcKHR};
 
-    vk::AttachmentReference colorAttachmentRef{0, vk::ImageLayout::eColorAttachmentOptimal};
+    vk::AttachmentReference colorAttachmentRef{attachment,
+                                               vk::ImageLayout::eColorAttachmentOptimal};
 
-    vk::SubpassDescription subpass{{},
-                                   vk::PipelineBindPoint::eGraphics,
-                                   {}, // inputAttachments
-                                   colorAttachmentRef};
+    vk::AttachmentDescription depthAttachment{{},
+                                              FindDepthFormat(),
+                                              vk::SampleCountFlagBits::e1,
+                                              vk::AttachmentLoadOp::eClear,     // loadOp
+                                              vk::AttachmentStoreOp::eStore,    // storeOp
+                                              vk::AttachmentLoadOp::eDontCare,  // stencilLoadOp
+                                              vk::AttachmentStoreOp::eDontCare, // stencilStoreOp
+                                              vk::ImageLayout::eUndefined,
+                                              vk::ImageLayout::eDepthStencilAttachmentOptimal};
 
-    vk::SubpassDependency subpassDependency{VK_SUBPASS_EXTERNAL,
-                                            0,
-                                            vk::PipelineStageFlagBits::eColorAttachmentOutput,
-                                            vk::PipelineStageFlagBits::eColorAttachmentOutput,
-                                            vk::AccessFlagBits::eNone,
-                                            vk::AccessFlagBits::eColorAttachmentWrite};
+    vk::AttachmentReference depthAttachmentRef{attachment + 1,
+                                               vk::ImageLayout::eDepthStencilAttachmentOptimal};
 
-    vk::RenderPassCreateInfo renderPassCreateInfo{{}, colorAttachment, subpass, subpassDependency};
+    vk::SubpassDescription subpass{
+        {},
+        vk::PipelineBindPoint::eGraphics,
+        {}, // inputAttachments
+        colorAttachmentRef,
+        {}, // resolveAttachments
+        &depthAttachmentRef,
+    };
+
+    constexpr uint32_t srcSubpass = VK_SUBPASS_EXTERNAL;
+    constexpr uint32_t dstSubpass = 0;
+    constexpr vk::PipelineStageFlags srcStageMask =
+        vk::PipelineStageFlagBits::eColorAttachmentOutput |
+        vk::PipelineStageFlagBits::eLateFragmentTests;
+    constexpr vk::PipelineStageFlags dstStageMask =
+        vk::PipelineStageFlagBits::eColorAttachmentOutput |
+        vk::PipelineStageFlagBits::eEarlyFragmentTests;
+    constexpr vk::AccessFlags srcAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+    constexpr vk::AccessFlags dstAccessMask = vk::AccessFlagBits::eColorAttachmentWrite |
+                                              vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+    vk::SubpassDependency subpassDependency{srcSubpass,   dstSubpass,    srcStageMask,
+                                            dstStageMask, srcAccessMask, dstAccessMask};
+
+    std::array attachments{colorAttachment, depthAttachment};
+    vk::RenderPassCreateInfo renderPassCreateInfo{{}, attachments, subpass, subpassDependency};
 
     m_renderPass = m_device.createRenderPass(renderPassCreateInfo);
 }
