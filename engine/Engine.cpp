@@ -771,6 +771,12 @@ void Engine::RecreateSwapchain()
 
     CreateSwapchain();
     CreateImageViews();
+
+    StagingCommandPool stagingCommandPool =
+        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
+    CreateDepthResources(stagingCommandPool);
+    stagingCommandPool.WaitForFences(m_device);
+
     CreateFrameBuffers();
 }
 
