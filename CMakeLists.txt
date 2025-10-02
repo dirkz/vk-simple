@@ -37,9 +37,10 @@ add_subdirectory(SDL-Hpp EXCLUDE_FROM_ALL)
 add_subdirectory(engine)
 add_subdirectory(shaders)
 add_subdirectory(textures)
+add_subdirectory(tinyobjloader)
 
 add_dependencies(${PROJECT_NAME} shaders)
 
 target_precompile_headers(${PROJECT_NAME} REUSE_FROM engine)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC engine Vulkan::Vulkan glm::glm SDL-Hpp)
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC engine Vulkan::Vulkan glm::glm SDL-Hpp tinyobjloader)
