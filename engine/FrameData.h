@@ -51,7 +51,7 @@ struct FrameData
 
     VmaBuffer &UniformBuffer()
     {
-        return m_uniformBuffer;
+        return m_uniformBuffer.value();
     }
 
     vk::raii::DescriptorSet &DescriptorSet()
@@ -64,7 +64,7 @@ struct FrameData
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
-    VmaBuffer m_uniformBuffer = nullptr;
+    std::optional<VmaBuffer> m_uniformBuffer;
     vk::raii::DescriptorSet m_descriptorSet = nullptr;
 };
 

@@ -95,8 +95,8 @@ struct Engine
     vk::raii::ImageView m_depthImageView = nullptr;
 
     VmaImage m_textureImage = nullptr;
-    VmaBuffer m_vertexBuffer = nullptr;
-    VmaBuffer m_indexBuffer = nullptr;
+    std::optional<VmaBuffer> m_vertexBuffer;
+    std::optional<VmaBuffer> m_indexBuffer;
 
     vk::raii::ImageView m_textureImageView = nullptr;
     vk::raii::Sampler m_textureSampler = nullptr;

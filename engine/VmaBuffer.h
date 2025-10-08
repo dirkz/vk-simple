@@ -11,8 +11,6 @@ struct VmaBuffer
               vk::DeviceSize size)
         : m_allocator{allocator}, m_buffer{buffer}, m_allocation{allocation}, m_size{size} {};
 
-    VmaBuffer(std::nullptr_t) {};
-
     VmaBuffer() = delete;
     VmaBuffer(const VmaBuffer &) = delete;
 
