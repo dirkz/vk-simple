@@ -28,7 +28,7 @@ FrameData::FrameData(vk::raii::Device &device, vk::raii::CommandPool &commandPoo
                                        VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                            VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
-    vk::DescriptorBufferInfo descriptorBufferInfo{m_uniformBuffer->Buffer(), 0, uniformBufferSize};
+    vk::DescriptorBufferInfo descriptorBufferInfo{m_uniformBuffer.Buffer(), 0, uniformBufferSize};
 
     constexpr uint32_t dstBinding = 0;
     constexpr uint32_t dstArrayElement = 0;

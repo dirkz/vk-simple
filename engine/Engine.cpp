@@ -57,7 +57,7 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateCommandPool();
 
     StagingCommandPool stagingCommandPool =
-        StagingCommandPool{m_device, m_graphicsQueue, *m_vma, m_queueFamilyIndices.GraphicsQueue()};
+        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
     CreateDepthResources(stagingCommandPool);
 
@@ -98,7 +98,7 @@ void Engine::DrawFrame()
     vk::Result resultOfWaiting =
         m_device.waitForFences(*inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
 
-    auto [result, imageIndex] = m_swapchain->AcquireNextImage(imageAvailableSemaphore);
+    auto [result, imageIndex] = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
 
     if (result == vk::Result::eErrorOutOfDateKHR || m_windowResized)
     {
@@ -117,7 +117,7 @@ void Engine::DrawFrame()
     RecordCommandBuffer(commandBuffer, frameData, imageIndex);
 
     vk::raii::Semaphore &renderFinishedSemaphore =
-        m_swapchain->RenderFinishedSemaphoreAt(imageIndex);
+        m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
 
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
@@ -125,7 +125,7 @@ void Engine::DrawFrame()
                               *renderFinishedSemaphore};
     m_graphicsQueue.submit(submitInfo, inflightFence);
 
-    const vk::raii::SwapchainKHR &swapchain = m_swapchain->SwapchainKHR();
+    const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
     vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 
@@ -363,18 +363,22 @@ void Engine::CreateLogicalDevice()
 
 void Engine::CreateVma()
 {
-    m_vma.emplace(m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device);
+    m_vma = Vma{m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device};
 }
 
 void Engine::CreateSwapchain()
 {
-    m_swapchain.emplace(m_physicalDevice, m_device, m_surface, m_window,
-                        m_queueFamilyIndices.GraphicsQueue(), m_queueFamilyIndices.PresentQueue());
+    m_swapchain = Swapchain{m_physicalDevice,
+                            m_device,
+                            m_surface,
+                            m_window,
+                            m_queueFamilyIndices.GraphicsQueue(),
+                            m_queueFamilyIndices.PresentQueue()};
 }
 
 void Engine::CreateImageViews()
 {
-    m_swapchain->CreateImageViews(m_device);
+    m_swapchain.CreateImageViews(m_device);
 }
 
 void Engine::CreateRenderPass()
@@ -382,7 +386,7 @@ void Engine::CreateRenderPass()
     constexpr uint32_t attachment = 0;
 
     vk::AttachmentDescription colorAttachment{{},
-                                              m_swapchain->Format(),
+                                              m_swapchain.Format(),
                                               vk::SampleCountFlagBits::e1,
                                               vk::AttachmentLoadOp::eClear,     // loadOp
                                               vk::AttachmentStoreOp::eStore,    // storeOp
@@ -479,9 +483,9 @@ void Engine::CreateGraphicsPipeline()
 
     vk::PipelineTessellationStateCreateInfo tesselationStateCreateInfo{};
 
-    vk::Viewport viewport = m_swapchain->Viewport();
+    vk::Viewport viewport = m_swapchain.Viewport();
 
-    vk::Rect2D scissorRect = m_swapchain->ScissorRect();
+    vk::Rect2D scissorRect = m_swapchain.ScissorRect();
 
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
@@ -568,7 +572,7 @@ void Engine::CreateGraphicsPipeline()
 
 void Engine::CreateFrameBuffers()
 {
-    m_swapchain->CreateFrameBuffers(m_device, m_renderPass, m_depthImageView);
+    m_swapchain.CreateFrameBuffers(m_device, m_renderPass, m_depthImageView);
 }
 
 void Engine::CreateCommandPool()
@@ -611,14 +615,14 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
     vk::Format depthFormat = FindDepthFormat();
 
-    m_depthImage = m_vma->CreateImage(m_swapchain->Width(), m_swapchain->Height(), depthFormat,
-                                      vk::ImageTiling::eOptimal,
-                                      vk::ImageUsageFlagBits::eDepthStencilAttachment);
+    m_depthImage = m_vma.CreateImage(m_swapchain.Width(), m_swapchain.Height(), depthFormat,
+                                     vk::ImageTiling::eOptimal,
+                                     vk::ImageUsageFlagBits::eDepthStencilAttachment);
 
-    m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage->Image(), depthFormat,
+    m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage.Image(), depthFormat,
                                                   vk::ImageAspectFlagBits::eDepth);
 
-    stagingCommandPool.TransitionImageLayout(m_depthImage->Image(), depthFormat,
+    stagingCommandPool.TransitionImageLayout(m_depthImage.Image(), depthFormat,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eDepthStencilAttachmentOptimal);
 }
@@ -645,7 +649,7 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * 4};
 
-    VmaBuffer stagingBuffer = m_vma->CreateBuffer(
+    VmaBuffer stagingBuffer = m_vma.CreateBuffer(
         imageSize, vk::BufferUsageFlagBits::eTransferSrc,
         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
@@ -654,17 +658,17 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
     stbi_image_free(pixels);
 
     m_textureImage =
-        m_vma->CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
-                           vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
+        m_vma.CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
+                          vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage->Image(), TextureFormat,
+    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eTransferDstOptimal);
 
-    stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage->Image(), texWidth,
+    stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage.Image(), texWidth,
                                          texHeight);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage->Image(), TextureFormat,
+    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
                                              vk::ImageLayout::eTransferDstOptimal,
                                              vk::ImageLayout::eShaderReadOnlyOptimal);
 
@@ -697,8 +701,8 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 
 void Engine::CreateTextureImageView()
 {
-    m_textureImageView = Swapchain::CreateImageView(m_device, m_textureImage->Image(),
-                                                    TextureFormat, vk::ImageAspectFlagBits::eColor);
+    m_textureImageView = Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat,
+                                                    vk::ImageAspectFlagBits::eColor);
 }
 
 void Engine::CreateTextureSampler()
@@ -756,7 +760,7 @@ void Engine::CreateFrameData()
 {
     for (auto i = 0; i < MaxFramesInFlight; ++i)
     {
-        m_frameData.emplace_back(m_device, m_commandPool, *m_vma, m_descriptorSets[i],
+        m_frameData.emplace_back(m_device, m_commandPool, m_vma, m_descriptorSets[i],
                                  m_textureSampler, m_textureImageView);
     }
 
@@ -771,7 +775,7 @@ void Engine::RecreateSwapchain()
     CreateImageViews();
 
     StagingCommandPool stagingCommandPool =
-        StagingCommandPool{m_device, m_graphicsQueue, *m_vma, m_queueFamilyIndices.GraphicsQueue()};
+        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
     CreateDepthResources(stagingCommandPool);
     stagingCommandPool.WaitForFences(m_device);
 
@@ -786,7 +790,7 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     float time =
         std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-    float ratio = m_swapchain->Ratio();
+    float ratio = m_swapchain.Ratio();
 
     glm::mat4 model =
         glm::rotate(glm::mat4{1.f}, time * glm::radians(5.f), glm::vec3{0.f, 0.f, 1.f});
@@ -804,19 +808,19 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameDa
     vk::CommandBufferBeginInfo commandBufferBeginInfo{};
     commandBuffer.begin(commandBufferBeginInfo);
 
-    const vk::Rect2D renderArea{{0, 0}, m_swapchain->Extent()};
+    const vk::Rect2D renderArea{{0, 0}, m_swapchain.Extent()};
     constexpr vk::ClearValue colorAttachmentClearValue{vk::ClearColorValue{0.f, 0.f, 0.f, 1.f}};
     constexpr vk::ClearValue depthStencilAttachmentClearValue{vk::ClearDepthStencilValue{1, 0}};
     std::array clearValues{colorAttachmentClearValue, depthStencilAttachmentClearValue};
-    vk::RenderPassBeginInfo renderPassBeginInfo{
-        m_renderPass, m_swapchain->FrameBufferAt(imageIndex), renderArea, clearValues};
+    vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
+                                                renderArea, clearValues};
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
-    commandBuffer.bindVertexBuffers(0, m_vertexBuffer->Buffer(), static_cast<vk::DeviceSize>(0));
-    commandBuffer.bindIndexBuffer(m_indexBuffer->Buffer(), 0, vk::IndexType::eUint16);
-    commandBuffer.setViewport(0, m_swapchain->Viewport());
-    commandBuffer.setScissor(0, m_swapchain->ScissorRect());
+    commandBuffer.bindVertexBuffers(0, m_vertexBuffer.Buffer(), static_cast<vk::DeviceSize>(0));
+    commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint16);
+    commandBuffer.setViewport(0, m_swapchain.Viewport());
+    commandBuffer.setScissor(0, m_swapchain.ScissorRect());
     commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout, 0,
                                      {frameData.DescriptorSet()}, {});
 

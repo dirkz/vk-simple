@@ -10,6 +10,8 @@ struct VmaImage
     VmaImage(VmaAllocator allocator, VkImage image, VmaAllocation allocation)
         : m_allocator{allocator}, m_image{image}, m_allocation{allocation} {};
 
+    VmaImage(std::nullptr_t) {};
+
     VmaImage() = delete;
     VmaImage(const VmaImage &) = delete;
 
