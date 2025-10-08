@@ -98,7 +98,7 @@ void Engine::DrawFrame()
     vk::Result resultOfWaiting =
         m_device.waitForFences(*inflightFence, vk::True, std::numeric_limits<uint32_t>::max());
 
-    auto [result, imageIndex] = m_swapchain.AcquireNextImage(imageAvailableSemaphore);
+    auto [result, imageIndex] = m_swapchain->AcquireNextImage(imageAvailableSemaphore);
 
     if (result == vk::Result::eErrorOutOfDateKHR || m_windowResized)
     {
@@ -117,7 +117,7 @@ void Engine::DrawFrame()
     RecordCommandBuffer(commandBuffer, frameData, imageIndex);
 
     vk::raii::Semaphore &renderFinishedSemaphore =
-        m_swapchain.RenderFinishedSemaphoreAt(imageIndex);
+        m_swapchain->RenderFinishedSemaphoreAt(imageIndex);
 
     constexpr vk::PipelineStageFlags waitDstStageMask =
         vk::PipelineStageFlagBits::eColorAttachmentOutput;
@@ -125,7 +125,7 @@ void Engine::DrawFrame()
                               *renderFinishedSemaphore};
     m_graphicsQueue.submit(submitInfo, inflightFence);
 
-    const vk::raii::SwapchainKHR &swapchain = m_swapchain.SwapchainKHR();
+    const vk::raii::SwapchainKHR &swapchain = m_swapchain->SwapchainKHR();
     vk::PresentInfoKHR presentInfo{*renderFinishedSemaphore, *swapchain, imageIndex};
     vk::Result resultOfPresenting = m_presentQueue.presentKHR(presentInfo);
 
@@ -368,17 +368,13 @@ void Engine::CreateVma()
 
 void Engine::CreateSwapchain()
 {
-    m_swapchain = Swapchain{m_physicalDevice,
-                            m_device,
-                            m_surface,
-                            m_window,
-                            m_queueFamilyIndices.GraphicsQueue(),
-                            m_queueFamilyIndices.PresentQueue()};
+    m_swapchain.emplace(m_physicalDevice, m_device, m_surface, m_window,
+                        m_queueFamilyIndices.GraphicsQueue(), m_queueFamilyIndices.PresentQueue());
 }
 
 void Engine::CreateImageViews()
 {
-    m_swapchain.CreateImageViews(m_device);
+    m_swapchain->CreateImageViews(m_device);
 }
 
 void Engine::CreateRenderPass()
@@ -386,7 +382,7 @@ void Engine::CreateRenderPass()
     constexpr uint32_t attachment = 0;
 
     vk::AttachmentDescription colorAttachment{{},
-                                              m_swapchain.Format(),
+                                              m_swapchain->Format(),
                                               vk::SampleCountFlagBits::e1,
                                               vk::AttachmentLoadOp::eClear,     // loadOp
                                               vk::AttachmentStoreOp::eStore,    // storeOp
@@ -483,9 +479,9 @@ void Engine::CreateGraphicsPipeline()
 
     vk::PipelineTessellationStateCreateInfo tesselationStateCreateInfo{};
 
-    vk::Viewport viewport = m_swapchain.Viewport();
+    vk::Viewport viewport = m_swapchain->Viewport();
 
-    vk::Rect2D scissorRect = m_swapchain.ScissorRect();
+    vk::Rect2D scissorRect = m_swapchain->ScissorRect();
 
     std::array dynamicStates{vk::DynamicState::eViewport, vk::DynamicState::eScissor};
     vk::PipelineDynamicStateCreateInfo dynamicStateCreateInfo{{}, dynamicStates};
@@ -572,7 +568,7 @@ void Engine::CreateGraphicsPipeline()
 
 void Engine::CreateFrameBuffers()
 {
-    m_swapchain.CreateFrameBuffers(m_device, m_renderPass, m_depthImageView);
+    m_swapchain->CreateFrameBuffers(m_device, m_renderPass, m_depthImageView);
 }
 
 void Engine::CreateCommandPool()
@@ -615,7 +611,7 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
     vk::Format depthFormat = FindDepthFormat();
 
-    m_depthImage = m_vma.CreateImage(m_swapchain.Width(), m_swapchain.Height(), depthFormat,
+    m_depthImage = m_vma.CreateImage(m_swapchain->Width(), m_swapchain->Height(), depthFormat,
                                      vk::ImageTiling::eOptimal,
                                      vk::ImageUsageFlagBits::eDepthStencilAttachment);
 
@@ -790,7 +786,7 @@ void Engine::UpdateUniformBuffer(FrameData &frameData)
     float time =
         std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
-    float ratio = m_swapchain.Ratio();
+    float ratio = m_swapchain->Ratio();
 
     glm::mat4 model =
         glm::rotate(glm::mat4{1.f}, time * glm::radians(5.f), glm::vec3{0.f, 0.f, 1.f});
@@ -808,19 +804,19 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameDa
     vk::CommandBufferBeginInfo commandBufferBeginInfo{};
     commandBuffer.begin(commandBufferBeginInfo);
 
-    const vk::Rect2D renderArea{{0, 0}, m_swapchain.Extent()};
+    const vk::Rect2D renderArea{{0, 0}, m_swapchain->Extent()};
     constexpr vk::ClearValue colorAttachmentClearValue{vk::ClearColorValue{0.f, 0.f, 0.f, 1.f}};
     constexpr vk::ClearValue depthStencilAttachmentClearValue{vk::ClearDepthStencilValue{1, 0}};
     std::array clearValues{colorAttachmentClearValue, depthStencilAttachmentClearValue};
-    vk::RenderPassBeginInfo renderPassBeginInfo{m_renderPass, m_swapchain.FrameBufferAt(imageIndex),
-                                                renderArea, clearValues};
+    vk::RenderPassBeginInfo renderPassBeginInfo{
+        m_renderPass, m_swapchain->FrameBufferAt(imageIndex), renderArea, clearValues};
     commandBuffer.beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
     commandBuffer.bindVertexBuffers(0, m_vertexBuffer.Buffer(), static_cast<vk::DeviceSize>(0));
     commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint16);
-    commandBuffer.setViewport(0, m_swapchain.Viewport());
-    commandBuffer.setScissor(0, m_swapchain.ScissorRect());
+    commandBuffer.setViewport(0, m_swapchain->Viewport());
+    commandBuffer.setScissor(0, m_swapchain->ScissorRect());
     commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout, 0,
                                      {frameData.DescriptorSet()}, {});
 

@@ -13,28 +13,10 @@ struct Swapchain
               vk::raii::SurfaceKHR &surface, IVulkanWindow &window, uint32_t graphicsQueue,
               uint32_t presentQueue);
 
-    Swapchain(std::nullptr_t) : m_imageFormat{vk::Format::eR8G8B8A8Srgb}
-    {
-    }
-
     Swapchain() = delete;
-    Swapchain(Swapchain &) = delete;
+    Swapchain(const Swapchain &) = delete;
 
     Swapchain &operator=(Swapchain const &) = delete;
-
-    Swapchain &operator=(Swapchain &&rhs) noexcept
-    {
-        if (this != &rhs)
-        {
-            std::swap(m_swapchain, rhs.m_swapchain);
-            std::swap(m_images, rhs.m_images);
-            std::swap(m_imageFormat, rhs.m_imageFormat);
-            std::swap(m_extent, rhs.m_extent);
-            std::swap(m_imageViews, rhs.m_imageViews);
-            std::swap(m_renderFinishedSemaphores, rhs.m_renderFinishedSemaphores);
-        }
-        return *this;
-    }
 
     static vk::raii::ImageView CreateImageView(vk::raii::Device &device, vk::Image image,
                                                vk::Format format, vk::ImageAspectFlags aspectFlags);
