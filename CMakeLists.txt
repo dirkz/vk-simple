@@ -37,6 +37,7 @@ add_subdirectory(SDL-Hpp EXCLUDE_FROM_ALL)
 add_subdirectory(engine)
 add_subdirectory(shaders)
 add_subdirectory(textures)
+add_subdirectory(models)
 add_subdirectory(tinyobjloader)
 
 add_dependencies(${PROJECT_NAME} shaders)

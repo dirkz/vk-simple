@@ -47,6 +47,8 @@ struct Engine
                                    vk::ImageTiling tiling, vk::FormatFeatureFlags features);
     vk::Format FindDepthFormat();
 
+    void LoadModel();
+
     void CreateDepthResources(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateTextureImage(StagingCommandPool &stagingCommandPool);
     VmaBuffer CreateVertexBuffer(StagingCommandPool &stagingCommandPool);

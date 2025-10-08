@@ -67,6 +67,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     // the depth/stencil buffer created in `CreateDepthResources`.
     CreateFrameBuffers();
 
+    LoadModel();
+
     // These creation methods set the corresponding buffer/texture member as a side
     // effect and return the temporary staging buffer.
     // This temporary buffer must be held unto until the upload has been completed.
@@ -611,6 +613,24 @@ vk::Format Engine::FindDepthFormat()
     return FindSupportedFormat(
         {vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint},
         vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment);
+}
+
+void Engine::LoadModel()
+{
+    std::filesystem::path basePath{sdl::GetBasePath()};
+    std::filesystem::path modelPath = basePath / "models" / "viking_room.obj";
+    std::string modelPathString = modelPath.string();
+
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn;
+    std::string err;
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelPathString.c_str()))
+    {
+        throw std::runtime_error{err};
+    }
 }
 
 void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
