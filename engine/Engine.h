@@ -83,7 +83,7 @@ struct Engine
     vk::raii::PhysicalDevice m_physicalDevice = nullptr;
     QueueFamilyIndices m_queueFamilyIndices;
     vk::raii::Device m_device = nullptr;
-    Vma m_vma = nullptr;
+    std::optional<Vma> m_vma;
     std::optional<Swapchain> m_swapchain;
     vk::raii::RenderPass m_renderPass = nullptr;
     vk::raii::DescriptorSetLayout m_descriptorSetLayout = nullptr;

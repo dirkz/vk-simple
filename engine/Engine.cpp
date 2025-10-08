@@ -56,8 +56,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateCommandPool();
 
-    StagingCommandPool stagingCommandPool =
-        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
+    StagingCommandPool stagingCommandPool = StagingCommandPool{
+        m_device, m_graphicsQueue, m_vma.value(), m_queueFamilyIndices.GraphicsQueue()};
 
     CreateDepthResources(stagingCommandPool);
 
@@ -363,7 +363,7 @@ void Engine::CreateLogicalDevice()
 
 void Engine::CreateVma()
 {
-    m_vma = Vma{m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device};
+    m_vma.emplace(m_window.GetInstanceProcAddr(), m_instance, m_physicalDevice, m_device);
 }
 
 void Engine::CreateSwapchain()
@@ -611,9 +611,9 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 {
     vk::Format depthFormat = FindDepthFormat();
 
-    m_depthImage = m_vma.CreateImage(m_swapchain->Width(), m_swapchain->Height(), depthFormat,
-                                     vk::ImageTiling::eOptimal,
-                                     vk::ImageUsageFlagBits::eDepthStencilAttachment);
+    m_depthImage = m_vma->CreateImage(m_swapchain->Width(), m_swapchain->Height(), depthFormat,
+                                      vk::ImageTiling::eOptimal,
+                                      vk::ImageUsageFlagBits::eDepthStencilAttachment);
 
     m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage.Image(), depthFormat,
                                                   vk::ImageAspectFlagBits::eDepth);
@@ -645,7 +645,7 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 
     vk::DeviceSize imageSize{static_cast<vk::DeviceSize>(texWidth) * texHeight * 4};
 
-    VmaBuffer stagingBuffer = m_vma.CreateBuffer(
+    VmaBuffer stagingBuffer = m_vma->CreateBuffer(
         imageSize, vk::BufferUsageFlagBits::eTransferSrc,
         VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT | VMA_ALLOCATION_CREATE_MAPPED_BIT);
 
@@ -654,8 +654,8 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
     stbi_image_free(pixels);
 
     m_textureImage =
-        m_vma.CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
-                          vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
+        m_vma->CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
+                           vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
 
     stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
                                              vk::ImageLayout::eUndefined,
@@ -756,7 +756,7 @@ void Engine::CreateFrameData()
 {
     for (auto i = 0; i < MaxFramesInFlight; ++i)
     {
-        m_frameData.emplace_back(m_device, m_commandPool, m_vma, m_descriptorSets[i],
+        m_frameData.emplace_back(m_device, m_commandPool, m_vma.value(), m_descriptorSets[i],
                                  m_textureSampler, m_textureImageView);
     }
 
@@ -770,8 +770,8 @@ void Engine::RecreateSwapchain()
     CreateSwapchain();
     CreateImageViews();
 
-    StagingCommandPool stagingCommandPool =
-        StagingCommandPool{m_device, m_graphicsQueue, m_vma, m_queueFamilyIndices.GraphicsQueue()};
+    StagingCommandPool stagingCommandPool = StagingCommandPool{
+        m_device, m_graphicsQueue, m_vma.value(), m_queueFamilyIndices.GraphicsQueue()};
     CreateDepthResources(stagingCommandPool);
     stagingCommandPool.WaitForFences(m_device);
 

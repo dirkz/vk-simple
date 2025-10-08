@@ -31,24 +31,12 @@ struct Vma
     Vma(PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr, vk::raii::Instance &instance,
         vk::raii::PhysicalDevice &physicalDevice, vk::raii::Device &device);
 
-    Vma(std::nullptr_t) {};
-
     Vma() = delete;
     Vma(const Vma &) = delete;
 
     ~Vma();
 
     Vma &operator=(const Vma &) = delete;
-
-    Vma &operator=(Vma &&rhs) noexcept
-    {
-        if (this != &rhs)
-        {
-            std::swap(m_allocator, rhs.m_allocator);
-        }
-
-        return *this;
-    }
 
     VmaBuffer CreateBuffer(vk::DeviceSize size, vk::BufferUsageFlags bufferUsage,
                            VmaAllocationCreateFlags createFlagBits = {},
