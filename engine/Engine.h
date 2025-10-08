@@ -7,6 +7,7 @@
 #include "QueueFamilyIndices.h"
 #include "StagingCommandPool.h"
 #include "Swapchain.h"
+#include "Vertex.h"
 #include "Vma.h"
 
 namespace vkdeck
@@ -93,6 +94,9 @@ struct Engine
 
     VmaImage m_depthImage = nullptr;
     vk::raii::ImageView m_depthImageView = nullptr;
+
+    std::vector<Vertex> m_vertices;
+    std::vector<uint32_t> m_indices;
 
     VmaImage m_textureImage = nullptr;
     VmaBuffer m_vertexBuffer = nullptr;
