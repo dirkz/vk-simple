@@ -13,12 +13,8 @@ struct FrameData
               vk::raii::DescriptorSet &descriptorSet, vk::Sampler sampler,
               vk::ImageView textureImageView);
 
-    FrameData(std::nullptr_t)
-    {
-    }
-
     FrameData() = delete;
-    FrameData(FrameData &) = delete;
+    FrameData(const FrameData &) = delete;
 
     /// <summary>
     /// For use in `std::vector`.
@@ -32,19 +28,6 @@ struct FrameData
         std::swap(m_inflightFence, rhs.m_inflightFence);
         std::swap(m_uniformBuffer, rhs.m_uniformBuffer);
         std::swap(m_descriptorSet, rhs.m_descriptorSet);
-    }
-
-    FrameData &operator=(FrameData &&rhs) noexcept
-    {
-        if (this != &rhs)
-        {
-            std::swap(m_commandBuffer, rhs.m_commandBuffer);
-            std::swap(m_imageAvailableSemaphore, rhs.m_imageAvailableSemaphore);
-            std::swap(m_inflightFence, rhs.m_inflightFence);
-            std::swap(m_uniformBuffer, rhs.m_uniformBuffer);
-            std::swap(m_descriptorSet, rhs.m_descriptorSet);
-        }
-        return *this;
     }
 
     FrameData &operator=(FrameData const &) = delete;
@@ -77,6 +60,7 @@ struct FrameData
     }
 
   private:
+    // NOTE: Move semantics!
     vk::raii::CommandBuffer m_commandBuffer = nullptr;
     vk::raii::Semaphore m_imageAvailableSemaphore = nullptr;
     vk::raii::Fence m_inflightFence = nullptr;
