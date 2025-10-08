@@ -615,10 +615,10 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
                                       vk::ImageTiling::eOptimal,
                                       vk::ImageUsageFlagBits::eDepthStencilAttachment);
 
-    m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage.Image(), depthFormat,
+    m_depthImageView = Swapchain::CreateImageView(m_device, m_depthImage->Image(), depthFormat,
                                                   vk::ImageAspectFlagBits::eDepth);
 
-    stagingCommandPool.TransitionImageLayout(m_depthImage.Image(), depthFormat,
+    stagingCommandPool.TransitionImageLayout(m_depthImage->Image(), depthFormat,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eDepthStencilAttachmentOptimal);
 }
@@ -657,14 +657,14 @@ VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
         m_vma->CreateImage(texWidth, texHeight, TextureFormat, vk::ImageTiling::eOptimal,
                            vk::ImageUsageFlagBits::eTransferDst | vk::ImageUsageFlagBits::eSampled);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
+    stagingCommandPool.TransitionImageLayout(m_textureImage->Image(), TextureFormat,
                                              vk::ImageLayout::eUndefined,
                                              vk::ImageLayout::eTransferDstOptimal);
 
-    stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage.Image(), texWidth,
+    stagingCommandPool.CopyBufferToImage(stagingBuffer.Buffer(), m_textureImage->Image(), texWidth,
                                          texHeight);
 
-    stagingCommandPool.TransitionImageLayout(m_textureImage.Image(), TextureFormat,
+    stagingCommandPool.TransitionImageLayout(m_textureImage->Image(), TextureFormat,
                                              vk::ImageLayout::eTransferDstOptimal,
                                              vk::ImageLayout::eShaderReadOnlyOptimal);
 
@@ -697,8 +697,8 @@ VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 
 void Engine::CreateTextureImageView()
 {
-    m_textureImageView = Swapchain::CreateImageView(m_device, m_textureImage.Image(), TextureFormat,
-                                                    vk::ImageAspectFlagBits::eColor);
+    m_textureImageView = Swapchain::CreateImageView(m_device, m_textureImage->Image(),
+                                                    TextureFormat, vk::ImageAspectFlagBits::eColor);
 }
 
 void Engine::CreateTextureSampler()

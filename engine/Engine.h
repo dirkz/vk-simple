@@ -91,10 +91,10 @@ struct Engine
     vk::raii::Pipeline m_pipeline = nullptr;
     vk::raii::CommandPool m_commandPool = nullptr;
 
-    VmaImage m_depthImage = nullptr;
+    std::optional<VmaImage> m_depthImage;
     vk::raii::ImageView m_depthImageView = nullptr;
 
-    VmaImage m_textureImage = nullptr;
+    std::optional<VmaImage> m_textureImage;
     std::optional<VmaBuffer> m_vertexBuffer;
     std::optional<VmaBuffer> m_indexBuffer;
 
