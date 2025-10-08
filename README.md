@@ -28,3 +28,8 @@ Or after a normal clone:
 ```
 git submodule update --init --recursive
 ```
+
+## Attributions
+
+* [Texture image](https://pixabay.com/photos/statue-sculpture-figure-1275469/) ([license](https://pixabay.com/service/license-summary/))
+* [Viking room](https://sketchfab.com/3d-models/viking-room-a49f1b8e4f5c4ecf9e1fe7d81915ad38) ([license](https://creativecommons.org/licenses/by/4.0/deed.es))
