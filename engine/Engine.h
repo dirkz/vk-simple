@@ -77,6 +77,8 @@ struct Engine
 
     FrameData &CurrentFrameData();
 
+    std::string DataPath(const std::filesystem::path &relativePath);
+
     IVulkanWindow &m_window;
 
     vk::raii::Context m_context;

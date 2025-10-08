@@ -617,9 +617,8 @@ vk::Format Engine::FindDepthFormat()
 
 void Engine::LoadModel()
 {
-    std::filesystem::path basePath{sdl::GetBasePath()};
-    std::filesystem::path modelPath = basePath / "models" / "viking_room.obj";
-    std::string modelPathString = modelPath.string();
+    std::filesystem::path modelPath = std::filesystem::path{"models"} / "viking_room.obj";
+    std::string modelPathString = DataPath(modelPath);
 
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -651,9 +650,8 @@ void Engine::CreateDepthResources(StagingCommandPool &stagingCommandPool)
 
 VmaBuffer Engine::CreateTextureImage(StagingCommandPool &stagingCommandPool)
 {
-    std::filesystem::path basePath{sdl::GetBasePath()};
-    std::filesystem::path texturePath = basePath / "textures" / "viking_room.png";
-    std::string texturePathString = texturePath.string();
+    std::filesystem::path texturePath = std::filesystem::path{"textures"} / "viking_room.png";
+    std::string texturePathString = DataPath(texturePath);
 
     int texWidth, texHeight, texChannels;
     stbi_uc *pixels =
@@ -855,6 +853,15 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameDa
 FrameData &Engine::CurrentFrameData()
 {
     return m_frameData[m_currentFrame];
+}
+
+std::string Engine::DataPath(const std::filesystem::path &relativePath)
+{
+    std::filesystem::path basePath{sdl::GetBasePath()};
+    std::filesystem::path dataPath = basePath / relativePath;
+    std::string dataPathString = dataPath.string();
+
+    return dataPathString;
 }
 
 } // namespace vkdeck
