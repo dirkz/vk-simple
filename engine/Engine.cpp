@@ -41,7 +41,7 @@ const std::vector<Vertex> Vertices{{{-0.5f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.
                                    {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}}};
 
 // TODO: Remove
-const std::vector<uint16_t> Indices = {0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7};
+const std::vector<uint32_t> Indices = {0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7};
 
 Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetInstanceProcAddr()}
 {
@@ -691,7 +691,7 @@ VmaBuffer Engine::CreateVertexBuffer(StagingCommandPool &stagingCommandPool)
 
 VmaBuffer Engine::CreateIndexBuffer(StagingCommandPool &stagingCommandPool)
 {
-    vk::DeviceSize bufferSize = sizeof(uint16_t) * Indices.size();
+    vk::DeviceSize bufferSize = sizeof(uint32_t) * Indices.size();
 
     auto [indexBuffer, stagingBuffer] = stagingCommandPool.CreateDeviceBufferFromMemory(
         Indices.data(), bufferSize, vk::BufferUsageFlagBits::eIndexBuffer);
@@ -820,7 +820,7 @@ void Engine::RecordCommandBuffer(vk::raii::CommandBuffer &commandBuffer, FrameDa
 
     commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, m_pipeline);
     commandBuffer.bindVertexBuffers(0, m_vertexBuffer.Buffer(), static_cast<vk::DeviceSize>(0));
-    commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint16);
+    commandBuffer.bindIndexBuffer(m_indexBuffer.Buffer(), 0, vk::IndexType::eUint32);
     commandBuffer.setViewport(0, m_swapchain.Viewport());
     commandBuffer.setScissor(0, m_swapchain.ScissorRect());
     commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, m_pipelineLayout, 0,
