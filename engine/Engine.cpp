@@ -56,8 +56,8 @@ Engine::Engine(IVulkanWindow &window) : m_window{window}, m_context{window.GetIn
     CreateGraphicsPipeline();
     CreateCommandPool();
 
-    StagingCommandPool stagingCommandPool = StagingCommandPool{
-        m_device, m_graphicsQueue, m_vma.value(), m_queueFamilyIndices.GraphicsQueue()};
+    StagingCommandPool stagingCommandPool =
+        StagingCommandPool{m_device, m_graphicsQueue, *m_vma, m_queueFamilyIndices.GraphicsQueue()};
 
     CreateDepthResources(stagingCommandPool);
 
@@ -756,7 +756,7 @@ void Engine::CreateFrameData()
 {
     for (auto i = 0; i < MaxFramesInFlight; ++i)
     {
-        m_frameData.emplace_back(m_device, m_commandPool, m_vma.value(), m_descriptorSets[i],
+        m_frameData.emplace_back(m_device, m_commandPool, *m_vma, m_descriptorSets[i],
                                  m_textureSampler, m_textureImageView);
     }
 
@@ -770,8 +770,8 @@ void Engine::RecreateSwapchain()
     CreateSwapchain();
     CreateImageViews();
 
-    StagingCommandPool stagingCommandPool = StagingCommandPool{
-        m_device, m_graphicsQueue, m_vma.value(), m_queueFamilyIndices.GraphicsQueue()};
+    StagingCommandPool stagingCommandPool =
+        StagingCommandPool{m_device, m_graphicsQueue, *m_vma, m_queueFamilyIndices.GraphicsQueue()};
     CreateDepthResources(stagingCommandPool);
     stagingCommandPool.WaitForFences(m_device);
 

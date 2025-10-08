@@ -51,7 +51,7 @@ struct FrameData
 
     VmaBuffer &UniformBuffer()
     {
-        return m_uniformBuffer.value();
+        return *m_uniformBuffer;
     }
 
     vk::raii::DescriptorSet &DescriptorSet()
